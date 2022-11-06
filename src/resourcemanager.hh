@@ -1,9 +1,9 @@
 #ifndef RESOURCEPOOL_H
 #define RESOURCEPOOL_H
 
-#include "headers.h"
+#include "headers.hh"
 
-class ResourcePool {
+class ResourceManager {
 	// Store textures in graphics memory and easily manage them
 	private:
 		/* Setup */
@@ -15,8 +15,8 @@ class ResourcePool {
 		std::map<std::string, Animation*> animations;
 		std::map<std::string, Sprite*> sprites;
 	public:
-		ResourcePool(SDL_Renderer* renderer);
-		~ResourcePool();
+		ResourceManager(SDL_Renderer* renderer);
+		~ResourceManager();
 
 		/* Textures */
 		//SDL_Texture* import_texture(std::string id, std::string path);

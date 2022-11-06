@@ -1,7 +1,7 @@
 #ifndef TILEMAP_H
 #define TILEMAP_H
 
-#include "headers.h"
+#include "headers.hh"
 
 class Tilemap {
 	// The tilemap consists of four parts

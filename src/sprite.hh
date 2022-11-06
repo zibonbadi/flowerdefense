@@ -1,7 +1,7 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
-#include "headers.h"
+#include "headers.hh"
 
 class Sprite {
 	// Visual plane for internal grephics model

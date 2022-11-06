@@ -1,31 +1,31 @@
-#include "canvas.hh"
+#include "game.hh"
 
 // Actual stuff
 
-Canvas::Canvas(){
+Game::Game(){
 	_init(SCREEN_W, SCREEN_H);
 }
 
-Canvas::Canvas(Z_RGBA background){
+Game::Game(Z_RGBA background){
 	this->background = background;
 };
 
-Canvas::Canvas(uint16_t w, uint16_t h, Z_RGBA background){
+Game::Game(uint16_t w, uint16_t h, Z_RGBA background){
 	this->background = background;
 	_init(w, h);
 };
 
-Canvas::Canvas(uint16_t w, uint16_t h){
+Game::Game(uint16_t w, uint16_t h){
 	_init(w, h);
 };
 
-Canvas::~Canvas(){
+Game::~Game(){
 	delete this->a_specs;
 	SDL_CloseAudioDevice(this->a_master);
 };
 
 
-void Canvas::_init(uint16_t w, uint16_t h){
+void Game::_init(uint16_t w, uint16_t h){
 	this->w = w;
 	this->h = h;
 	
@@ -49,14 +49,14 @@ void Canvas::_init(uint16_t w, uint16_t h){
 	// Init main SDL
 	if(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_EVENTS) < 0){
 		std::clog << "SDL_Init() failed! Why? " << SDL_GetError() << std::endl;
-		throw std::runtime_error("Runtime error in Canvas constructor");
+		throw std::runtime_error("Runtime error in Game constructor");
 	}
 
 	/* Audio */
 	/*
 	if(Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) < 0){
 		std::clog << "SDL2_Mixer failed! Why? " << SDL_GetError() << std::endl;
-		throw std::runtime_error("Runtime error in Canvas constructor");
+		throw std::runtime_error("Runtime error in Game constructor");
 	}
 	*/
 
@@ -85,7 +85,7 @@ void Canvas::_init(uint16_t w, uint16_t h){
 	/* Window & GPU */
 	if(!this->window){
 		std::clog << "SDL_CreateWindow() failed! Why? " << SDL_GetError() << std::endl;
-		throw std::runtime_error("Runtime error in Canvas constructor");
+		throw std::runtime_error("Runtime error in Game constructor");
 	}
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
@@ -93,7 +93,7 @@ void Canvas::_init(uint16_t w, uint16_t h){
 
 	if(!this->renderer){
 		std::clog << "SDL_CreateRenderer() failed! Why? " << SDL_GetError() << std::endl;
-		throw std::runtime_error("Runtime error in Canvas constructor");
+		throw std::runtime_error("Runtime error in Game constructor");
 	}
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
@@ -112,30 +112,30 @@ void Canvas::_init(uint16_t w, uint16_t h){
 			);
 	if(!this->framebuf){
 		std::clog << "SDL_CreateTexture() failed! Why? " << SDL_GetError() << std::endl;
-		throw std::runtime_error("Runtime error in Canvas constructor");
+		throw std::runtime_error("Runtime error in Game constructor");
 	}
 
 	// Init SDL_Image
 	if(IMG_Init(imgflags) < 0){
 		printf("IMG_Init() failed! Why? %s\n", SDL_GetError());
-		throw std::runtime_error("Runtime error in Canvas constructor");
+		throw std::runtime_error("Runtime error in Game constructor");
 	}
 
-	std::cout << "Canvas (SDL) Initialized." << std::endl;
+	std::cout << "Game (SDL) Initialized." << std::endl;
 
 }
 
-SDL_Renderer* Canvas::getRenderer(){
+SDL_Renderer* Game::getRenderer(){
 	return this->renderer;
 }
-SDL_Window* Canvas::getWindow(){
+SDL_Window* Game::getWindow(){
 	return this->window;
 }
-SDL_Texture* Canvas::getFramebuffer(){
+SDL_Texture* Game::getFramebuffer(){
 	return this->framebuf;
 }
 
-int Canvas::load_mod(std::string path, int32_t subsong, int32_t repeats){
+int Game::load_mod(std::string path, int32_t subsong, int32_t repeats){
 	try{
 		//std::vector<float> audio_left(480);
 		//std::vector<float> audio_right(480);
@@ -153,18 +153,18 @@ int Canvas::load_mod(std::string path, int32_t subsong, int32_t repeats){
 		auto mod_title = this->mod_buf->get_metadata("title");
 		auto mod_artist = this->mod_buf->get_metadata("artist");
 
-		std::clog << "Canvas.load_mod(\"" << path << "\") now playing: " << 
+		std::clog << "Game.load_mod(\"" << path << "\") now playing: " << 
 			((mod_artist=="")?"[UNKNOWN]":mod_artist) << " - " <<
 			((mod_title=="")?"[UNKNOWN]":mod_title) <<
 			'[' << (int) subsong << "]x" << (int)repeats << std::endl;
 		return 0;
 	}catch(std::exception &e){
-		std::cerr << "Canvas.load_mod(" << path << ") exception: " << e.what() << std::endl;
+		std::cerr << "Game.load_mod(" << path << ") exception: " << e.what() << std::endl;
 		return -1;
 	}
 }
 
-int Canvas::load_mod(openmpt::module* mod, int32_t subsong, int32_t repeats){
+int Game::load_mod(openmpt::module* mod, int32_t subsong, int32_t repeats){
 	try{
 		// Avoid memory leakage
 		this->mod_buf = mod;
@@ -174,26 +174,46 @@ int Canvas::load_mod(openmpt::module* mod, int32_t subsong, int32_t repeats){
 		auto mod_title = this->mod_buf->get_metadata("title");
 		auto mod_artist = this->mod_buf->get_metadata("artist");
 
-		std::clog << "Canvas.load_mod(<openmpt::module>:" << mod << ") now playing: " << 
+		std::clog << "Game.load_mod(<openmpt::module>:" << mod << ") now playing: " << 
 			((mod_artist=="")?"[UNKNOWN]":mod_artist) << " - " <<
 			((mod_title=="")?"[UNKNOWN]":mod_title) <<
 			'[' << (int) subsong << "]x" << (int)repeats << std::endl;
 		return 0;
 	}catch(std::exception &e){
-		std::cerr << "Canvas.load_mod(<openmpt::module>:" << mod << ") exception: " << e.what() << std::endl;
+		std::cerr << "Game.load_mod(<openmpt::module>:" << mod << ") exception: " << e.what() << std::endl;
 		return -1;
 	}
 }
 
+<<<<<<< HEAD:src/canvas.cc
 void Canvas::attach(Plane *src){
+=======
+
+
+void Game::blit(Plane *src){
+	//SDL_Texture *tmp = SDL_CreateTextureFromSurface(src->image.framebuf);
+	// 4 byte RGBA video buffer
+	unsigned char buf[this->h*this->w*4];
+	for(int i = 0; i < this->h*this->w; i++){
+		buf[i*4] = SDL_ALPHA_OPAQUE; // Alpha
+		buf[i*4+1] = rand()%256; // B
+		buf[i*4+2] = rand()%256; // G
+		buf[i*4+3] = rand()%256; // R
+	}
+	SDL_UpdateTexture(this->framebuf, NULL, buf, this->w*4);
+
+};
+
+void Game::attach(Plane *src){
+>>>>>>> 663ca2916313077412b77f713a02323953d18725:src/game.cc
 	this->planes.push_back(src);
 }
 
-void Canvas::set_background(Z_RGBA background){
+void Game::set_background(Z_RGBA background){
 	this->background = background;
 };
 
-void Canvas::render(){
+void Game::render(){
 	try{
 		if( this->mod_buf != nullptr && this->a_master > 0){
 			/* Audio render */
@@ -226,18 +246,18 @@ void Canvas::render(){
 		SDL_RenderCopy(this->videomagic.renderer,this->videomagic.framebuf, NULL, NULL);
 		*/
 
-		//std::clog << "Canvas.render(): Calling planes..." << std::endl;
+		//std::clog << "Game.render(): Calling planes..." << std::endl;
 		// Render planes in registration order
 		for(auto & i : this->planes){
 			i->render(this->renderer);
 		}
 
-		//std::clog << "Canvas.render(): Calling SDL_RenderPresent..." << std::endl;
+		//std::clog << "Game.render(): Calling SDL_RenderPresent..." << std::endl;
 		// Pass to graphics card
 		SDL_RenderPresent(this->renderer);
-		//std::clog << "Canvas.render(): Done." << std::endl;
+		//std::clog << "Game.render(): Done." << std::endl;
 	}catch(std::exception &e){
-		std::cerr << "Canvas.render() exception: " << e.what() << std::endl;
+		std::cerr << "Game.render() exception: " << e.what() << std::endl;
 	}
 };
 

@@ -19,7 +19,7 @@
 
 /* utils */
 #include "defs.h"
-#include "structs.h"
+#include "structs.hh"
 
 /* Forward declarations */
 class Animation;
@@ -32,15 +32,11 @@ class Tilemap;
 class Tileset;
 
 /* custom classes */
-/* #include "texturepool.hh" */
-#include "resourcepool.hh"
-/* Tile system: Tilemap -> Tileset -> Tile */
-#include "canvas.hh"
+#include "resourcemanager.hh"
+#include "game.hh"
 #include "plane.hh"
 #include "sprite.hh"
 #include "tilemap.hh"
-#include "tileset.hh"
-#include "tile.hh"
 #include "animation.hh"
 #endif
 

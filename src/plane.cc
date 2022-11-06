@@ -1,4 +1,3 @@
-#include "headers.h"
 #include "plane.hh"
 #include "canvas.hh"
 

@@ -1,7 +1,7 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
-#include "headers.h"
+#include "headers.hh"
 
 class Animation {
 	// Animation - An animated texture reference
