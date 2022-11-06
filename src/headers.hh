@@ -39,8 +39,6 @@ class Tileset;
 #include "plane.hh"
 #include "sprite.hh"
 #include "tilemap.hh"
-#include "tileset.hh"
-#include "tile.hh"
 #include "animation.hh"
 #endif
 

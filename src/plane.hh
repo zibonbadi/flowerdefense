@@ -1,7 +1,7 @@
 #ifndef PLANE_H
 #define PLANE_H
 
-#include "headers.h"
+#include "headers.hh"
 #include "sprite.hh"
 #include "tilemap.hh"
 

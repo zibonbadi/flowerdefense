@@ -1,7 +1,7 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-#include "headers.h"
+#include "headers.hh"
 
 class Canvas {
 	// Generic canvas; basically a video output

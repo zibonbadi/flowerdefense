@@ -1,7 +1,7 @@
 #ifndef RESOURCEPOOL_H
 #define RESOURCEPOOL_H
 
-#include "headers.h"
+#include "headers.hh"
 
 class ResourcePool {
 	// Store textures in graphics memory and easily manage them

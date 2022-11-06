@@ -1,4 +1,4 @@
-#include "headers.h"
+#include "animation.hh"
 
 Animation::Animation(SDL_Texture* base, unsigned int tickrate){
 	this->base = base;
