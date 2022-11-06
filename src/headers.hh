@@ -19,7 +19,7 @@
 
 /* utils */
 #include "defs.h"
-#include "structs.h"
+#include "structs.hh"
 
 /* Forward declarations */
 class Animation;
