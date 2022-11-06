@@ -32,7 +32,6 @@ class Canvas {
 		SDL_Renderer* getRenderer();
 		SDL_Window* getWindow();
 		SDL_Texture* getFramebuffer();
-		void blit(Plane *src);
 		void set_background(Z_RGBA);
 		void attach(Plane *src);
 		void render();

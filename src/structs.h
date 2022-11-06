@@ -8,7 +8,7 @@ typedef struct {
 } Z_Video;
 */
 
-typedef struct Z_Cel{
+typedef struct Z_Cel {
 	// Header data. width, height & bytes per pixel
 	uint8_t w,h,bpp;
 	char* data;
@@ -18,18 +18,18 @@ typedef struct Z_Cel{
 
 } Z_Cel;
 
-typedef struct {
+typedef struct Z_RGBA {
 	uint8_t r = 0xff,
 		g = 0xff,
 		b = 0xff,
 		a = 0xff;
 } Z_RGBA;
 
-typedef struct {
+typedef struct Z_Time {
 	uint32_t ms;
 } Z_Time;
 
-typedef struct {
+typedef struct Z_PlaneMeta {
 	float 
 		x = 0.0f,
 		y = 0.0f,
