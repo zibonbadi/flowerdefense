@@ -24,9 +24,9 @@
 /* Forward declarations */
 class Animation;
 class Canvas;
-class Plane;
+class Game;
 class Sprite;
-class Texturepool;
+class ResourceManager;
 class Tile;
 class Tilemap;
 class Tileset;
