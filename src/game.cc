@@ -185,27 +185,7 @@ int Game::load_mod(openmpt::module* mod, int32_t subsong, int32_t repeats){
 	}
 }
 
-<<<<<<< HEAD:src/canvas.cc
-void Canvas::attach(Plane *src){
-=======
-
-
-void Game::blit(Plane *src){
-	//SDL_Texture *tmp = SDL_CreateTextureFromSurface(src->image.framebuf);
-	// 4 byte RGBA video buffer
-	unsigned char buf[this->h*this->w*4];
-	for(int i = 0; i < this->h*this->w; i++){
-		buf[i*4] = SDL_ALPHA_OPAQUE; // Alpha
-		buf[i*4+1] = rand()%256; // B
-		buf[i*4+2] = rand()%256; // G
-		buf[i*4+3] = rand()%256; // R
-	}
-	SDL_UpdateTexture(this->framebuf, NULL, buf, this->w*4);
-
-};
-
 void Game::attach(Plane *src){
->>>>>>> 663ca2916313077412b77f713a02323953d18725:src/game.cc
 	this->planes.push_back(src);
 }
 
