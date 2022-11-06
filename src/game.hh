@@ -3,7 +3,7 @@
 
 #include "headers.hh"
 
-class Canvas {
+class Game {
 	// Generic canvas; basically a video output
 	private:
 		uint16_t w,h;
@@ -11,7 +11,7 @@ class Canvas {
 		SDL_Window *window;
 		SDL_Texture *framebuf;
 		Z_RGBA background;
-		// 3/4 layer scene graph: Canvas -> Plane (-> Tilemap) -> Sprite
+		// 3/4 layer scene graph: Game -> Plane (-> Tilemap) -> Sprite
 		std::vector<Plane*> planes;
 
 		/* Audio stuff */
@@ -24,11 +24,11 @@ class Canvas {
 		void _init(uint16_t w, uint16_t h);
 
 	public:
-		Canvas();
-		Canvas(Z_RGBA background);
-		Canvas(uint16_t w, uint16_t h, Z_RGBA background);
-		Canvas(uint16_t w, uint16_t h);
-		~Canvas();
+		Game();
+		Game(Z_RGBA background);
+		Game(uint16_t w, uint16_t h, Z_RGBA background);
+		Game(uint16_t w, uint16_t h);
+		~Game();
 		SDL_Renderer* getRenderer();
 		SDL_Window* getWindow();
 		SDL_Texture* getFramebuffer();
