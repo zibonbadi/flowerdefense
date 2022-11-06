@@ -37,7 +37,8 @@ void Canvas::_init(uint16_t w, uint16_t h){
 		;
 	wflags =
 		SDL_WINDOW_SHOWN |
-		SDL_WINDOW_OPENGL
+		SDL_WINDOW_RESIZABLE |
+		SDL_WINDOW_ALLOW_HIGHDPI
 		;
 	imgflags =
 		IMG_INIT_PNG
@@ -79,7 +80,7 @@ void Canvas::_init(uint16_t w, uint16_t h){
 	}
 	std::clog << "Audio (SDL_Audio) Initialized." << std::endl;
 
-	this->window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->w, this->h, rflags);
+	this->window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->w, this->h, wflags);
 
 	/* Window & GPU */
 	if(!this->window){
@@ -88,12 +89,18 @@ void Canvas::_init(uint16_t w, uint16_t h){
 	}
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-	this->renderer = SDL_CreateRenderer(this->window, -1, wflags);
+	this->renderer = SDL_CreateRenderer(this->window, -1, rflags);
 
 	if(!this->renderer){
 		std::clog << "SDL_CreateRenderer() failed! Why? " << SDL_GetError() << std::endl;
 		throw std::runtime_error("Runtime error in Canvas constructor");
 	}
+
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+	SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_SCALING,"1");
+
+	SDL_RenderSetViewport(this->renderer, nullptr);
+	SDL_RenderSetLogicalSize(this->renderer, this->w, this->h);
 
 	std::clog << "GPU (SDL) Initialized." << std::endl;
 	
