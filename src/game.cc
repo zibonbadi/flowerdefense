@@ -1,4 +1,4 @@
-#include "canvas.hh"
+#include "game.hh"
 
 // Actual stuff
 

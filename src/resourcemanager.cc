@@ -1,4 +1,4 @@
-#include "resourcepool.hh"
+#include "resourcemanager.hh"
 
 /* Basics */
 ResourcePool::ResourcePool(SDL_Renderer* renderer){

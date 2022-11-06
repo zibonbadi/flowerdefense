@@ -32,10 +32,8 @@ class Tilemap;
 class Tileset;
 
 /* custom classes */
-/* #include "texturepool.hh" */
-#include "resourcepool.hh"
-/* Tile system: Tilemap -> Tileset -> Tile */
-#include "canvas.hh"
+#include "resourcemanager.hh"
+#include "game.hh"
 #include "plane.hh"
 #include "sprite.hh"
 #include "tilemap.hh"
