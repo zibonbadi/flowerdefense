@@ -101,8 +101,9 @@ int main(int argc, char* argv[]){
 			std::cout << "Entering main loop..." << std::endl;
 
 			// Gloptastic tracker beats
-			rc.import_mod("bgm", "./assets/cycle.stm");
-			screen.load_mod(rc.get_mod("bgm"), -1, -1);
+			if(rc.import_mod("bgm", "./assets/cycle.stm") != nullptr){
+				screen.load_mod(rc.get_mod("bgm"), -1, -1);
+			}
 
 			while(true){
 				poll();

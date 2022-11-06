@@ -68,8 +68,9 @@ openmpt::module* ResourceManager::import_mod(std::string id, std::string path){
 		// Avoid memory leakage
 		if (this->mods.find(id) != this->mods.end()){ delete this->mods[id]; }
 		this->mods[id] = new openmpt::module(modfile);
+		if(this->mods[id] == nullptr){ throw std::runtime_error("Failed to initialize tracker"); }
 		std::clog << "Added module '" << id << "':(" << this->mods[id] << ") to ResourceManager " << this << std::endl;
-		return 0;
+		return this->mods[id];
 	}catch(std::exception &e){
 		std::cerr << "ResourceManager.import_mod(" << path << ") exception: " << e.what() << std::endl;
 		return nullptr;

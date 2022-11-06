@@ -166,6 +166,8 @@ int Game::load_mod(std::string path, int32_t subsong, int32_t repeats){
 
 int Game::load_mod(openmpt::module* mod, int32_t subsong, int32_t repeats){
 	try{
+		// Segfault check
+		if(mod == nullptr){ throw std::runtime_error("Invalid tracker module (nullptr)"); }
 		// Avoid memory leakage
 		this->mod_buf = mod;
 		this->mod_buf->select_subsong(subsong);
