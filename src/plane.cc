@@ -1,5 +1,4 @@
 #include "plane.hh"
-#include "canvas.hh"
 
 Plane::Plane(){
 };

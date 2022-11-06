@@ -23,8 +23,8 @@
 
 /* Forward declarations */
 class Animation;
-class Canvas;
 class Game;
+class Plane;
 class Sprite;
 class ResourceManager;
 class Tile;

@@ -22,14 +22,21 @@ add_executable(${EXEC} ${SOURCES})
 include(FindPkgConfig)
 
 if (MSVC)
+	find_package(SDL2 CONFIG REQUIRED)
+	find_package(SDL2_ttf CONFIG REQUIRED)
+	find_package(SDL2_net CONFIG REQUIRED)
+	find_package(sdl2-gfx CONFIG REQUIRED)
+	find_package(SDL2_mixer CONFIG REQUIRED)
+	find_package(sdl2-image CONFIG REQUIRED)
+	find_package(libopenmpt CONFIG REQUIRED)
 else()
-	pkg_search_module(SDL2      REQUIRED sdl2>=2.0.1)
-	#pkg_search_module(SDL2TTF   REQUIRED SDL2_ttf>=2.0.0)
-	#pkg_search_module(SDL2NET   REQUIRED SDL2_net>=2.0.0)
-	#pkg_search_module(SDL2GFX   REQUIRED SDL2_gfx>=1.0.0) # this 1.x.x is correct
+	pkg_search_module(SDL2 REQUIRED sdl2>=2.0.1)
+	#pkg_search_module(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
+	#pkg_search_module(SDL2NET REQUIRED SDL2_net>=2.0.0)
+	#pkg_search_module(SDL2GFX REQUIRED SDL2_gfx>=1.0.0) # this 1.x.x is correct
 	pkg_search_module(SDL2MIXER REQUIRED SDL2_mixer>=2.0.0)
 	pkg_search_module(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
-	pkg_search_module(LIBOPENMPT REQUIRED libopenmpt>=0.6)
+	pkg_search_module(LIBOPENMPT REQUIRED libopenmpt>=0.5.12)
 endif()
 
 include_directories(
@@ -50,7 +57,17 @@ target_link_libraries(
 	#${SDL2GFX_LIBRARIES}
 	${SDL2MIXER_LIBRARIES}
 	${SDL2IMAGE_LIBRARIES}
-	openmpt
 )
 
-
+if (MSVC)
+	target_link_libraries(
+		${PROJECT_NAME}
+		SDL2::SDL2_image
+		libopenmpt::libopenmpt
+	)
+else()
+	target_link_libraries(
+		${PROJECT_NAME}
+		openmpt
+	)
+endif()

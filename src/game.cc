@@ -70,7 +70,7 @@ void Game::_init(uint16_t w, uint16_t h){
 	SDL_AudioSpec *a_spec_tmp = new SDL_AudioSpec;
 	
 
-	this->a_master = SDL_OpenAudioDevice(NULL, 0, &aspec_want, a_spec_tmp, SDL_AUDIO_ALLOW_ANY_CHANGE);
+	this->a_master = SDL_OpenAudioDevice(NULL, 0, &aspec_want, a_spec_tmp, 0);
 	if( this->a_master <= 0 ){
 		std::cerr << "SDL_OpenAudioDevice() failed. Why? " << SDL_GetError() << std::endl;
 	}else{

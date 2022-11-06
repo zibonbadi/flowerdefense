@@ -80,10 +80,10 @@ int Animation::add_frame(int u, int v, int uw, int vw){
 };
 int Animation::add_frame(Z_PlaneMeta crop){
 	SDL_Rect insert = {
-		.x = crop.u,
-		.y = crop.v,
-		.w = crop.uw,
-		.h = crop.vw
+		.x = (int)crop.u,
+		.y = (int)crop.v,
+		.w = (int)crop.uw,
+		.h = (int)crop.vw
 	};
 	this->frames.push_back(insert);
 	std::clog << "Added frame to animation " << this << ": [" << this->frames.size()-1 << "](" <<
@@ -152,19 +152,19 @@ void Animation::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 		SDL_Rect currentframe = this->frames[this->xsheet[this->xsheet_i].first];
 
 		SDL_Rect pos {
-			.x = transform.x,
-				.y = transform.y,
-				.w = transform.w,
-				.h = transform.h,
+				.x = (int)transform.x,
+				.y = (int)transform.y,
+				.w = (int)transform.w,
+				.h = (int)transform.h,
 		}, crop {
-			.x = currentframe.x+transform.u,
-				.y = currentframe.y+transform.v,
-				.w = currentframe.w+transform.uw,
-				.h = currentframe.h+transform.vw,
+				.x = (int)currentframe.x+(int)transform.u,
+				.y = (int)currentframe.y+(int)transform.v,
+				.w = (int)currentframe.w+(int)transform.uw,
+				.h = (int)currentframe.h+(int)transform.vw,
 		};
 		SDL_Point pivot = {
-			.x = transform.pivot_x,
-			.y = transform.pivot_y
+			.x = (int)transform.pivot_x,
+			.y = (int)transform.pivot_y
 		};
 
 		/*
@@ -185,10 +185,10 @@ void Animation::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 		};
 	}catch(std::exception &e){
 		SDL_Rect pos {
-			.x = transform.x,
-				.y = transform.y,
-				.w = transform.w,
-				.h = transform.h,
+				.x = (int)transform.x,
+				.y = (int)transform.y,
+				.w = (int)transform.w,
+				.h = (int)transform.h,
 		};
 		std::cerr << "Animation.render() exception: " << e.what() << std::endl;
 		SDL_SetRenderDrawColor(renderer, 0xff,0,0xff, 255);

@@ -5,8 +5,8 @@ Tilemap::Tilemap(){
 		.x = 0.0f,
 			.y = 0.0f,
 			// Only tranlate x/y. Don't bother with affine stuff
-			.w = this->grit_w,
-			.h = this->grit_h,
+			.w = (float)this->grit_w,
+			.h = (float)this->grit_h,
 			.pivot_x = 0.0f,
 			.pivot_y = 0.0f,
 			.deg = 0.0f,
@@ -35,8 +35,8 @@ Tilemap::Tilemap(int grit_w, int grit_h){
 		.x = 0.0f,
 			.y = 0.0f,
 			// Only tranlate x/y. Don't bother with affine stuff
-			.w = this->grit_w,
-			.h = this->grit_h,
+			.w = (float)this->grit_w,
+			.h = (float)this->grit_h,
 			.pivot_x = 0.0f,
 			.pivot_y = 0.0f,
 			.deg = 0.0f,
@@ -252,8 +252,8 @@ void Tilemap::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 			.x = 0.0f,
 				.y = 0.0f,
 				// Only tranlate x/y. Don't bother with affine stuff
-				.w = this->grit_w,
-				.h = this->grit_h,
+				.w = (float)this->grit_w,
+				.h = (float)this->grit_h,
 				.pivot_x = 0.0f,
 				.pivot_y = 0.0f,
 				.deg = 0.0f,
@@ -274,8 +274,8 @@ void Tilemap::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 				zp_tmp.y = (this->grit_h*pos_y)+transform.y+this->transform_rect.y;
 
 				SDL_Rect sdlr_tmp {
-					.x = zp_tmp.y,
-						.y = zp_tmp.y,
+						.x = (int)zp_tmp.y,
+						.y = (int)zp_tmp.y,
 					//.x = pos_x*this->grit_w+zp_tmp.x,
 						//.y = pos_y*this->grit_h+zp_tmp.y,
 						.w = this->grit_w,

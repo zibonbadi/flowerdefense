@@ -1,5 +1,5 @@
-#ifndef CANVAS_H
-#define CANVAS_H
+#ifndef GAME_H
+#define GAME_H
 
 #include "headers.hh"
 
