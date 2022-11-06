@@ -4,20 +4,20 @@ set(CMAKE_CXX_STANDARD 20)
 
 set(EXEC flowerdefense)
 include_directories(${PROJECT_SOURCE_DIR})
-file(GLOB SOURCES ${PROJECT_SOURCE_DIR}/*.cpp)
+file(GLOB SOURCES src/*.cc)
 
-#add_executable(${EXEC} ${SOURCES})
-add_executable(${EXEC} 
-src/animation.cc
-src/canvas.cc
-src/eventbus.cc
-src/main.cc
-src/plane.cc
-src/resourcepool.cc
-src/sprite.cc
-src/texturepool.cc
-src/tilemap.cc
-)
+add_executable(${EXEC} ${SOURCES})
+#add_executable(${EXEC} 
+#src/animation.cc
+#src/canvas.cc
+#src/eventbus.cc
+#src/main.cc
+#src/plane.cc
+#src/resourcepool.cc
+#src/sprite.cc
+#src/texturepool.cc
+#src/tilemap.cc
+#)
 
 include(FindPkgConfig)
 
