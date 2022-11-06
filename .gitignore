@@ -4,6 +4,7 @@ Makefile
 *.vxcproj
 *.sln
 *.cbp
+flowerdefense
 
 ##### Windows
 # Windows thumbnail cache files
