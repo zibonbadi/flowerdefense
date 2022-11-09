@@ -14,3 +14,4 @@ Libraries needed:
 - libopenmpt
 
 
+Use CMAKE for your build environment
