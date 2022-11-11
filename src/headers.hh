@@ -14,8 +14,11 @@
 #include <exception>
 #include <vector>
 #include <map>
+#include <set>
+#include <queue>
 #include <array>
 #include <memory>
+#include <functional>
 
 /* utils */
 #include "defs.h"
@@ -27,6 +30,8 @@ class Game;
 class Plane;
 class Sprite;
 class ResourceManager;
+class Eventbus;
+class Event;
 class Tile;
 class Tilemap;
 class Tileset;
@@ -38,5 +43,7 @@ class Tileset;
 #include "sprite.hh"
 #include "tilemap.hh"
 #include "animation.hh"
+#include "event.hh"
+#include "eventbus.hh"
 #endif
 
