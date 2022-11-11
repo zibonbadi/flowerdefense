@@ -15,6 +15,7 @@ class Sprite {
 		uint8_t bounds_mask = 0b00000000;
 		//bool locked_transform = false; // Prevent transformations (screen buffers)
 		Z_PlaneMeta transform_rect;
+		Z_RGBA color = { .r = 0xFF, .g = 0x00, .b = 0xFF };
 		std::map<std::string, Animation*> anime; // Animations (for later)
 		std::string current_anime; // Selected for rendering
 
@@ -24,6 +25,7 @@ class Sprite {
 		Sprite(Z_PlaneMeta init);
 		~Sprite();
 		int switch_to(std::string animation);
+		int set_color(Z_RGBA color);
 		int add_animation(std::string name, Animation* animation);
 		void transform(Z_PlaneMeta add_tf);
 		Z_PlaneMeta get_transform();

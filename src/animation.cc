@@ -4,6 +4,7 @@ Animation::Animation(SDL_Texture* base, unsigned int tickrate){
 	this->base = base;
 	this->set_rate(tickrate);
 	this->restart();
+	std::clog << "Animation created: " << this << std::endl;
 };
 
 Animation::~Animation(){
@@ -67,28 +68,38 @@ int Animation::restart(){
 
 
 int Animation::add_frame(int u, int v, int uw, int vw){
-	SDL_Rect insert = {
-		.x = u,
-		.y = v,
-		.w = uw,
-		.h = vw
-	};
-	this->frames.push_back(insert);
-	std::clog << "Added frame to animation " << this << ": [" << this->frames.size()-1 << "](" <<
-	insert.x << ',' << insert.y << ':' << insert.w << 'x' << insert.h << ')' << std::endl;
-	return this->frames.size()-1;
+	try{
+		SDL_Rect insert = {
+			.x = u,
+			.y = v,
+			.w = uw,
+			.h = vw
+		};
+		this->frames.push_back(insert);
+		std::clog << "Added frame to animation " << this << ": [" << this->frames.size()-1 << "](" <<
+			insert.x << ',' << insert.y << ':' << insert.w << 'x' << insert.h << ')' << std::endl;
+		return this->frames.size()-1;
+	}catch(std::exception &e){
+		std::cerr << "Animation.add_frame() error: " << e.what() << std::endl;
+		return -1;
+	}
 };
 int Animation::add_frame(Z_PlaneMeta crop){
-	SDL_Rect insert = {
-		.x = (int)crop.u,
-		.y = (int)crop.v,
-		.w = (int)crop.uw,
-		.h = (int)crop.vw
-	};
-	this->frames.push_back(insert);
-	std::clog << "Added frame to animation " << this << ": [" << this->frames.size()-1 << "](" <<
-	insert.x << ',' << insert.y << ':' << insert.y << 'x' << insert.h << ')' << std::endl;
-	return this->frames.size()-1;
+	try{
+		SDL_Rect insert = {
+			.x = (int)crop.u,
+			.y = (int)crop.v,
+			.w = (int)crop.uw,
+			.h = (int)crop.vw
+		};
+		this->frames.push_back(insert);
+		std::clog << "Added frame to animation " << this << ": [" << this->frames.size()-1 << "](" <<
+			insert.x << ',' << insert.y << ':' << insert.y << 'x' << insert.h << ')' << std::endl;
+		return this->frames.size()-1;
+	}catch(std::exception &e){
+		std::cerr << "Animation.add_frame() error: " << e.what() << std::endl;
+		return -1;
+	}
 };
 
 int Animation::add_xsheet_phase(unsigned int frame, unsigned int duration){
@@ -140,7 +151,7 @@ void Animation::render(SDL_Renderer* renderer){
 
 void Animation::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 
-	try{
+	//try{
 		//std::clog << "Animation.render(): " << this->frames.size() << ':' << this->xsheet.size() << std::endl;
 		if(this->frames.size() < 1){ throw std::runtime_error("Frame set missing!"); }
 		if(this->xsheet.size() < 1){ throw std::runtime_error("X-Sheet missing!"); }
@@ -181,8 +192,9 @@ void Animation::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 					transform.deg, &pivot,
 					SDL_FLIP_NONE 
 					) != 0){
-			//throw std::runtime_error("Plane blit error");
+			throw std::runtime_error("Render error");
 		};
+		/*
 	}catch(std::exception &e){
 		SDL_Rect pos {
 				.x = (int)transform.x,
@@ -194,5 +206,6 @@ void Animation::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 		SDL_SetRenderDrawColor(renderer, 0xff,0,0xff, 255);
 		SDL_RenderFillRect(renderer, &pos);
 	}
+		*/
 }
 

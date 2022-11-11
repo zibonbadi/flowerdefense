@@ -30,7 +30,23 @@ Sprite::Sprite(Z_PlaneMeta init){
 Sprite::~Sprite(){
 };
 
+int Sprite::set_color(Z_RGBA color){
+	this->color = color;
+	std::clog << "Sprite.set_color(): Updated Color: RGBA("
+		<< this->color.r
+		<< ", " << this->color.g
+		<< ", " << this->color.b
+		<< ", " << this->color.b
+		<< ", " << this->color.a
+		<< ")." << std::endl;
+	return 0;
+};
+
 int Sprite::add_animation(std::string name, Animation* animation){
+	if(animation == nullptr){
+		std::cerr << "Sprite.add_animation(): Invalid Animation (nullptr)" << std::endl;
+		return -1;
+	}
 	this->anime[name] = animation;
 	return 0;
 };
@@ -144,15 +160,23 @@ void Sprite::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 	*/
 
 	try{
-		if(this->anime.size() < 1 || this->anime.find(this->current_anime) == this->anime.end() ){
-			//std::cerr << "Sprite animation error @ \"" << this->current_anime << "\":" << this->anime.size() << std::endl;
-			SDL_SetRenderDrawColor(renderer, 0xff,0,0xff, 255);
-			SDL_RenderDrawRect(renderer, &pos);
-		}else{
+		/*
+		if(
+			this->anime.size() < 1 ||
+			this->anime.find(this->current_anime) == this->anime.end() ||
+			this->anime.at(this->current_anime) == nullptr
+		){
+		*/
+			////std::cerr << "Sprite animation error @ \"" << this->current_anime << "\":" << this->anime.size() << std::endl;
+			//SDL_SetRenderDrawColor(renderer, this->color.r, this->color.g, this->color.b, 255);
+			//SDL_RenderFillRect(renderer, &pos);
+		//}else{
 			//std::clog << "Rendering animation \"" << this->current_anime << "\":" << this->anime.size() << "\"..." << std::endl;
 			this->anime[this->current_anime]->render(renderer, plane_meta);
-		}
+		//}
 	}catch(std::exception &e){
-		std::cerr << "Sprite.render() exception: " << e.what() << std::endl;
+		//std::cerr << "Sprite.render() exception: " << e.what() << std::endl;
+		SDL_SetRenderDrawColor(renderer, this->color.r, this->color.g, this->color.b, 255);
+		SDL_RenderFillRect(renderer, &pos);
 	}
 };

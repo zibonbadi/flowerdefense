@@ -52,10 +52,12 @@ int ResourceManager::free_texture(std::string id){
 };
 
 SDL_Texture* ResourceManager::get_texture(std::string id){
-	if(this->textures[id]){
-		return this->textures[id];
-	}
-	return nullptr;
+	try{
+		return this->textures.at(id);
+	}catch(std::exception &e){
+		std::cerr << "ResourceManager.get_texture(\"" << id << "\") error: " << e.what() << std::endl;
+		return nullptr;
+	};
 };
 
 /* Modules */
@@ -111,10 +113,12 @@ std::pair<std::string, Animation*> ResourceManager::add_anim(std::string id, Ani
 	return std::pair(id,nullptr);
 };
 Animation* ResourceManager::get_anim(std::string id){
-	if(this->animations[id]){
-		return animations[id];
-	}
-	return nullptr;
+	try{
+		return this->animations.at(id);
+	}catch(std::exception &e){
+		std::cerr << "ResourceManager.get_anim(\"" << id << "\") error: " << e.what() << std::endl;
+		return nullptr;
+	};
 };
 int ResourceManager::free_anim(std::string id){
 	try{
@@ -184,24 +188,24 @@ int ResourceManager::free_sprite(std::string id){
 	}
 };
 
-std::pair<std::string, Sprite*> ResourceManager::make_static_sprite_from_anim(std::string id, Animation* anim, Z_PlaneMeta crop){
+std::pair<std::string, Sprite*> ResourceManager::make_sprite_from_anim(std::string id, Animation* anim, Z_PlaneMeta crop){
 	Sprite* new_sprite = new Sprite("show", anim, crop );
 	this->sprites.insert(std::pair(id,new_sprite));
 	std::clog << "Added sprite '" << id << "':(" << new_sprite << ") to ResourceManager " << this << std::endl;
 	return std::pair(id,new_sprite);
 }
-std::pair<std::string, Sprite*> ResourceManager::make_static_sprite_from_anim(std::string id, std::string animId, Z_PlaneMeta crop){
-	return this->make_static_sprite_from_anim(id, this->get_anim(animId), crop);
+std::pair<std::string, Sprite*> ResourceManager::make_sprite_from_anim(std::string id, std::string animId, Z_PlaneMeta crop){
+	return this->make_sprite_from_anim(id, this->get_anim(animId), crop);
 }
 std::pair<std::string, Sprite*> ResourceManager::make_static_sprite_from_texture(std::string id, SDL_Texture* tex, Z_PlaneMeta crop){
 	auto new_anim = this->make_static_anim_from_texture(id+".animation", tex, crop);
-	return this->make_static_sprite_from_anim(id, new_anim.second, crop);
+	return this->make_sprite_from_anim(id, new_anim.second, crop);
 }
 std::pair<std::string, Sprite*> ResourceManager::make_static_sprite_from_texture(std::string id, std::string texId, Z_PlaneMeta crop){
 	return this->make_static_sprite_from_texture(id, this->get_texture(texId), crop);
 }
 std::pair<std::string, Sprite*> ResourceManager::make_static_sprite_from_file(std::string id, std::string path, Z_PlaneMeta crop){
 	auto new_anim = this->make_static_anim_from_file(id+".animation", path, crop);
-	return this->make_static_sprite_from_anim(id, new_anim.second, crop);
+	return this->make_sprite_from_anim(id, new_anim.second, crop);
 }
 

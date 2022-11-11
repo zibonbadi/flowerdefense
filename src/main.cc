@@ -76,13 +76,14 @@ int main(int argc, char* argv[]){
 
 
 			ResourceManager rc(screen.getRenderer());
-			rc.import_texture("dirt", "./assets/dirt.png");
+			rc.import_texture("grass", "./assets/grass_2.jpeg");
 			rc.import_texture("rose", "./assets/rose.png");
 
 			Tilemap ground(32,32), plants(160,160);
-			auto dirt = rc.make_static_sprite_from_texture("tiles.dirt", "dirt", Z_PlaneMeta {.u = 0, .v = 0, .uw = 85, .vw = 85}).second;
-			auto rose = rc.make_static_sprite_from_texture("tiles.flowers.rose", "rose", Z_PlaneMeta {.u = 0, .v = 0, .uw = 32, .vw = 32}).second;
-			ground.add_tile('.', dirt);
+			auto grass = rc.make_static_sprite_from_texture("tiles.grass", "grass", Z_PlaneMeta {.u = 0, .v = 0, .uw = 32, .vw = 32}).second;
+			auto rose = rc.make_static_sprite_from_texture("tiles.flowers.rose", "banana", Z_PlaneMeta {.u = 0, .v = 0, .uw = 32, .vw = 32}).second;
+			rose->set_color(Z_RGBA{ .r = 0x22, .g = 0xaa, .b = 0xff, .a = 0xff});
+			ground.add_tile('.',grass);
 			plants.add_tile('%',rose);
 
 			ground.fill(0,0,25,25,'.');
