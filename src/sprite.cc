@@ -176,7 +176,7 @@ void Sprite::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 		//}
 	}catch(std::exception &e){
 		//std::cerr << "Sprite.render() exception: " << e.what() << std::endl;
-		SDL_SetRenderDrawColor(renderer, this->color.r, this->color.g, this->color.b, 255);
+		SDL_SetRenderDrawColor(renderer, this->color.r, this->color.g, this->color.b, this->color.a);
 		SDL_RenderFillRect(renderer, &pos);
 	}
 };

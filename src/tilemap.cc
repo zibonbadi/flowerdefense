@@ -171,7 +171,7 @@ void Tilemap::write(std::pair<unsigned int,unsigned int> top_left, std::string t
 		}
 		default:{
 			//std::clog << '(' << (top_left_x+pos_x) << ',' << (top_left_y+pos_y) << "):" << i << ' ' ;
-			this->map[std::pair<unsigned int, unsigned int>(top_left_x+pos_x, top_left_y+pos_y)] = i;
+			this->map[std::pair<unsigned int, unsigned int>(top_left_y+pos_y, top_left_x+pos_x)] = i;
 			pos_x++;
 			break;
 		}
@@ -188,7 +188,7 @@ std::map<std::pair<unsigned int,unsigned int>, char> Tilemap::get_map(){
 };
 
 char Tilemap::get_spot(int x, int y){
-	return this->map[std::pair<int,int> (x,y)];
+	return this->map[std::pair<int,int> (y,x)];
 };
 
 int Tilemap::fill(int map_x, int map_y, int w, int h, char tile){
@@ -199,8 +199,8 @@ int Tilemap::fill(int map_x, int map_y, int w, int h, char tile){
 			// Is this even valid? If no -> skip
 			for(int y = map_y; y < map_y+h; y++){
 				for(int x = map_x; x < map_x+w; x++){
-					std::clog << '(' << x << ',' << y << ") => " << tile << std::endl;
-					this->map[std::pair<int,int> (x,y)] = tile;
+					//std::clog << '(' << x << ',' << y << ") => " << tile << std::endl;
+					this->map[std::pair<int,int> (y,x)] = tile;
 				}
 			}
 		}
@@ -265,8 +265,8 @@ void Tilemap::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 		for(auto & i : this->map){
 			try{
 				auto pos = i.first;
-				auto pos_x = pos.first;
-				auto pos_y = pos.second;
+				auto pos_x = pos.second;
+				auto pos_y = pos.first;
 				auto val = i.second;
 
 			//.x = transform.x+this->transform_rect.x,
@@ -274,7 +274,7 @@ void Tilemap::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 				zp_tmp.y = (this->grit_h*pos_y)+transform.y+this->transform_rect.y;
 
 				SDL_Rect sdlr_tmp {
-						.x = (int)zp_tmp.y,
+						.x = (int)zp_tmp.x,
 						.y = (int)zp_tmp.y,
 					//.x = pos_x*this->grit_w+zp_tmp.x,
 						//.y = pos_y*this->grit_h+zp_tmp.y,
