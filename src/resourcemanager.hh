@@ -43,7 +43,7 @@ class ResourceManager {
 
 
 		/* Sprites */
-		std::pair<std::string, Sprite*> add_sprite(std::string id, Sprite* anim);
+		std::pair<std::string, Sprite*> add_sprite(std::string id, Sprite* spr);
 		int free_sprite(std::string id);
 		Sprite* get_sprite(std::string id);
 

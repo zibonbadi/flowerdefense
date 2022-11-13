@@ -68,6 +68,14 @@ int update(Tilemap* tmap){
 	return 0;
 };
 
+typedef enum
+{
+	LEFT,
+	RIGHT,
+	UP,
+	DOWN
+} EPlayerDirection;
+
 int main(int argc, char* argv[]){
 	std::cout << "Engine launched!" << std::endl;
 
@@ -96,14 +104,45 @@ int main(int argc, char* argv[]){
 			auto rose = rc.make_static_sprite_from_texture("tiles.rose", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 
 			/* Player animation definition */
-			auto playerLeft = Animation(rc.get_texture("spritesheet"), 5);
 
+			auto playerUp = Animation(rc.get_texture("spritesheet"), 5);
+			playerUp.add_frame(Z_PlaneMeta{ .u = 0, .v = 32 * 1, .uw = 32, .vw = 32 });
+			playerUp.add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 1, .uw = 32, .vw = 32 });
+			playerUp.add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 1, .uw = 32, .vw = 32 });
+			playerUp.add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 1, .uw = 32, .vw = 32 });
+			playerUp.add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 1, .uw = 32, .vw = 32 });
+			playerUp.add_xsheet_phase(0, 1);
+			playerUp.add_xsheet_phase(1, 1);
+			playerUp.add_xsheet_phase(2, 1);
+			playerUp.add_xsheet_phase(3, 1);
+			playerUp.add_xsheet_phase(4, 1);
+			playerUp.add_xsheet_phase(3, 1);
+			playerUp.add_xsheet_phase(2, 1);
+			playerUp.add_xsheet_phase(1, 1);
+			rc.add_anim("player.up", &playerUp);
+
+			auto playerDown = Animation(rc.get_texture("spritesheet"), 5);
+			playerDown.add_frame(Z_PlaneMeta{ .u = 0, .v = 32 * 0, .uw = 32, .vw = 32 });
+			playerDown.add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 0, .uw = 32, .vw = 32 });
+			playerDown.add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 0, .uw = 32, .vw = 32 });
+			playerDown.add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 0, .uw = 32, .vw = 32 });
+			playerDown.add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 0, .uw = 32, .vw = 32 });
+			playerDown.add_xsheet_phase(0, 1);
+			playerDown.add_xsheet_phase(1, 1);
+			playerDown.add_xsheet_phase(2, 1);
+			playerDown.add_xsheet_phase(3, 1);
+			playerDown.add_xsheet_phase(4, 1);
+			playerDown.add_xsheet_phase(3, 1);
+			playerDown.add_xsheet_phase(2, 1);
+			playerDown.add_xsheet_phase(1, 1);
+			rc.add_anim("player.down", &playerDown);
+
+			auto playerLeft = Animation(rc.get_texture("spritesheet"), 5);
 			playerLeft.add_frame(Z_PlaneMeta{ .u = 0, .v = 32 * 2, .uw = 32, .vw = 32 });
 			playerLeft.add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 2, .uw = 32, .vw = 32 });
 			playerLeft.add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 2, .uw = 32, .vw = 32 });
 			playerLeft.add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 2, .uw = 32, .vw = 32 });
 			playerLeft.add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 2, .uw = 32, .vw = 32 });
-
 			playerLeft.add_xsheet_phase(0, 1);
 			playerLeft.add_xsheet_phase(1, 1);
 			playerLeft.add_xsheet_phase(2, 1);
@@ -115,13 +154,11 @@ int main(int argc, char* argv[]){
 			rc.add_anim("player.left", &playerLeft);
 
 			auto playerRight = Animation(rc.get_texture("spritesheet"), 5);
-
 			playerRight.add_frame(Z_PlaneMeta{ .u = 0, .v = 32 * 3, .uw = 32, .vw = 32 });
 			playerRight.add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 3, .uw = 32, .vw = 32 });
 			playerRight.add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 3, .uw = 32, .vw = 32 });
 			playerRight.add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 3, .uw = 32, .vw = 32 });
 			playerRight.add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 3, .uw = 32, .vw = 32 });
-
 			playerRight.add_xsheet_phase(0, 1);
 			playerRight.add_xsheet_phase(1, 1);
 			playerRight.add_xsheet_phase(2, 1);
@@ -130,16 +167,17 @@ int main(int argc, char* argv[]){
 			playerRight.add_xsheet_phase(3, 1);
 			playerRight.add_xsheet_phase(2, 1);
 			playerRight.add_xsheet_phase(1, 1);
-
 			rc.add_anim("player.right", &playerRight);
 
+			Sprite player;
+			rc.add_sprite("player", &player);
+			player.add_animation("up", rc.get_anim("player.up"));
+			player.add_animation("down", rc.get_anim("player.down"));
+			player.add_animation("left", rc.get_anim("player.left"));
+			player.add_animation("right", rc.get_anim("player.right"));
+			player.switch_to("left");
 
-
-			auto player = rc.make_sprite_from_anim("player", "player.left", Z_PlaneMeta { .x = 0, .y = 0, .w = 128, .h = 128 }).second;
-			/*auto playerSprite = rc.get_sprite("player").second;
-			rc.add_anim("player.right", &playerRight);
-			playerSprite.add_animation("up", rc.get_anim("player.up"));
-			playerSprite.switch_to_anim("player.up");*/
+			EPlayerDirection playerDir = EPlayerDirection::LEFT;
 
 			Tilemap ground(32,32), plants(32,32);
 
@@ -159,7 +197,7 @@ int main(int argc, char* argv[]){
 			// Construct scene planes
 			board.attach(&ground);
 			board.attach(&plants);
-			board.attach(player);
+			board.attach(&player);
 
 			// Hook plane into scene
 			screen.attach(&board);
@@ -172,11 +210,11 @@ int main(int argc, char* argv[]){
 			}
 
 			uint32_t past = 0;
-
 			/* Player data definition */
 			float playerSpeed = 4.f;
 			SDL_FPoint playerCoordinates = { .x = (SCREEN_WIDTH / 2) - 64, .y = (SCREEN_HEIGHT / 2) - 64 - 200 };
 			SDL_FPoint delta = { .x = 0, .y = 0 };
+			EPlayerDirection pastPlayerDir;
 			while(running){
 				auto now = SDL_GetTicks();
 				//poll();
@@ -202,14 +240,34 @@ int main(int argc, char* argv[]){
 				/* Update player */
 				delta.x = 0;
 				delta.y = 0;
-				if (state[SDL_SCANCODE_UP])		delta.y = -1;
-				if (state[SDL_SCANCODE_DOWN])	delta.y = 1;
-				if (state[SDL_SCANCODE_LEFT])	delta.x = -1;
-				if (state[SDL_SCANCODE_RIGHT])	delta.x = 1;
+
+				EPlayerDirection pastPlayerDir = playerDir;
+
+				if (state[SDL_SCANCODE_UP])		{ delta.y = -1; playerDir = EPlayerDirection::UP; }
+				if (state[SDL_SCANCODE_DOWN])	{ delta.y = 1;	playerDir = EPlayerDirection::DOWN; }
+				if (state[SDL_SCANCODE_LEFT])	{ delta.x = -1; playerDir = EPlayerDirection::LEFT; }
+				if (state[SDL_SCANCODE_RIGHT])  { delta.x = 1;	playerDir = EPlayerDirection::RIGHT; }
+
+				/* Change player sprite animation*/
+				if (pastPlayerDir != playerDir) {
+					switch (playerDir) {
+						case EPlayerDirection::UP:
+								player.switch_to("up");
+							break;
+						case EPlayerDirection::DOWN:
+								player.switch_to("down");
+							break;
+						case EPlayerDirection::LEFT:
+								player.switch_to("left");
+							break;
+						case EPlayerDirection::RIGHT:
+								player.switch_to("right");
+							break;
+					}
+				}
 
 				/* Normalize delta length */
-				if (delta.x != 0 || delta.y != 0)
-				{
+				if (delta.x != 0 || delta.y != 0) {
 					const float length_inverse = 1.f / sqrt(delta.x * delta.x + delta.y * delta.y);
 					delta.x *= length_inverse * playerSpeed;
 					delta.y *= length_inverse * playerSpeed;
@@ -225,8 +283,8 @@ int main(int argc, char* argv[]){
 				if (playerCoordinates.x < 0)				playerCoordinates.x += delta.x;
 				if (playerCoordinates.x > SCREEN_WIDTH)		playerCoordinates.x -= delta.x;
 
-				/* Adjust player sprite position*/
-				player->setTransform(Z_PlaneMeta{ .x = playerCoordinates.x, .y = playerCoordinates.y, .w = 128, .h = 128 });
+				/* Adjust player sprite transform*/
+				player.setTransform(Z_PlaneMeta{ .x = playerCoordinates.x, .y = playerCoordinates.y, .w = 128, .h = 128 });
 
 				/* Advance the player animation */
 				//playerLeft.advance(now);
