@@ -172,7 +172,7 @@ void Sprite::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 			//SDL_RenderFillRect(renderer, &pos);
 		//}else{
 			//std::clog << "Rendering animation \"" << this->current_anime << "\":" << this->anime.size() << "\"..." << std::endl;
-			this->anime[this->current_anime]->render(renderer, plane_meta);
+			this->anime.at(this->current_anime)->render(renderer, plane_meta);
 		//}
 	}catch(std::exception &e){
 		//std::cerr << "Sprite.render() exception: " << e.what() << std::endl;

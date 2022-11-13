@@ -47,6 +47,7 @@ class ResourceManager {
 		int free_sprite(std::string id);
 		Sprite* get_sprite(std::string id);
 
+		std::pair<std::string, Sprite*> make_sprite(std::string id, Z_PlaneMeta crop);
 		std::pair<std::string, Sprite*> make_sprite_from_anim(std::string id, Animation* anim, Z_PlaneMeta crop);
 		std::pair<std::string, Sprite*> make_sprite_from_anim(std::string id, std::string animId, Z_PlaneMeta crop);
 		std::pair<std::string, Sprite*> make_static_sprite_from_texture(std::string id, SDL_Texture* tex, Z_PlaneMeta crop);

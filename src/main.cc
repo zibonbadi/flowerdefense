@@ -135,7 +135,10 @@ int main(int argc, char* argv[]){
 
 
 
-			auto player = rc.make_sprite_from_anim("player", "player.left", Z_PlaneMeta { .x = 0, .y = 0, .w = 128, .h = 128 }).second;
+			//auto player = rc.make_sprite_from_anim("player", "player.left", Z_PlaneMeta { .x = 0, .y = 0, .w = 64, .h = 64 }).second;
+			auto player = rc.make_sprite("player", Z_PlaneMeta { .x = 0, .y = 0, .w = 64, .h = 64 }).second;
+			player->add_animation("left", rc.get_anim("player.left"));
+			player->switch_to("left");
 			/*auto playerSprite = rc.get_sprite("player").second;
 			rc.add_anim("player.right", &playerRight);
 			playerSprite.add_animation("up", rc.get_anim("player.up"));
