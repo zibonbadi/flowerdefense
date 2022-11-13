@@ -10,7 +10,7 @@ using EBus_Fn = std::function<void(Event*)>;
 class Eventbus{
 	private:
 		std::map<std::string, std::set<EBus_Fn*>> callbacks;
-		std::queue<Event> pending;
+		std::queue<Event*> pending;
 
 	public:
 		Eventbus();
