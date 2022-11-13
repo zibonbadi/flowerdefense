@@ -39,6 +39,7 @@ class ResourceManager {
 		std::pair<std::string, Animation*> make_static_anim_from_file(std::string id, std::string path, Z_PlaneMeta crop);
 		std::pair<std::string, Animation*> make_static_anim_from_texture(std::string id, SDL_Texture* tex, Z_PlaneMeta crop);
 		std::pair<std::string, Animation*> make_static_anim_from_texture(std::string id, std::string texId, Z_PlaneMeta crop);
+		void advance_all_anim(uint32_t now);
 
 
 		/* Sprites */

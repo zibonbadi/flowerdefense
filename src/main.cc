@@ -108,7 +108,7 @@ int main(int argc, char* argv[]){
 			Tilemap ground(32,32), plants(32,32);
 			auto dirt = rc.make_static_sprite_from_texture("tiles.dirt", "spritesheet", Z_PlaneMeta {.u = 0, .v = 0, .uw = 85, .vw = 85}).second;
 			auto grass = rc.make_static_sprite_from_texture("grass", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
-			auto rose = rc.make_static_sprite_from_texture("tiles.flowers.rose", "banana", Z_PlaneMeta {.u = 32*5, .v = 32*5, .uw = 32, .vw = 32}).second;
+			auto rose = rc.make_static_sprite_from_texture("tiles.flowers.rose", "spritesheet", Z_PlaneMeta {.u = 32*5, .v = 32*5, .uw = 32, .vw = 32}).second;
 			
 			// Set backup color for rose tile
 			rose->set_color(Z_RGBA{ .r = 0xff, .g = 0x7f, .b = 0xcf, .a = 0xff});
@@ -156,7 +156,8 @@ int main(int argc, char* argv[]){
 					}
 				}
 				}
-				playerBottom.advance(now);
+				//playerBottom.advance(now);
+				rc.advance_all_anim(now);
 				screen.render();
 				past = now;
 			}

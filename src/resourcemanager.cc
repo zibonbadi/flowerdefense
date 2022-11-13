@@ -209,3 +209,9 @@ std::pair<std::string, Sprite*> ResourceManager::make_static_sprite_from_file(st
 	return this->make_sprite_from_anim(id, new_anim.second, crop);
 }
 
+void ResourceManager::advance_all_anim(uint32_t now){
+	for(auto & anim : this->animations){
+		anim.second->advance(now);
+	};
+};
+
