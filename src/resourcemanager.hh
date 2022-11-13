@@ -54,5 +54,8 @@ class ResourceManager {
 
 		/* Tilemaps */
 };
+
+//ResourceManager g_resourcemanager;
+
 #endif
 

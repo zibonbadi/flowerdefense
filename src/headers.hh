@@ -26,24 +26,29 @@
 
 /* Forward declarations */
 class Animation;
-class Game;
-class Plane;
-class Sprite;
-class ResourceManager;
-class Eventbus;
 class Event;
-class Tile;
+class EventBus;
+class Game;
+class KeyMapper;
+class Plane;
+class ResourceManager;
+class Sprite;
 class Tilemap;
-class Tileset;
 
 /* custom classes */
-#include "resourcemanager.hh"
-#include "game.hh"
-#include "plane.hh"
-#include "sprite.hh"
-#include "tilemap.hh"
 #include "animation.hh"
 #include "event.hh"
 #include "eventbus.hh"
+#include "game.hh"
+#include "keymapper.hh"
+#include "plane.hh"
+#include "resourcemanager.hh"
+#include "sprite.hh"
+#include "tilemap.hh"
+
+// Global Engine Objects
+extern EventBus g_eventbus;
+//extern KeyMapper g_keymapper(&g_eventbus);
+
 #endif
 

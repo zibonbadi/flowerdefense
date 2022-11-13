@@ -6,6 +6,8 @@ int uninit(){
 	return 0;
 }
 
+bool running = true;
+
 int poll(){
 	SDL_Event e;
 	while(SDL_PollEvent(&e)){
@@ -15,6 +17,7 @@ int poll(){
 		break;
 	}
 	case SDL_KEYDOWN:{
+	/*
 		switch(e.key.keysym.sym){
 		case SDLK_q:{
 			throw std::runtime_error("Received QUIT signal from user");
@@ -53,6 +56,7 @@ int poll(){
 			}
 		}
 		break;
+	*/
 	}
 	default:{
 		break;
@@ -74,6 +78,14 @@ int main(int argc, char* argv[]){
 		Z_RGBA bgcolor = { .r = 0x00, .g = 0x00, .b = 0x00 };
 		Game screen((int)800,(int)800, bgcolor);
 
+			EventBus ebus;
+			EBus_Fn quit_func = [](Event* e){ running = false; };
+			ebus.subscribe("engine.quit", &quit_func);
+
+			KeyMapper keymap(&ebus);
+			Event e_quit("engine.quit");
+			e_quit.set("attrib", "banana");
+			keymap.bind(SDLK_q, e_quit);
 
 			ResourceManager rc(screen.getRenderer());
 			// rc.import_texture("grass", "./assets/grass_2.jpeg");
@@ -89,9 +101,18 @@ int main(int argc, char* argv[]){
 			rc.import_texture("dirt", "./assets/dirt.png");
 			rc.import_texture("rose", "./assets/rose.png");
 
+<<<<<<< HEAD
 			auto grass = rc.make_static_sprite_from_texture("grass", "spritesheet", Z_PlaneMeta{ .u = 0, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
 			
 			auto playerBottom = Animation(rc.get_texture("spritesheet"), 5);
+=======
+			Tilemap ground(32,32), plants(160,160);
+			auto grass = rc.make_static_sprite_from_texture("tiles.grass", "grass", Z_PlaneMeta {.u = 0, .v = 0, .uw = 32, .vw = 32}).second;
+			auto rose = rc.make_static_sprite_from_texture("tiles.flowers.rose", "banana", Z_PlaneMeta {.u = 0, .v = 0, .uw = 32, .vw = 32}).second;
+			rose->set_color(Z_RGBA{ .r = 0x22, .g = 0xaa, .b = 0xff, .a = 0x7f});
+			ground.add_tile('.',grass);
+			plants.add_tile('%',rose);
+>>>>>>> c066014 (Update EventBus and KeyMapper)
 
 			playerBottom.add_frame(Z_PlaneMeta{ .u = 0, .v = 32 * 2, .uw = 32, .vw = 32 });
 			playerBottom.add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 2, .uw = 32, .vw = 32 });
@@ -135,9 +156,24 @@ int main(int argc, char* argv[]){
 
 			auto now = SDL_GetTicks();
 			uint32_t past = 0;
-
-			while(true){
-				poll();
+			while(running){
+				//poll();
+				//keymap.probe();
+				SDL_Event e;
+				while(SDL_PollEvent(&e)){
+				switch(e.type){
+				case SDL_QUIT:{
+					throw std::runtime_error("Received QUIT signal");
+					break;
+				}
+				case SDL_KEYDOWN:{
+					keymap.probe(e.key);
+				}
+				default:{
+					break;
+					}
+				}
+				}
 				playerBottom.advance(now);
 				screen.render();
 				past = now;
