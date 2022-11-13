@@ -175,7 +175,7 @@ int main(int argc, char* argv[]){
 			player.add_animation("down", rc.get_anim("player.down"));
 			player.add_animation("left", rc.get_anim("player.left"));
 			player.add_animation("right", rc.get_anim("player.right"));
-			player.switch_to("left");
+			player.switch_to_anim("left");
 
 			EPlayerDirection playerDir = EPlayerDirection::LEFT;
 
@@ -252,16 +252,16 @@ int main(int argc, char* argv[]){
 				if (pastPlayerDir != playerDir) {
 					switch (playerDir) {
 						case EPlayerDirection::UP:
-								player.switch_to("up");
+								player.switch_to_anim("up");
 							break;
 						case EPlayerDirection::DOWN:
-								player.switch_to("down");
+								player.switch_to_anim("down");
 							break;
 						case EPlayerDirection::LEFT:
-								player.switch_to("left");
+								player.switch_to_anim("left");
 							break;
 						case EPlayerDirection::RIGHT:
-								player.switch_to("right");
+								player.switch_to_anim("right");
 							break;
 					}
 				}
