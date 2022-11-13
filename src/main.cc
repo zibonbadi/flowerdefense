@@ -212,7 +212,7 @@ int main(int argc, char* argv[]){
 			uint32_t past = 0;
 			/* Player data definition */
 			float playerSpeed = 4.f;
-			SDL_FPoint playerCoordinates = { .x = (SCREEN_WIDTH / 2) - 64, .y = (SCREEN_HEIGHT / 2) - 64 - 200 };
+			SDL_FPoint playerCoordinates = { .x = (SCREEN_WIDTH / 2) - 32, .y = (SCREEN_HEIGHT / 2) - 32 - 200 };
 			SDL_FPoint delta = { .x = 0, .y = 0 };
 			EPlayerDirection pastPlayerDir;
 			while(running){
@@ -284,7 +284,7 @@ int main(int argc, char* argv[]){
 				if (playerCoordinates.x > SCREEN_WIDTH)		playerCoordinates.x -= delta.x;
 
 				/* Adjust player sprite transform*/
-				player.setTransform(Z_PlaneMeta{ .x = playerCoordinates.x, .y = playerCoordinates.y, .w = 128, .h = 128 });
+				player.setTransform(Z_PlaneMeta{ .x = playerCoordinates.x, .y = playerCoordinates.y, .w = 64, .h = 64 });
 
 				/* Advance the player animation */
 				//playerLeft.advance(now);

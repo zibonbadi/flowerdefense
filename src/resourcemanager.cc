@@ -188,10 +188,16 @@ int ResourceManager::free_sprite(std::string id){
 	}
 };
 
+std::pair<std::string, Sprite*> ResourceManager::make_sprite(std::string id, Z_PlaneMeta crop){
+	Sprite* new_sprite = new Sprite(crop);
+	this->sprites.insert(std::pair(id,new_sprite));
+	std::clog << "Added sprite '" << id << "'<" << new_sprite << "> to ResourceManager " << this << std::endl;
+	return std::pair(id,new_sprite);
+}
 std::pair<std::string, Sprite*> ResourceManager::make_sprite_from_anim(std::string id, Animation* anim, Z_PlaneMeta crop){
 	Sprite* new_sprite = new Sprite("show", anim, crop );
 	this->sprites.insert(std::pair(id,new_sprite));
-	std::clog << "Added sprite '" << id << "':(" << new_sprite << ") to ResourceManager " << this << std::endl;
+	std::clog << "Added sprite '" << id << "'<" << new_sprite << "> to ResourceManager " << this << std::endl;
 	return std::pair(id,new_sprite);
 }
 std::pair<std::string, Sprite*> ResourceManager::make_sprite_from_anim(std::string id, std::string animId, Z_PlaneMeta crop){

@@ -20,7 +20,7 @@ Sprite::Sprite(){
 Sprite::Sprite(std::string first_anim_name, Animation* first_anim, Z_PlaneMeta init){
 	this->add_animation(first_anim_name, first_anim);
 	this->transform_rect = init;
-	this->switch_to(first_anim_name);
+	this->switch_to_anim(first_anim_name);
 };
 
 Sprite::Sprite(Z_PlaneMeta init){
@@ -73,7 +73,7 @@ Z_PlaneMeta Sprite::get_transform(){
 	return this->transform_rect;
 }
 
-int Sprite::switch_to(std::string animation_name){
+int Sprite::switch_to_anim(std::string animation_name){
 	if(this->anime.find(animation_name) != this->anime.end()){
 		this->current_anime = animation_name;
 		this->anime[animation_name]->restart();
@@ -172,7 +172,7 @@ void Sprite::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 			//SDL_RenderFillRect(renderer, &pos);
 		//}else{
 			//std::clog << "Rendering animation \"" << this->current_anime << "\":" << this->anime.size() << "\"..." << std::endl;
-			this->anime[this->current_anime]->render(renderer, plane_meta);
+			this->anime.at(this->current_anime)->render(renderer, plane_meta);
 		//}
 	}catch(std::exception &e){
 		//std::cerr << "Sprite.render() exception: " << e.what() << std::endl;
