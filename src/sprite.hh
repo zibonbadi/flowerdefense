@@ -24,7 +24,7 @@ class Sprite {
 		Sprite(std::string first_anim_name, Animation* first_anim, Z_PlaneMeta init);
 		Sprite(Z_PlaneMeta init);
 		~Sprite();
-		int switch_to(std::string animation);
+		int switch_to_anim(std::string animation);
 		int set_color(Z_RGBA color);
 		int add_animation(std::string name, Animation* animation);
 		void transform(Z_PlaneMeta add_tf);
