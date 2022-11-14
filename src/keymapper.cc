@@ -1,6 +1,7 @@
 #include "keymapper.hh"
 
 KeyMapper::KeyMapper(EventBus* target){
+	this->bus = target;
 };
 
 KeyMapper::~KeyMapper(){

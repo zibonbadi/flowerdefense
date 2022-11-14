@@ -8,7 +8,7 @@ using EBus_Fn = std::function<void(Event*)>;
 class EventBus{
 	private:
 		std::map<std::string, std::set<EBus_Fn*>> callbacks;
-		std::queue<Event*> pending;
+		//std::queue<Event*> pending;
 
 	public:
 		EventBus();
