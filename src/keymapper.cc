@@ -35,13 +35,20 @@ int KeyMapper::probe(SDL_KeyboardEvent sdlevent){
 	try{
 		Event e_send = this->key_events.at(sdlevent.keysym.sym);
 		// status_edge: "up" "down" "on" "off" "toggle"
-		if(sdlevent.repeat == 0 && sdlevent.type == SDL_KEYDOWN){
-			e_send.set("status_edge", "down");
-		}else if(sdlevent.type == SDL_KEYUP){
-			e_send.set("status_edge", "up");
-		}
+		if(sdlevent.repeat == 0){
+			switch(sdlevent.type){
+			case SDL_KEYDOWN:{
+				e_send.set("status_edge", "down");
+				break;
+			}
+			case SDL_KEYUP:{
+				e_send.set("status_edge", "up");
+				break;
+			}
+			};
 			this->bus->send(&e_send);
-			std::cerr << "KeyMapper.probe(" << sdlevent.keysym.sym << "): Called." << std::endl;
+			std::cerr << "KeyMapper.probe(" << sdlevent.keysym.sym << "): Called. \"" << e_send.get("status_edge") << "\"" << std::endl;
+		};
 		return 0;
 	}catch (std::exception &e){
 		std::cerr << "KeyMapper.probe() exception: " << e.what() << std::endl;
