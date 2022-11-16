@@ -35,6 +35,7 @@ class Plane;
 class ResourceManager;
 class Sprite;
 class Tilemap;
+class Hub;
 
 /* custom classes */
 #include "animation.hh"
@@ -46,6 +47,7 @@ class Tilemap;
 #include "resourcemanager.hh"
 #include "sprite.hh"
 #include "tilemap.hh"
+#include "hub.hh"
 
 // Global Engine Objects
 extern EventBus g_eventbus;
