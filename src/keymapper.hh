@@ -2,6 +2,8 @@
 #define KEYMAPPER_H
 
 #include "headers.hh"
+		
+// status_edge: "up" "down" "on" "off" "toggle"
 
 class KeyMapper{
 	private:

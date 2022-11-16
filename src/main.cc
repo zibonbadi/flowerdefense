@@ -88,13 +88,7 @@ int main(int argc, char* argv[]){
 		Game screen((int)SCREEN_WIDTH,(int)SCREEN_HEIGHT, bgcolor);
 
 			EventBus ebus;
-			EBus_Fn quit_func = [](Event* e){ running = false; };
-			ebus.subscribe("engine.quit", &quit_func);
-
 			KeyMapper keymap(&ebus);
-			Event e_quit("engine.quit");
-			e_quit.set("attrib", "banana");
-			keymap.bind(SDLK_q, e_quit);
 
 			ResourceManager rc(screen.getRenderer());
 			/* Import spritesheet */
@@ -146,8 +140,80 @@ int main(int argc, char* argv[]){
 			SDL_FPoint playerCoordinates = { .x = (SCREEN_WIDTH / 2) - 32, .y = (SCREEN_HEIGHT / 2) - 32 - 200 };
 			SDL_FPoint delta = { .x = 0, .y = 0 };
 			EPlayerDirection pastPlayerDir;
+
+			/* Set up control events */
+			EBus_Fn f_quit = [&](Event* e){
+				if(e->get("status_edge") == "up"){
+					std::clog << "Quitting engine on behalf of event " << e << std::endl;
+					running = false;
+				};
+			};
+			EBus_Fn f_set_dir = [&](Event* e){
+				auto dir = e->get("direction");
+				if(e->get("status_edge") == "down"){
+					if(dir == "right"){
+						delta.x = 1;
+						playerDir = EPlayerDirection::RIGHT; 
+					};
+					if(dir == "up"){
+						delta.y = -1;
+						playerDir = EPlayerDirection::UP; 
+					};
+					if(dir == "left"){
+						delta.x = -1;
+						playerDir = EPlayerDirection::LEFT; 
+					};
+					if(dir == "down"){
+						delta.y = 1;
+						playerDir = EPlayerDirection::DOWN; 
+					};
+				};
+				if(e->get("status_edge") == "up"){
+					if(dir == "left" || dir == "right"){
+						delta.x = 0;
+					}
+					if(dir == "up" || dir == "down"){
+						delta.y = 0;
+					}
+				}
+			};
+
+			// Create Keymap events
+			Event e_quit("engine.quit");
+			keymap.bind(SDLK_q, e_quit);
+			// Up
+			Event e_player_up("player.set_direction");
+			e_player_up.set("direction", "up");
+			keymap.bind(SDLK_w, e_player_up);
+			// Down
+			Event e_player_down("player.set_direction");
+			e_player_down.set("direction", "down");
+			keymap.bind(SDLK_s, e_player_down);
+			// Left
+			Event e_player_left("player.set_direction");
+			e_player_left.set("direction", "left");
+			keymap.bind(SDLK_a, e_player_left);
+			// Right
+			Event e_player_right("player.set_direction");
+			e_player_right.set("direction", "right");
+			keymap.bind(SDLK_d, e_player_right);
+
+			// Register events
+			ebus.subscribe("engine.quit", &f_quit);
+			ebus.subscribe("player.set_direction", &f_set_dir);
+
 			while(running){
 				auto now = SDL_GetTicks();
+				const Uint8* state = SDL_GetKeyboardState(nullptr);
+
+
+				/* Update player */
+				//delta.x = 0;
+				//delta.y = 0;
+
+				EPlayerDirection pastPlayerDir = playerDir;
+
+				//
 				//poll();
 				SDL_Event e;
 				while(SDL_PollEvent(&e)){
@@ -156,6 +222,7 @@ int main(int argc, char* argv[]){
 					throw std::runtime_error("Received QUIT signal");
 					break;
 				}
+				case SDL_KEYUP:
 				case SDL_KEYDOWN:{
 					keymap.probe(e.key);
 				}
@@ -165,19 +232,12 @@ int main(int argc, char* argv[]){
 				}
 				}
 				//playerBottom.advance(now);
-				const Uint8* state = SDL_GetKeyboardState(nullptr);
-
-
-				/* Update player */
-				delta.x = 0;
-				delta.y = 0;
-
-				EPlayerDirection pastPlayerDir = playerDir;
-
+				/*
 				if (state[SDL_SCANCODE_UP])		{ delta.y = -1; playerDir = EPlayerDirection::UP; }
 				if (state[SDL_SCANCODE_DOWN])	{ delta.y = 1;	playerDir = EPlayerDirection::DOWN; }
 				if (state[SDL_SCANCODE_LEFT])	{ delta.x = -1; playerDir = EPlayerDirection::LEFT; }
 				if (state[SDL_SCANCODE_RIGHT])  { delta.x = 1;	playerDir = EPlayerDirection::RIGHT; }
+				*/
 
 				/* Change player sprite animation*/
 				if (pastPlayerDir != playerDir) {

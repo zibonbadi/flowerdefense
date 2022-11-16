@@ -18,9 +18,9 @@ void EventBus::send(Event *event){
 	auto type_i = this->callbacks.find(e_type);
 	if(type_i != this->callbacks.end()){
 		std::clog << "EventBus.send(): Propagating event \"" << e_type << "\"." << std::endl;
-		for(auto & callback : this->callbacks[e_type]){
-			std::clog << callback << std::endl;
-			//callback(event);
+		for(auto & cb : this->callbacks[e_type]){
+			//std::clog << cb << std::endl;
+			(*cb)(event);
 		}
 	}else{
 		throw std::runtime_error("Event propagation failed");
@@ -41,7 +41,9 @@ int EventBus::subscribe(std::string type, EBus_Fn* callback){
 	// Create missing vector
 	auto type_i = this->callbacks.find(type);
 	if(type_i == this->callbacks.end()){ this->callbacks[type] = std::set<EBus_Fn*>(); }
-	// Insert callback
+	
+	// Reload for assurance & Insert callback
+	type_i = this->callbacks.find(type);
 	if(type_i != this->callbacks.end() && this->callbacks[type].find(callback) == this->callbacks[type].end() ){
 		this->callbacks[type].insert(callback);
 		std::clog << "EventBus.subscribe(\"" << type << "\", " << callback << "): Successfully subscribed." << std::endl;
