@@ -1,90 +1,17 @@
 #include "headers.hh"
 #include "player.hh"
 
-int uninit(){
-	IMG_Quit();
-	SDL_Quit();
-	return 0;
-}
-
+int uninit();
+int update(Tilemap* tmap);
+int poll();
 bool running = true;
-
-int poll(){
-	SDL_Event e;
-	while(SDL_PollEvent(&e)){
-	switch(e.type){
-	case SDL_QUIT:{
-		throw std::runtime_error("Received QUIT signal");
-		break;
-	}
-	case SDL_KEYDOWN:{
-		switch(e.key.keysym.sym){
-		case SDLK_q:{
-			throw std::runtime_error("Received QUIT signal from user");
-			break;
-		}
-		case SDLK_UP:
-		case SDLK_w:{
-			// Game logic
-			//current_dir = UP;
-			break;
-		}
-		case SDLK_DOWN:
-		case SDLK_s:{
-			// Game logic
-			//current_dir = DOWN;
-			break;
-		}
-		case SDLK_LEFT:
-		case SDLK_a:{
-			// Game logic
-			//current_dir = LEFT;
-			break;
-		}
-		case SDLK_RIGHT:
-		case SDLK_d:{
-			// Game logic
-			//current_dir = RIGHT;
-			break;
-		}
-		case SDLK_p:{
-			//SDL_PauseAudio(adev, 1);
-			break;
-		}
-		default:{
-			break;
-			}
-		}
-		break;
-	}
-	default:{
-		break;
-		}
-	}
-	}
-	return 0;
-};
-
-int update(Tilemap* tmap){
-	return 0;
-};
-
-typedef enum
-{
-	LEFT,
-	RIGHT,
-	UP,
-	DOWN
-} EPlayerDirection;
 
 int main(int argc, char* argv[]){
 	std::cout << "Engine launched!" << std::endl;
-
 	try{
 		std::cout << "Building system..." << std::endl;
 		Z_RGBA bgcolor = { .r = 0x00, .g = 0x00, .b = 0x00 };
-		constexpr int SCREEN_HEIGHT = 800;
-		constexpr int SCREEN_WIDTH = 800;
+
 		Game screen((int)SCREEN_WIDTH,(int)SCREEN_HEIGHT, bgcolor);
 
 			EventBus ebus;
@@ -98,11 +25,7 @@ int main(int argc, char* argv[]){
 			auto grass = rc.make_static_sprite_from_texture("tiles.grass", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 			auto rose = rc.make_static_sprite_from_texture("tiles.rose", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 
-			Player p1(rc);
-
-			Sprite &player = *(rc.get_sprite("player"));
-
-			EPlayerDirection playerDir = EPlayerDirection::LEFT;
+			Player player((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200, rc, ebus, keymap);
 
 			Tilemap ground(32,32), plants(32,32);
 
@@ -122,7 +45,7 @@ int main(int argc, char* argv[]){
 			// Construct scene planes
 			board.attach(&ground);
 			board.attach(&plants);
-			board.attach(&player);
+			board.attach(player.GetSprite());
 
 			// Hook plane into scene
 			screen.attach(&board);
@@ -134,12 +57,6 @@ int main(int argc, char* argv[]){
 				screen.load_mod(rc.get_mod("bgm"), -1, -1);
 			}
 
-			uint32_t past = 0;
-			/* Player data definition */
-			float playerSpeed = 4.f;
-			SDL_FPoint playerCoordinates = { .x = (SCREEN_WIDTH / 2) - 32, .y = (SCREEN_HEIGHT / 2) - 32 - 200 };
-			SDL_FPoint delta = { .x = 0, .y = 0 };
-			EPlayerDirection pastPlayerDir;
 
 			/* Set up control events */
 			EBus_Fn f_quit = [&](Event* e){
@@ -148,73 +65,22 @@ int main(int argc, char* argv[]){
 					running = false;
 				};
 			};
-			EBus_Fn f_set_dir = [&](Event* e){
-				auto dir = e->get("direction");
-				if(e->get("status_edge") == "down"){
-					if(dir == "right"){
-						delta.x = 1;
-						playerDir = EPlayerDirection::RIGHT; 
-					};
-					if(dir == "up"){
-						delta.y = -1;
-						playerDir = EPlayerDirection::UP; 
-					};
-					if(dir == "left"){
-						delta.x = -1;
-						playerDir = EPlayerDirection::LEFT; 
-					};
-					if(dir == "down"){
-						delta.y = 1;
-						playerDir = EPlayerDirection::DOWN; 
-					};
-				};
-				if(e->get("status_edge") == "up"){
-					if(dir == "left" || dir == "right"){
-						delta.x = 0;
-					}
-					if(dir == "up" || dir == "down"){
-						delta.y = 0;
-					}
-				}
-			};
 
-			// Create Keymap events
+			// Create Keymap Quit event
 			Event e_quit("engine.quit");
 			keymap.bind(SDLK_q, e_quit);
-			// Up
-			Event e_player_up("player.set_direction");
-			e_player_up.set("direction", "up");
-			keymap.bind(SDLK_w, e_player_up);
-			// Down
-			Event e_player_down("player.set_direction");
-			e_player_down.set("direction", "down");
-			keymap.bind(SDLK_s, e_player_down);
-			// Left
-			Event e_player_left("player.set_direction");
-			e_player_left.set("direction", "left");
-			keymap.bind(SDLK_a, e_player_left);
-			// Right
-			Event e_player_right("player.set_direction");
-			e_player_right.set("direction", "right");
-			keymap.bind(SDLK_d, e_player_right);
 
 			// Register events
 			ebus.subscribe("engine.quit", &f_quit);
-			ebus.subscribe("player.set_direction", &f_set_dir);
 
+
+			uint32_t past = 0;
 			while(running){
 				auto now = SDL_GetTicks();
 				const Uint8* state = SDL_GetKeyboardState(nullptr);
 
 
-				/* Update player */
-				//delta.x = 0;
-				//delta.y = 0;
-
-				EPlayerDirection pastPlayerDir = playerDir;
-
-				//
-				//poll();
+				// poll Events
 				SDL_Event e;
 				while(SDL_PollEvent(&e)){
 				switch(e.type){
@@ -231,51 +97,9 @@ int main(int argc, char* argv[]){
 					}
 				}
 				}
-				//playerBottom.advance(now);
-				/*
-				if (state[SDL_SCANCODE_UP])		{ delta.y = -1; playerDir = EPlayerDirection::UP; }
-				if (state[SDL_SCANCODE_DOWN])	{ delta.y = 1;	playerDir = EPlayerDirection::DOWN; }
-				if (state[SDL_SCANCODE_LEFT])	{ delta.x = -1; playerDir = EPlayerDirection::LEFT; }
-				if (state[SDL_SCANCODE_RIGHT])  { delta.x = 1;	playerDir = EPlayerDirection::RIGHT; }
-				*/
 
-				/* Change player sprite animation*/
-				if (pastPlayerDir != playerDir) {
-					switch (playerDir) {
-						case EPlayerDirection::UP:
-								player.switch_to_anim("up");
-							break;
-						case EPlayerDirection::DOWN:
-								player.switch_to_anim("down");
-							break;
-						case EPlayerDirection::LEFT:
-								player.switch_to_anim("left");
-							break;
-						case EPlayerDirection::RIGHT:
-								player.switch_to_anim("right");
-							break;
-					}
-				}
-
-				/* Normalize delta length */
-				if (delta.x != 0 || delta.y != 0) {
-					const float length_inverse = 1.f / sqrt(delta.x * delta.x + delta.y * delta.y);
-					delta.x *= length_inverse * playerSpeed;
-					delta.y *= length_inverse * playerSpeed;
-				}
-
-				/* Add delta to player coordinates */
-				playerCoordinates.x += delta.x;
-				playerCoordinates.y += delta.y;
-
-				/* Handle Offscreen Movement */
-				if (playerCoordinates.y < 0)				playerCoordinates.y += delta.y;
-				if (playerCoordinates.y > SCREEN_HEIGHT)	playerCoordinates.y -= delta.y;
-				if (playerCoordinates.x < 0)				playerCoordinates.x += delta.x;
-				if (playerCoordinates.x > SCREEN_WIDTH)		playerCoordinates.x -= delta.x;
-
-				/* Adjust player sprite transform*/
-				player.setTransform(Z_PlaneMeta{ .x = playerCoordinates.x, .y = playerCoordinates.y, .w = 64, .h = 64 });
+				
+				player.Update();
 
 				/* Advance the player animation */
 				rc.advance_all_anim(now);
@@ -292,3 +116,69 @@ int main(int argc, char* argv[]){
 	_CrtDumpMemoryLeaks();
 	return 0;
 }
+
+int uninit(){
+	IMG_Quit();
+	SDL_Quit();
+	return 0;
+}
+
+int update(Tilemap* tmap) {
+	return 0;
+};
+
+int poll() {
+	SDL_Event e;
+	while (SDL_PollEvent(&e)) {
+		switch (e.type) {
+		case SDL_QUIT: {
+			throw std::runtime_error("Received QUIT signal");
+			break;
+		}
+		case SDL_KEYDOWN: {
+			switch (e.key.keysym.sym) {
+			case SDLK_q: {
+				throw std::runtime_error("Received QUIT signal from user");
+				break;
+			}
+			case SDLK_UP:
+			case SDLK_w: {
+				// Game logic
+				//current_dir = UP;
+				break;
+			}
+			case SDLK_DOWN:
+			case SDLK_s: {
+				// Game logic
+				//current_dir = DOWN;
+				break;
+			}
+			case SDLK_LEFT:
+			case SDLK_a: {
+				// Game logic
+				//current_dir = LEFT;
+				break;
+			}
+			case SDLK_RIGHT:
+			case SDLK_d: {
+				// Game logic
+				//current_dir = RIGHT;
+				break;
+			}
+			case SDLK_p: {
+				//SDL_PauseAudio(adev, 1);
+				break;
+			}
+			default: {
+				break;
+			}
+			}
+			break;
+		}
+		default: {
+			break;
+		}
+		}
+	}
+	return 0;
+};
