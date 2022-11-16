@@ -1,4 +1,5 @@
 #include "headers.hh"
+#include "player.hh"
 
 int uninit(){
 	IMG_Quit();
@@ -103,79 +104,9 @@ int main(int argc, char* argv[]){
 			auto grass = rc.make_static_sprite_from_texture("tiles.grass", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 			auto rose = rc.make_static_sprite_from_texture("tiles.rose", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 
-			/* Player animation definition */
+			Player p1(rc);
 
-			auto playerUp = Animation(rc.get_texture("spritesheet"), 5);
-			playerUp.add_frame(Z_PlaneMeta{ .u = 0, .v = 32 * 1, .uw = 32, .vw = 32 });
-			playerUp.add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 1, .uw = 32, .vw = 32 });
-			playerUp.add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 1, .uw = 32, .vw = 32 });
-			playerUp.add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 1, .uw = 32, .vw = 32 });
-			playerUp.add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 1, .uw = 32, .vw = 32 });
-			playerUp.add_xsheet_phase(0, 1);
-			playerUp.add_xsheet_phase(1, 1);
-			playerUp.add_xsheet_phase(2, 1);
-			playerUp.add_xsheet_phase(3, 1);
-			playerUp.add_xsheet_phase(4, 1);
-			playerUp.add_xsheet_phase(3, 1);
-			playerUp.add_xsheet_phase(2, 1);
-			playerUp.add_xsheet_phase(1, 1);
-			rc.add_anim("player.up", &playerUp);
-
-			auto playerDown = Animation(rc.get_texture("spritesheet"), 5);
-			playerDown.add_frame(Z_PlaneMeta{ .u = 0, .v = 32 * 0, .uw = 32, .vw = 32 });
-			playerDown.add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 0, .uw = 32, .vw = 32 });
-			playerDown.add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 0, .uw = 32, .vw = 32 });
-			playerDown.add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 0, .uw = 32, .vw = 32 });
-			playerDown.add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 0, .uw = 32, .vw = 32 });
-			playerDown.add_xsheet_phase(0, 1);
-			playerDown.add_xsheet_phase(1, 1);
-			playerDown.add_xsheet_phase(2, 1);
-			playerDown.add_xsheet_phase(3, 1);
-			playerDown.add_xsheet_phase(4, 1);
-			playerDown.add_xsheet_phase(3, 1);
-			playerDown.add_xsheet_phase(2, 1);
-			playerDown.add_xsheet_phase(1, 1);
-			rc.add_anim("player.down", &playerDown);
-
-			auto playerLeft = Animation(rc.get_texture("spritesheet"), 5);
-			playerLeft.add_frame(Z_PlaneMeta{ .u = 0, .v = 32 * 2, .uw = 32, .vw = 32 });
-			playerLeft.add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 2, .uw = 32, .vw = 32 });
-			playerLeft.add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 2, .uw = 32, .vw = 32 });
-			playerLeft.add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 2, .uw = 32, .vw = 32 });
-			playerLeft.add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 2, .uw = 32, .vw = 32 });
-			playerLeft.add_xsheet_phase(0, 1);
-			playerLeft.add_xsheet_phase(1, 1);
-			playerLeft.add_xsheet_phase(2, 1);
-			playerLeft.add_xsheet_phase(3, 1);
-			playerLeft.add_xsheet_phase(4, 1);
-			playerLeft.add_xsheet_phase(3, 1);
-			playerLeft.add_xsheet_phase(2, 1);
-			playerLeft.add_xsheet_phase(1, 1);
-			rc.add_anim("player.left", &playerLeft);
-
-			auto playerRight = Animation(rc.get_texture("spritesheet"), 5);
-			playerRight.add_frame(Z_PlaneMeta{ .u = 0, .v = 32 * 3, .uw = 32, .vw = 32 });
-			playerRight.add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 3, .uw = 32, .vw = 32 });
-			playerRight.add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 3, .uw = 32, .vw = 32 });
-			playerRight.add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 3, .uw = 32, .vw = 32 });
-			playerRight.add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 3, .uw = 32, .vw = 32 });
-			playerRight.add_xsheet_phase(0, 1);
-			playerRight.add_xsheet_phase(1, 1);
-			playerRight.add_xsheet_phase(2, 1);
-			playerRight.add_xsheet_phase(3, 1);
-			playerRight.add_xsheet_phase(4, 1);
-			playerRight.add_xsheet_phase(3, 1);
-			playerRight.add_xsheet_phase(2, 1);
-			playerRight.add_xsheet_phase(1, 1);
-			rc.add_anim("player.right", &playerRight);
-
-			Sprite player;
-			rc.add_sprite("player", &player);
-			player.add_animation("up", rc.get_anim("player.up"));
-			player.add_animation("down", rc.get_anim("player.down"));
-			player.add_animation("left", rc.get_anim("player.left"));
-			player.add_animation("right", rc.get_anim("player.right"));
-			player.switch_to_anim("left");
+			Sprite &player = *(rc.get_sprite("player"));
 
 			EPlayerDirection playerDir = EPlayerDirection::LEFT;
 
@@ -287,7 +218,6 @@ int main(int argc, char* argv[]){
 				player.setTransform(Z_PlaneMeta{ .x = playerCoordinates.x, .y = playerCoordinates.y, .w = 64, .h = 64 });
 
 				/* Advance the player animation */
-				//playerLeft.advance(now);
 				rc.advance_all_anim(now);
 				screen.render();
 				past = now;
@@ -299,5 +229,6 @@ int main(int argc, char* argv[]){
 	std::cout << "Shutting down..." << std::endl;
 	uninit();
 	std::cout << "Engine stopped!" << std::endl;
+	_CrtDumpMemoryLeaks();
 	return 0;
 }
