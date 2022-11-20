@@ -12,12 +12,12 @@ int main(int argc, char* argv[]){
 		std::cout << "Building system..." << std::endl;
 		Z_RGBA bgcolor = { .r = 0x00, .g = 0x00, .b = 0x00 };
 
-		Game screen((int)SCREEN_WIDTH,(int)SCREEN_HEIGHT, bgcolor);
+		Game game((int)SCREEN_WIDTH,(int)SCREEN_HEIGHT, bgcolor);
 
 			EventBus ebus;
 			KeyMapper keymap(&ebus);
 
-			ResourceManager rc(screen.getRenderer());
+			ResourceManager rc(game.getRenderer());
 			/* Import spritesheet */
 			rc.import_texture("spritesheet", "./assets/spritesheet.png");
 
@@ -48,13 +48,13 @@ int main(int argc, char* argv[]){
 			board.attach(player.GetSprite());
 
 			// Hook plane into scene
-			screen.attach(&board);
+			game.attach(&board);
 
 			std::cout << "Entering main loop..." << std::endl;
 
 			// Gloptastic tracker beats
 			if(rc.import_mod("bgm", "./assets/cycle.stm") != nullptr){
-				screen.load_mod(rc.get_mod("bgm"), -1, -1);
+				game.load_mod(rc.get_mod("bgm"), -1, -1);
 			}
 
 
@@ -103,7 +103,7 @@ int main(int argc, char* argv[]){
 
 				/* Advance the player animation */
 				rc.advance_all_anim(now);
-				screen.render();
+				game.render();
 				past = now;
 			}
 		}catch(std::exception& e){
