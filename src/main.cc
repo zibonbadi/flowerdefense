@@ -113,7 +113,6 @@ int main(int argc, char* argv[]){
 	std::cout << "Shutting down..." << std::endl;
 	uninit();
 	std::cout << "Engine stopped!" << std::endl;
-	_CrtDumpMemoryLeaks();
 	return 0;
 }
 
