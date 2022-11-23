@@ -114,11 +114,11 @@ void BFS::execute(const int& x_root, const int& y_root) {
 		for (int j = 0; j < charVec[i].size(); j++) {
 			ss << charVec[i][j];
 		}
-		ss << "\n";
-		std::cout << ss.str() << std::endl;
-		bfsArrows->write(std::pair{ 0, i }, ss.str());
-		ss.str("");
+		ss << "\r\n";
 	}
+	std::cout << ss.str() << std::endl;
+	bfsArrows->write(std::pair{ 0, 0 }, ss.str());
+	ss.str("");
 }
 
 // Function to check if a cell
