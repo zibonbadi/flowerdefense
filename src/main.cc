@@ -14,68 +14,72 @@ int main(int argc, char* argv[]){
 
 		Game game((int)SCREEN_WIDTH,(int)SCREEN_HEIGHT, bgcolor);
 
-			EventBus ebus;
-			KeyMapper keymap(&ebus);
+		EventBus ebus;
+		KeyMapper keymap(&ebus);
 
-			ResourceManager rc(game.getRenderer());
-			/* Import spritesheet */
-			rc.import_texture("spritesheet", "./assets/spritesheet.png");
+		ResourceManager rc(game.getRenderer());
+		/* Import spritesheet */
+		rc.import_texture("spritesheet", "./assets/spritesheet.png");
 
-			/* Select tiles from tileset */
-			auto grass = rc.make_static_sprite_from_texture("tiles.grass", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
-			auto rose = rc.make_static_sprite_from_texture("tiles.rose", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
+		/* Select tiles from tileset */
+		auto grass = rc.make_static_sprite_from_texture("tiles.grass", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
+		auto rose = rc.make_static_sprite_from_texture("tiles.rose", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 
-			Player player((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200, rc, ebus, keymap);
+		Player player((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200, rc, ebus, keymap);
 
-			Tilemap ground(32,32), plants(32,32);
+		Tilemap ground(32,32), plants(32,32);
 
-			
-			// Set backup color for rose tile
-			rose->set_color(Z_RGBA{ .r = 0xff, .g = 0x7f, .b = 0xcf, .a = 0xff});
+		
+		// Set backup color for rose tile
+		rose->set_color(Z_RGBA{ .r = 0xff, .g = 0x7f, .b = 0xcf, .a = 0xff});
 
-			ground.add_tile('.', grass);
-			plants.add_tile('%', rose);
+		ground.add_tile('.', grass);
+		plants.add_tile('%', rose);
 
-			ground.fill(0, 0, 25, 25, '.');
-			plants.fill(12, 12, 1, 1, '%');
+		ground.fill(0, 0, 25, 25, '.');
+		plants.fill(12, 12, 1, 1, '%');
 
-			/* Actual game */
-			Plane board(Z_PlaneMeta{.x = 0, .y = 0, .w = 800, .h = 800});
-			
-			// Construct scene planes
-			board.attach(&ground);
-			board.attach(&plants);
-			board.attach(player.GetSprite());
+		/* Actual game */
+		Plane board(Z_PlaneMeta{.x = 0, .y = 0, .w = 800, .h = 800});
+		
+		// Construct scene planes
+		board.attach(&ground);
+		board.attach(&plants);
+		board.attach(player.GetSprite());
 
-			// Hook plane into scene
-			game.attach(&board);
+		//Hud
+		Hud hud(rc,board);
+		hud.exp_create(5,8);
 
-			std::cout << "Entering main loop..." << std::endl;
+		// Hook plane into scene
+		game.attach(&board);
 
-			// Gloptastic tracker beats
-			if(rc.import_mod("bgm", "./assets/cycle.stm") != nullptr){
-				game.load_mod(rc.get_mod("bgm"), -1, -1);
-			}
+		std::cout << "Entering main loop..." << std::endl;
+
+		// Gloptastic tracker beats
+		if(rc.import_mod("bgm", "./assets/cycle.stm") != nullptr){
+			game.load_mod(rc.get_mod("bgm"), -1, -1);
+		}
 
 
-			/* Set up control events */
-			EBus_Fn f_quit = [&](Event* e){
-				if(e->get("status_edge") == "up"){
-					std::clog << "Quitting engine on behalf of event " << e << std::endl;
-					running = false;
-				};
+		/* Set up control events */
+		EBus_Fn f_quit = [&](Event* e){
+			if(e->get("status_edge") == "up"){
+				std::clog << "Quitting engine on behalf of event " << e << std::endl;
+				running = false;
 			};
+		};
 
-			// Create Keymap Quit event
-			Event e_quit("engine.quit");
-			keymap.bind(SDLK_q, e_quit);
+		// Create Keymap Quit event
+		Event e_quit("engine.quit");
+		keymap.bind(SDLK_q, e_quit);
 
-			// Register events
-			ebus.subscribe("engine.quit", &f_quit);
+		// Register events
+		ebus.subscribe("engine.quit", &f_quit);
 
 
-			uint32_t past = 0;
-			while(running){
+		uint32_t past = 0;
+		while(running){
 				auto now = SDL_GetTicks();
 				const Uint8* state = SDL_GetKeyboardState(nullptr);
 
@@ -105,6 +109,7 @@ int main(int argc, char* argv[]){
 				rc.advance_all_anim(now);
 				game.render();
 				past = now;
+
 			}
 		}catch(std::exception& e){
 			std::cerr << "Exception caught: " << e.what() << std::endl;

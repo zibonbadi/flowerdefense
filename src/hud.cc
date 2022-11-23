@@ -1,6 +1,14 @@
-#include "hub.hh"
+#include "hud.hh"
 
-void Hub::ex_rahmen_create(){
+Hud::Hud(ResourceManager &rc, Plane &board) : _rc(rc), _board(board){
+			ex_rahmen_create();
+			ex_bar_create();
+			gaertner_leben_create();
+			rose_leben_create();
+
+}
+
+void Hud::ex_rahmen_create(){
 			
 			auto xp_rahmen_links = _rc.make_static_sprite_from_texture("tiles.xp_rahmen_links", "spritesheet", Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 			auto xp_rahmen_rechts = _rc.make_static_sprite_from_texture("tiles.xp_rahmen_rechts", "spritesheet", Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
@@ -21,7 +29,7 @@ void Hub::ex_rahmen_create(){
 
 }
 
-void Hub::ex_bar_create(){
+void Hud::ex_bar_create(){
 			 ex_balken_anzeige = new Animation(_rc.get_texture("spritesheet"), 1);
 			ex_balken_anzeige->add_frame(Z_PlaneMeta{ .u = (32*3)-3, .v = 32 * 5, .uw = 32, .vw = 32 });
 			ex_balken_anzeige->add_xsheet_phase(0, 1);
@@ -31,7 +39,7 @@ void Hub::ex_bar_create(){
 		_board.attach(ex_bar);
 }
 
-void Hub::gaertner_leben_create(){
+void Hud::gaertner_leben_create(){
 
 			gaertner_leben_1 = new Animation(_rc.get_texture("spritesheet"), 1);
 		
@@ -58,7 +66,7 @@ void Hub::gaertner_leben_create(){
 			 _board.attach(gaertner_leben[3]);
 }
 
-void Hub::rose_leben_create(){
+void Hud::rose_leben_create(){
 			 rose_leben_a[0] = new Animation(_rc.get_texture("spritesheet"), 1);
 			 rose_leben_a[1] = new Animation(_rc.get_texture("spritesheet"), 1);
 			 rose_leben_a[2] = new Animation(_rc.get_texture("spritesheet"), 1);
@@ -98,7 +106,7 @@ void Hub::rose_leben_create(){
 
 }
 
-void Hub::rose_leben_runter(){
+void Hud::rose_leben_runter(){
 	switch (rose_akt_leben)
 	{
 	case 4:
@@ -125,7 +133,7 @@ void Hub::rose_leben_runter(){
 	}
 }
 
-void Hub::rose_leben_hoch(){
+void Hud::rose_leben_hoch(){
 	switch (rose_akt_leben)
 	{
 	case 1:
@@ -154,7 +162,7 @@ void Hub::rose_leben_hoch(){
 
 }
 
-void Hub::gaertner_leben_runter(){
+void Hud::gaertner_leben_runter(){
 	switch (gaetner_akt_leben)
 	{
 	case 4:
@@ -178,7 +186,7 @@ void Hub::gaertner_leben_runter(){
 	}
 }
 
-void Hub::gaertner_leben_hoch(){
+void Hud::gaertner_leben_hoch(){
 	switch (gaetner_akt_leben)
 	{
 	case 1:
@@ -200,7 +208,18 @@ void Hub::gaertner_leben_hoch(){
 	}
 }
 
-void Hub::ex_bar_steuern(float ex){
+void Hud::ex_bar_steuern(float ex){
 		ex_bar->setTransform(Z_PlaneMeta{ .x = -200, .y = 0, .w = ex, .h = 32 });
+
+}
+
+void Hud::exp_create(float x, float y){
+ 			ex_anzeige = new Animation(_rc.get_texture("spritesheet"), 1);
+			ex_anzeige->add_frame(Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 5, .uw = 32, .vw = 32  });
+			ex_anzeige->add_xsheet_phase(0, 1);
+			_rc.add_anim("ex.ex_anzeige", ex_anzeige);
+			 ex = _rc.make_sprite_from_anim("ex_anzeige", "ex.ex_anzeige", Z_PlaneMeta { .x = 32 * x, .y = 32 * y, .w = 32, .h = 32 }).second;
+
+		_board.attach(ex);
 
 }
