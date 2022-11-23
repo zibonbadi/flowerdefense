@@ -13,7 +13,6 @@ int main(int argc, char* argv[]){
 		Z_RGBA bgcolor = { .r = 0x00, .g = 0x00, .b = 0x00 };
 
 		Game screen((int)SCREEN_WIDTH,(int)SCREEN_HEIGHT, bgcolor);
-
 			EventBus ebus;
 			KeyMapper keymap(&ebus);
 
@@ -46,6 +45,10 @@ int main(int argc, char* argv[]){
 			board.attach(&ground);
 			board.attach(&plants);
 			board.attach(player.GetSprite());
+
+			//Hud
+			Hud hud(rc,board);
+			hud.exp_create(5,8);
 
 			// Hook plane into scene
 			screen.attach(&board);
@@ -105,6 +108,7 @@ int main(int argc, char* argv[]){
 				rc.advance_all_anim(now);
 				screen.render();
 				past = now;
+
 			}
 		}catch(std::exception& e){
 			std::cerr << "Exception caught: " << e.what() << std::endl;
@@ -113,7 +117,7 @@ int main(int argc, char* argv[]){
 	std::cout << "Shutting down..." << std::endl;
 	uninit();
 	std::cout << "Engine stopped!" << std::endl;
-	_CrtDumpMemoryLeaks();
+	//_CrtDumpMemoryLeaks();
 	return 0;
 }
 
