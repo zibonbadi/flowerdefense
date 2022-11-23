@@ -29,6 +29,7 @@ class Game {
 		Game(uint16_t w, uint16_t h, Z_RGBA background);
 		Game(uint16_t w, uint16_t h);
 		~Game();
+		void fetch_audio(uint8_t* stream, int len_bytes);
 		SDL_Renderer* getRenderer();
 		SDL_Window* getWindow();
 		SDL_Texture* getFramebuffer();

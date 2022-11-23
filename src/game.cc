@@ -1,5 +1,12 @@
 #include "game.hh"
 
+/* Audio util function because SDL needs void* pointers */
+static void fetch_audio_cb(void* udata, Uint8* stream, int len_bytes){
+	//std::clog << "fetch_audio_cb(<" << (void*) udata << ">, <" << (void*) stream << ">, " << len_bytes << "): Called." << std::endl;
+	((Game*) udata)->fetch_audio(stream, len_bytes);
+}
+
+
 // Actual stuff
 
 Game::Game(){
@@ -44,6 +51,8 @@ void Game::_init(uint16_t w, uint16_t h){
 		IMG_INIT_PNG
 		;
 
+
+
 	std::clog << "Initializing canvas (SDL)..." << SDL_GetError() << std::endl;
 
 	// Init main SDL
@@ -66,6 +75,10 @@ void Game::_init(uint16_t w, uint16_t h){
 		.channels = 2,
 		.samples = 4096,
 		//.callback = void*
+		//.callback = std::bind(&Game::fetch_audio, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3 )
+		.callback = fetch_audio_cb,
+		.userdata = this
+		//.callback = [this](void* udata, Uint8* stream, int len){ this->fetch_audio(udata, stream, len); }
 	};
 	SDL_AudioSpec *a_spec_tmp = new SDL_AudioSpec;
 	
@@ -123,6 +136,33 @@ void Game::_init(uint16_t w, uint16_t h){
 
 	std::cout << "Game (SDL) Initialized." << std::endl;
 
+}
+void Game::fetch_audio(Uint8* stream, int len_bytes){
+	//std::clog << "Game.fetch_audio(<" << (void*) stream << ">, " << len_bytes << "): Called." << std::endl;
+	if(
+		this->mod_buf != nullptr &&
+		this->a_master > 0 &&
+		len_bytes > 0
+	){
+		// Stereo 32-Bit samples -> 2 channels * 4 Bytes of audio
+		size_t len_samples = len_bytes/8.0f;
+
+		/* Audio render */
+		size_t audio_count = this->mod_buf->read_interleaved_stereo((int32_t) 48000, len_samples, this->a_buf_interleaved.data());
+		/*
+		std::clog << "Game.fetch_audio(): Passing data ["
+			<< len_bytes << ":" << len_samples << ";"
+			<< audio_count << ":" << audio_count*8 << "]"
+			<< ": " << *this->a_buf_interleaved.data()
+			<< std::endl;
+			*/
+		// Stereo 32-Bit samples -> 2 channels * 4 Bytes of audio
+		//SDL_LockAudioDevice(this->a_master);
+		// Clear out with silence
+		SDL_memset(stream, 0.5f, len_bytes);
+		SDL_MixAudio(stream, (Uint8*) this->a_buf_interleaved.data(), audio_count*8, SDL_MIX_MAXVOLUME);
+		//SDL_UnlockAudioDevice(this->a_master);
+	}
 }
 
 SDL_Renderer* Game::getRenderer(){
@@ -197,18 +237,18 @@ void Game::set_background(Z_RGBA background){
 
 void Game::render(){
 	try{
-		if( this->mod_buf != nullptr && this->a_master > 0){
+		//if( this->mod_buf != nullptr && this->a_master > 0){
 			/* Audio render */
-			size_t audio_count = this->mod_buf->read_interleaved_stereo((int32_t) 48000, (size_t) this->a_specs->samples, this->a_buf_interleaved.data());
+			//size_t audio_count = this->mod_buf->read_interleaved_stereo((int32_t) 48000, (size_t) this->a_specs->samples, this->a_buf_interleaved.data());
 			// Attempting to correct for audio source. FAILED
 			//size_t audio_count = this->mod_buf->read_interleaved_stereo((int32_t) this->a_specs->freq, (size_t) this->a_specs->samples, this->a_buf_interleaved.data());
-			if(audio_count != 0){
-				SDL_LockAudioDevice(this->a_master);
+			//if(audio_count != 0){
+				//SDL_LockAudioDevice(this->a_master);
 				// Stereo 32-Bit samples -> 2 channels * 4 Bytes of audio
-				int audio_status = SDL_QueueAudio(this->a_master, this->a_buf_interleaved.data(), audio_count*8);
-				SDL_UnlockAudioDevice(this->a_master);
-			}
-		}
+				//int audio_status = SDL_QueueAudio(this->a_master, this->a_buf_interleaved.data(), audio_count*8);
+				//SDL_UnlockAudioDevice(this->a_master);
+			//}
+		//}
 
 		/* Video render */
 		//SDL_SetRenderDrawColor(this->renderer, 0,0,0, 255);
