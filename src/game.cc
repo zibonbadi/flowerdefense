@@ -199,14 +199,17 @@ void Game::render(){
 	try{
 		if( this->mod_buf != nullptr && this->a_master > 0){
 			/* Audio render */
-			size_t audio_count = this->mod_buf->read_interleaved_stereo((int32_t) 48000, (size_t) this->a_specs->samples, this->a_buf_interleaved.data());
+			size_t audio_count = 0;
+			SDL_DequeueAudio(this->a_master, this->a_buf_interleaved.data(), this->a_specs->size);
+			if(SDL_GetQueuedAudioSize(this->a_master) <= this->a_specs->size*2){
+				// Is the buffer starved? (double buffered)
+				audio_count = this->mod_buf->read_interleaved_stereo((int32_t) 48000, (size_t) this->a_specs->samples, this->a_buf_interleaved.data());
+			}
 			// Attempting to correct for audio source. FAILED
 			//size_t audio_count = this->mod_buf->read_interleaved_stereo((int32_t) this->a_specs->freq, (size_t) this->a_specs->samples, this->a_buf_interleaved.data());
 			if(audio_count != 0){
-				SDL_LockAudioDevice(this->a_master);
 				// Stereo 32-Bit samples -> 2 channels * 4 Bytes of audio
 				int audio_status = SDL_QueueAudio(this->a_master, this->a_buf_interleaved.data(), audio_count*8);
-				SDL_UnlockAudioDevice(this->a_master);
 			}
 		}
 
