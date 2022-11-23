@@ -31,6 +31,8 @@ Tilemap::Tilemap(SDL_Texture* base, int grit_w, int grit_h){
 */
 
 Tilemap::Tilemap(int grit_w, int grit_h){
+	this->grit_w = grit_w;
+	this->grit_h = grit_h;
 	Z_PlaneMeta tmp = {
 		.x = 0.0f,
 			.y = 0.0f,
@@ -45,8 +47,6 @@ Tilemap::Tilemap(int grit_w, int grit_h){
 			.uw = 0.0f,
 			.vw = 0.0f,
 	};
-	this->grit_w = grit_w;
-	this->grit_h = grit_h;
 	this->set_transform(tmp);
 	//this->tiles = nullptr;
 	this->print_map();
@@ -179,7 +179,7 @@ void Tilemap::write(std::pair<unsigned int,unsigned int> top_left, std::string t
 	}
 		//std::clog << std::endl;
 		//std::clog << "Rendered tilemap text: (" << top_left_x << ',' << top_left_y << ") " << text << std::endl;
-		this->print_map();
+	//this->print_map();
 
 };
 

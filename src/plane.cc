@@ -19,6 +19,13 @@ void Plane::attach(Sprite *src){
 	this->sprites.push_back(src);
 };
 
+void Plane::detach(Tilemap* src) {
+	this->tilemaps.erase(std::remove(this->tilemaps.begin(), this->tilemaps.end(), src), this->tilemaps.end());
+};
+void Plane::detach(Sprite* src) {
+	this->sprites.erase(std::remove(this->sprites.begin(), this->sprites.end(), src), this->sprites.end());
+};
+
 void Plane::set_visible(bool value){
 	this->visible = value;
 };

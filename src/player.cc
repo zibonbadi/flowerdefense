@@ -1,6 +1,4 @@
 #include "player.hh"
-#include "animation.hh"
-#include "headers.hh"
 
 Player::Player(float x, float y, ResourceManager &rc, EventBus &eb, KeyMapper& keymap) : _rc(rc), _eb(eb), _keymap(keymap) {
 	playerCoordinates.x = x;

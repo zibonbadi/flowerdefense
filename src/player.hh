@@ -1,18 +1,16 @@
 #pragma once
 #include "headers.hh"
 
-typedef enum
-{
+typedef enum {
 	LEFT,
 	RIGHT,
 	UP,
 	DOWN
 } EPlayerDirection;
 
-class Player
-{
+class Player {
 	private:
-		ResourceManager &_rc;
+		ResourceManager& _rc;
 		EventBus& _eb;
 		KeyMapper& _keymap;
 		Sprite sprite;
@@ -22,11 +20,11 @@ class Player
 		SDL_FPoint delta				= { .x = 0, .y = 0 };
 		EPlayerDirection playerDir = EPlayerDirection::LEFT;
 		EPlayerDirection pastPlayerDir;
-		Sprite *player;
+		Sprite* player;
 		EBus_Fn f_set_dir;
 		Event *e_player_up, *e_player_down, *e_player_left, *e_player_right;
 	public:
-		Player(float x, float y, ResourceManager &rc, EventBus &eb, KeyMapper &keymap);
+		Player(float x, float y, ResourceManager& rc, EventBus& eb, KeyMapper& keymap);
 		void initAnimations();
 		void initControls();
 		void Update();

@@ -30,6 +30,8 @@ class Plane {
 		~Plane();
 		void attach(Tilemap* src);
 		void attach(Sprite* src);
+		void detach(Tilemap* src);
+		void detach(Sprite* src);
 		void set_visible(bool value);
 		bool is_visible();
 		void toggle_visible();
