@@ -8,9 +8,7 @@ void BFS::execute(const std::pair<int, int>& root) {
 void BFS::execute(const int& x_root, const int& y_root) {
 	//char cAtPos95 = arrowMap.get_spot(19, 5);
 
-	//std::map<std::pair<unsigned int, unsigned int>, char> map = bfsArrows->get_map();
-
-	//arrowMap.write(std::pair{ 1,1 }, "t");
+	//std::map<std::pair<unsigned int, unsigned int>, char> map = bfsArrows->get_map
 
 	Z_PlaneMeta zpMeta = bfsArrows->get_transform();
 	int cellCountX = SCREEN_WIDTH / zpMeta.w;		// 800 / 16 = 50
@@ -53,6 +51,33 @@ void BFS::execute(const int& x_root, const int& y_root) {
 		charVec[i].resize(cellCountX, 0);
 	}
 
+	std::map<std::pair<unsigned int, unsigned int>, char> obstacles = _obstacles.get_map();
+	const float innerTileCount = _obstacles.get_transform().w / zpMeta.w;
+
+	for (auto const& [key, val] : obstacles) {
+		const int& outer_x = key.second;
+		const int& outer_y = key.first;
+		const int& inner_x = outer_x * innerTileCount;
+		const int& inner_y = outer_y * innerTileCount;
+
+		if (val == 'x') {
+			for (int y = inner_y; y < (inner_y + innerTileCount); y++) {
+				for (int x = inner_x; x < (inner_x + innerTileCount); x++) {
+					charVec[y][x] = 'x';
+				}
+			}
+		}
+	}
+
+	//charVec[8][9] = 'x';
+	//charVec[9][9] = 'x';
+	//charVec[10][9] = 'x';
+	//charVec[11][9] = 'x';
+	//charVec[11][10] = 'x';
+	//charVec[11][11] = 'x';
+	//charVec[11][12] = 'x';
+
+
 	// Stores indices of the matrix cells
 	std::queue <std::pair<int, int> > q;
 
@@ -80,7 +105,7 @@ void BFS::execute(const int& x_root, const int& y_root) {
 			const int& adjy = y + deltaY[i];
 			//std::cout << "i: " << i << "    " << x << " , " << y << std::endl;
 
-			if (isValid(visited, adjx, adjy, cellCountX, cellCountY)) {
+			if (isValid(visited, adjx, adjy, cellCountX, cellCountY, charVec)) {
 				q.push(std::pair{ adjx, adjy });
 				visited[adjy][adjx] = true;
 
@@ -123,7 +148,7 @@ void BFS::execute(const int& x_root, const int& y_root) {
 
 // Function to check if a cell
 // is be visited or not
-bool BFS::isValid(const  std::vector<std::vector<bool>>& visited, const int& x, const int& y, const int& cellCountX, const int& cellCountY)
+bool BFS::isValid(const  std::vector<std::vector<bool>>& visited, const int& x, const int& y, const int& cellCountX, const int& cellCountY, const std::vector<std::vector<char>>& charVec)
 {
 	// If cell lies out of bounds
 	if (x < 0 || y < 0
@@ -135,24 +160,27 @@ bool BFS::isValid(const  std::vector<std::vector<bool>>& visited, const int& x, 
 	if (visited[y][x])
 		return false;
 
+	// if cell is an obstacle
+	if (charVec[y][x] == 'x')
+		return false;
+
 	// Otherwise
 	return true;
 }
 
-BFS::BFS(ResourceManager& rc, EventBus& eb, KeyMapper& keymap, Plane& board) : _rc(rc), _eb(eb), _keymap(keymap), _board(board) {
+BFS::BFS(ResourceManager& rc, EventBus& eb, KeyMapper& keymap, Plane& board, Tilemap& obstacles) : _rc(rc), _eb(eb), _keymap(keymap), _board(board), _obstacles(obstacles) {
 	/* Breadth First Search Tilemap */
 	bfsArrows = new Tilemap(16, 16);
 	auto dd = bfsArrows->get_transform();
 	/* Select tiles from tileset */
-	auto arrowTop = rc.make_static_sprite_from_texture("tiles.arrowTop", "spritesheet", Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowTopLeft = rc.make_static_sprite_from_texture("tiles.arrowTopLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowLeft = rc.make_static_sprite_from_texture("tiles.arrowLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowBottomLeft = rc.make_static_sprite_from_texture("tiles.arrowBottomLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowBottom = rc.make_static_sprite_from_texture("tiles.arrowBottom", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowBottomRight = rc.make_static_sprite_from_texture("tiles.arrowBottomRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowRight = rc.make_static_sprite_from_texture("tiles.arrowRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowTopRight = rc.make_static_sprite_from_texture("tiles.arrowTopRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-
+	auto arrowTop = rc.make_static_sprite_from_texture("tiles.bfs.arrowTop", "spritesheet", Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowTopLeft = rc.make_static_sprite_from_texture("tiles.bfs.arrowTopLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowLeft = rc.make_static_sprite_from_texture("tiles.bfs.arrowLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowBottomLeft = rc.make_static_sprite_from_texture("tiles.bfs.arrowBottomLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowBottom = rc.make_static_sprite_from_texture("tiles.bfs.arrowBottom", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowBottomRight = rc.make_static_sprite_from_texture("tiles.bfs.arrowBottomRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowRight = rc.make_static_sprite_from_texture("tiles.bfs.arrowRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowTopRight = rc.make_static_sprite_from_texture("tiles.bfs.arrowTopRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
 
 	// Possible arrow pointing direction
 	// towards one of its eight neighburs:
@@ -182,6 +210,7 @@ BFS::BFS(ResourceManager& rc, EventBus& eb, KeyMapper& keymap, Plane& board) : _
 	bfsArrows->add_tile('2', arrowTopRight);
 	bfsArrows->add_tile('3', arrowBottomLeft);
 	bfsArrows->add_tile('4', arrowBottomRight);
+
 
 	f_set_visibility = [&](Event* e) {
 		isAttached = !isAttached;

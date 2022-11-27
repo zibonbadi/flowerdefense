@@ -103,7 +103,7 @@ void Enemy::Update(Tilemap* bfsArrows) {
 				enemyDir = EEnemyDirection::TOPRIGHT;
 				sprite.switch_to_anim("topright");
 				goalTileCoordinates.x += tileSize;
-				goalTileCoordinates.y += tileSize;
+				goalTileCoordinates.y -= tileSize;
 				break;
 			case '3':
 				enemyDir = EEnemyDirection::BOTTOMLEFT;
@@ -147,8 +147,8 @@ void Enemy::Update(Tilemap* bfsArrows) {
 	coordinates.x += adjustedInterpolStepSize.x;
 	coordinates.y += adjustedInterpolStepSize.y;
 
-	/* Adjust enemy sprite transform*/
-	enemy->setTransform(Z_PlaneMeta{ .x = coordinates.x, .y = coordinates.y, .w = 64, .h = 64 });
+	/* Adjust enemy sprite transform*/             // x - 8 so that the sprite centroid moves exactly along the bfs path
+	enemy->setTransform(Z_PlaneMeta{ .x = coordinates.x - 8, .y = coordinates.y - 8, .w = 32, .h = 32 });
 }
 
 Sprite* Enemy::GetSprite() {

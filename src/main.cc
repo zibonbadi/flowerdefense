@@ -26,13 +26,15 @@ int main(int argc, char* argv[]) {
 		/* Select tiles from tileset */
 		auto grass = rc.make_static_sprite_from_texture("tiles.grass", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 		auto rose = rc.make_static_sprite_from_texture("tiles.rose", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
+		auto obstacle = rc.make_static_sprite_from_texture("tiles.obstacle", "spritesheet", Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
+
 
 		Player player((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200, rc, ebus, keymap);
 		Enemy enemy(16*20, 16 * 45, rc, ebus);
 
 		//Enemy enemy(0, 0, rc, ebus, keymap);
 
-		Tilemap ground(32, 32), plants(32, 32);
+		Tilemap ground(32, 32), plants(32, 32), obstacles;
 
 
 		// Set backup color for rose tile
@@ -40,21 +42,24 @@ int main(int argc, char* argv[]) {
 
 		ground.add_tile('.', grass);
 		plants.add_tile('%', rose);
+		obstacles.add_tile('x', obstacle);
 
 		ground.fill(0, 0, 25, 25, '.');
 		plants.fill(12, 12, 1, 1, '%');
+		obstacles.fill(4, 9, 4, 1, 'x');
 
 		
 
 		/* Game board */
 		Plane board(Z_PlaneMeta{ .x = 0, .y = 0, .w = 800, .h = 800 });
 
-		BFS bfs(rc, ebus, keymap, board);
+		BFS bfs(rc, ebus, keymap, board, obstacles);
 		bfs.execute(10, 10);
 
 		// Construct scene planes
 		board.attach(&ground);
 		board.attach(&plants);
+		board.attach(&obstacles);
 		board.attach(player.GetSprite());
 		board.attach(enemy.GetSprite());
 

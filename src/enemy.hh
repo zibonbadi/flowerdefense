@@ -18,7 +18,7 @@ class Enemy {
 		EventBus& _eb;
 		Sprite sprite;
 		Animation* animations[8];
-		float enemySpeed					= 1.5f;
+		float enemySpeed					= 0.5f;
 		SDL_Point goalTileCoordinates		= { .x = 0, .y = 0 };
 		SDL_FPoint interpolStepSize			= { .x = 0, .y = 0 };
 		EEnemyDirection enemyDir;
