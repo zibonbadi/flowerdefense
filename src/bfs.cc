@@ -40,10 +40,8 @@ void BFS::execute(const int& x_root, const int& y_root) {
 								// t,  b,  l,  r, tl, br, bl, tr
 	const int deltaX[] =		{  0,  0, -1,  1, -1,  1, -1,  1 };
 	const int deltaY[] =		{ -1,  1,  0,  0, -1,  1,  1, -1 };
-	const char reverseDir[] =	{'b','t','r','l','4','1','2','3' };
-	//const int order[8] =			{ 0,  1,  2,  3,  4,  5,  6,  7 };
-
-	std::vector<int> order = { 0, 1, 2, 3, 4, 5, 6, 7 };
+	const char reverseDir[] =	{'b','t','r','l','4','1','2',' 3' };
+	std::vector<int> order =	{  0,  1,  2,  3,  4,  5,  6,  7 };
 	std::random_device rd;
 	std::mt19937 g(rd());
 
@@ -78,15 +76,6 @@ void BFS::execute(const int& x_root, const int& y_root) {
 		}
 	}
 
-	//charVec[8][9] = 'x';
-	//charVec[9][9] = 'x';
-	//charVec[10][9] = 'x';
-	//charVec[11][9] = 'x';
-	//charVec[11][10] = 'x';
-	//charVec[11][11] = 'x';
-	//charVec[11][12] = 'x';
-
-
 	// Stores indices of the matrix cells
 	std::queue <std::pair<int, int> > q;
 
@@ -107,9 +96,9 @@ void BFS::execute(const int& x_root, const int& y_root) {
 		q.pop();
 
 		// Go to the adjacent cells
-
+		
+		std::shuffle(order.begin(), order.end(), g);
 		for (int k= 0; k < 8; k++) {
-			std::shuffle(order.begin(), order.end(), g);
 			int i = order[k];
 
 			const int& adjx = x + deltaX[i];

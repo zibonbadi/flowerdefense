@@ -32,6 +32,7 @@ int main(int argc, char* argv[]) {
 		Player player((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200, rc, ebus, keymap);
 		Enemy enemy(16*20, 16 * 45, rc, ebus, "1");
 		Enemy enemy2(16 * 10, 16 * 45, rc, ebus, "2");
+		Enemy enemy3(16 * 10, 16 * 35, rc, ebus, "3");
 
 		//Enemy enemy(0, 0, rc, ebus, keymap);
 
@@ -65,6 +66,7 @@ int main(int argc, char* argv[]) {
 		board.attach(player.GetSprite());
 		board.attach(enemy.GetSprite());
 		board.attach(enemy2.GetSprite());
+		board.attach(enemy3.GetSprite());
 
 		Hud hud(rc,hud_plane);
 		hud.exp_create(5,8);
@@ -151,6 +153,7 @@ int main(int argc, char* argv[]) {
 
 			enemy.Update(bfs.bfsArrows);
 			enemy2.Update(bfs.bfsArrows);
+			enemy3.Update(bfs.bfsArrows);
 			player.Update();
 
 			/* Advance the player animation */
