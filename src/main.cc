@@ -1,5 +1,6 @@
 #include "headers.hh"
 #include "player.hh"
+#include "enemy.hh"
 #include "bfs.hh"
 
 int uninit();
@@ -27,6 +28,9 @@ int main(int argc, char* argv[]) {
 		auto rose = rc.make_static_sprite_from_texture("tiles.rose", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 
 		Player player((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200, rc, ebus, keymap);
+		Enemy enemy(16*20, 16 * 45, rc, ebus);
+
+		//Enemy enemy(0, 0, rc, ebus, keymap);
 
 		Tilemap ground(32, 32), plants(32, 32);
 
@@ -52,7 +56,7 @@ int main(int argc, char* argv[]) {
 		board.attach(&ground);
 		board.attach(&plants);
 		board.attach(player.GetSprite());
-
+		board.attach(enemy.GetSprite());
 
 		Hud hud(rc,board);
 		hud.exp_create(5,8);
@@ -109,7 +113,7 @@ int main(int argc, char* argv[]) {
 				}
 			}
 
-
+			enemy.Update(bfs.bfsArrows);
 			player.Update();
 
 			/* Advance the player animation */

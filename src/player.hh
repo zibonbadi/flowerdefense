@@ -1,12 +1,12 @@
 #pragma once
 #include "headers.hh"
 
-typedef enum {
+enum class EPlayerDirection {
 	LEFT,
 	RIGHT,
 	UP,
 	DOWN
-} EPlayerDirection;
+};
 
 class Player {
 	private:
