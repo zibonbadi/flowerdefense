@@ -1,6 +1,6 @@
 #include "enemy.hh"
 
-Enemy::Enemy(float x, float y, ResourceManager &rc, EventBus &eb) : _rc(rc), _eb(eb) {
+Enemy::Enemy(float x, float y, ResourceManager &rc, EventBus &eb, std::string id) : _rc(rc), _eb(eb), _id(id) {
 	coordinates.x = x;
 	coordinates.y = y;
 	goalTileCoordinates.x = x;
@@ -15,54 +15,54 @@ void Enemy::initAnimations() {
 	animations[0] = new Animation(_rc.get_texture("spritesheet"), 1);
 	animations[0]->add_frame(Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[0]->add_xsheet_phase(0, 1);
-	_rc.add_anim("enemy.top", animations[0]);
+	_rc.add_anim(_id+"enemy.top", animations[0]);
 
 	animations[1] = new Animation(_rc.get_texture("spritesheet"), 1);
 	animations[1]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[1]->add_xsheet_phase(0, 1);
-	_rc.add_anim("enemy.topleft", animations[1]);
+	_rc.add_anim(_id + "enemy.topleft", animations[1]);
 
 	animations[2] = new Animation(_rc.get_texture("spritesheet"), 1);
 	animations[2]->add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[2]->add_xsheet_phase(0, 1);
-	_rc.add_anim("enemy.left", animations[2]);
+	_rc.add_anim(_id + "enemy.left", animations[2]);
 
 	animations[3] = new Animation(_rc.get_texture("spritesheet"), 1);
 	animations[3]->add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[3]->add_xsheet_phase(0, 1);
-	_rc.add_anim("enemy.bottomleft", animations[3]);
+	_rc.add_anim(_id + "enemy.bottomleft", animations[3]);
 
 	animations[4] = new Animation(_rc.get_texture("spritesheet"), 1);
 	animations[4]->add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[4]->add_xsheet_phase(0, 1);
-	_rc.add_anim("enemy.bottom", animations[4]);
+	_rc.add_anim(_id + "enemy.bottom", animations[4]);
 
 	animations[5] = new Animation(_rc.get_texture("spritesheet"), 1);
 	animations[5]->add_frame(Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[5]->add_xsheet_phase(0, 1);
-	_rc.add_anim("enemy.bottomright", animations[5]);
+	_rc.add_anim(_id + "enemy.bottomright", animations[5]);
 
 	animations[6] = new Animation(_rc.get_texture("spritesheet"), 1);
 	animations[6]->add_frame(Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[6]->add_xsheet_phase(0, 1);
-	_rc.add_anim("enemy.right", animations[6]);
+	_rc.add_anim(_id + "enemy.right", animations[6]);
 
 	animations[7] = new Animation(_rc.get_texture("spritesheet"), 1);
 	animations[7]->add_frame(Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[7]->add_xsheet_phase(0, 1);
-	_rc.add_anim("enemy.topright", animations[7]);
+	_rc.add_anim(_id + "enemy.topright", animations[7]);
 
-	_rc.add_sprite("enemy", &sprite);
-	sprite.add_animation("top",		_rc.get_anim("enemy.top"));
-	sprite.add_animation("bottom",	_rc.get_anim("enemy.bottom"));
-	sprite.add_animation("left",	_rc.get_anim("enemy.left"));
-	sprite.add_animation("right",	_rc.get_anim("enemy.right"));
-	sprite.add_animation("topleft", _rc.get_anim("enemy.topleft"));
-	sprite.add_animation("topright", _rc.get_anim("enemy.topright"));
-	sprite.add_animation("bottomleft", _rc.get_anim("enemy.bottomleft"));
-	sprite.add_animation("bottomright", _rc.get_anim("enemy.bottomright"));
+	_rc.add_sprite(_id + "enemy", &sprite);
+	sprite.add_animation("top",		_rc.get_anim(_id + "enemy.top"));
+	sprite.add_animation("bottom",	_rc.get_anim(_id + "enemy.bottom"));
+	sprite.add_animation("left",	_rc.get_anim(_id + "enemy.left"));
+	sprite.add_animation("right",	_rc.get_anim(_id + "enemy.right"));
+	sprite.add_animation("topleft", _rc.get_anim(_id + "enemy.topleft"));
+	sprite.add_animation("topright", _rc.get_anim(_id + "enemy.topright"));
+	sprite.add_animation("bottomleft", _rc.get_anim(_id + "enemy.bottomleft"));
+	sprite.add_animation("bottomright", _rc.get_anim(_id + "enemy.bottomright"));
 	sprite.switch_to_anim("right");
-	enemy = _rc.get_sprite("enemy");
+	enemy = _rc.get_sprite(_id + "enemy");
 }
 
 void Enemy::Update(Tilemap* bfsArrows) {

@@ -23,9 +23,10 @@ class Enemy {
 		SDL_FPoint interpolStepSize			= { .x = 0, .y = 0 };
 		EEnemyDirection enemyDir;
 		Sprite* enemy;
+		std::string _id;
 	public:
 		SDL_FPoint coordinates				= { .x = 0, .y = 0 };
-		Enemy(float x, float y, ResourceManager& rc, EventBus& eb);
+		Enemy(float x, float y, ResourceManager& rc, EventBus& eb, std::string id);
 		void initAnimations();
 		void Update(Tilemap* bfsArrows);
 		Sprite* GetSprite();

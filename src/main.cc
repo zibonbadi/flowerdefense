@@ -30,12 +30,13 @@ int main(int argc, char* argv[]) {
 
 
 		Player player((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200, rc, ebus, keymap);
-		Enemy enemy(16*20, 16 * 45, rc, ebus);
+		Enemy enemy(16*20, 16 * 45, rc, ebus, "1");
+		Enemy enemy2(16 * 10, 16 * 45, rc, ebus, "2");
 
 		//Enemy enemy(0, 0, rc, ebus, keymap);
 
 		Tilemap ground(32, 32), plants(32, 32), obstacles;
-
+		
 
 		// Set backup color for rose tile
 		rose->set_color(Z_RGBA{ .r = 0xff, .g = 0x7f, .b = 0xcf, .a = 0xff });
@@ -63,6 +64,7 @@ int main(int argc, char* argv[]) {
 		board.attach(&obstacles);
 		board.attach(player.GetSprite());
 		board.attach(enemy.GetSprite());
+		board.attach(enemy2.GetSprite());
 
 		Hud hud(rc,hud_plane);
 		hud.exp_create(5,8);
@@ -148,6 +150,7 @@ int main(int argc, char* argv[]) {
 			}
 
 			enemy.Update(bfs.bfsArrows);
+			enemy2.Update(bfs.bfsArrows);
 			player.Update();
 
 			/* Advance the player animation */
