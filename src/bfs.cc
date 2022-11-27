@@ -1,5 +1,7 @@
 #include "bfs.hh"
 #include <sstream>
+#include <algorithm>
+#include <random>
 
 void BFS::execute(const std::pair<int, int>& root) {
 	BFS::execute(root.first, root.second);
@@ -39,6 +41,13 @@ void BFS::execute(const int& x_root, const int& y_root) {
 	const int deltaX[] =		{  0,  0, -1,  1, -1,  1, -1,  1 };
 	const int deltaY[] =		{ -1,  1,  0,  0, -1,  1,  1, -1 };
 	const char reverseDir[] =	{'b','t','r','l','4','1','2','3' };
+	//const int order[8] =			{ 0,  1,  2,  3,  4,  5,  6,  7 };
+
+	std::vector<int> order = { 0, 1, 2, 3, 4, 5, 6, 7 };
+	std::random_device rd;
+	std::mt19937 g(rd());
+
+	
 
 	//std::map<std::pair<unsigned int, unsigned int>, bool> visited;
 	std::vector<std::vector<bool>> visited;
@@ -99,7 +108,9 @@ void BFS::execute(const int& x_root, const int& y_root) {
 
 		// Go to the adjacent cells
 
-		for (int i = 0; i < 8; i++) {
+		for (int k= 0; k < 8; k++) {
+			std::shuffle(order.begin(), order.end(), g);
+			int i = order[k];
 
 			const int& adjx = x + deltaX[i];
 			const int& adjy = y + deltaY[i];
