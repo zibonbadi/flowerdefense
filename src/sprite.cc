@@ -180,3 +180,60 @@ void Sprite::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 		SDL_RenderFillRect(renderer, &pos);
 	}
 };
+
+
+void Sprite::setCollider(Z_PlaneMeta* box){
+	// Coordinates are in sprite space
+	// xywh rect for bounds check
+	this->box_collide = box;
+};
+
+Z_PlaneMeta* Sprite::getCollider(){
+	return this->box_collide;
+};
+
+bool Sprite::collision(Sprite* opponent){
+	// Boolean collision
+	// Collisions are in plane space (cross-plane collisions ignored for now)
+	auto opponent_collide = opponent->getCollider();
+	auto opponent_transform = opponent->get_transform();
+	return (
+		opponent_collide != nullptr &&
+		this->transform_rect.x+this->box_collide->x <= (opponent_transform.x+opponent_collide->x+opponent_collide->w) &&
+		opponent_transform.x+opponent_collide->x <= (this->transform_rect.x+this->box_collide->x+this->box_collide->w) &&
+		this->transform_rect.y+this->box_collide->y <= (opponent_transform.y+opponent_collide->y+opponent_collide->h) &&
+		opponent_transform.y+opponent_collide->y <= (this->transform_rect.y+this->box_collide->y+this->box_collide->h) 
+	);
+};
+
+Z_PlaneMeta Sprite::getCollisionArea(Sprite* opponent){
+	// Collide rect (intersection)
+	// Collisions are in plane space (cross-plane collisions ignored for now)
+	auto opponent_collide = opponent->getCollider();
+	auto opponent_transform = opponent->get_transform();
+	if(opponent_collide != nullptr){
+		Z_PlaneMeta intersect = {
+			// Reformed 
+			.x = (opponent_transform.x+opponent_collide->x+opponent_collide->w) - this->transform_rect.x+this->box_collide->x,
+			.y = (this->transform_rect.x+this->box_collide->x+this->box_collide->w) - opponent_transform.x+opponent_collide->x,
+			.w = (opponent_transform.y+opponent_collide->y+opponent_collide->h) - this->transform_rect.y+this->box_collide->y,
+			.h = (this->transform_rect.y+this->box_collide->y+this->box_collide->h) - opponent_transform.y+opponent_collide->y
+		};
+
+		// Adjust for sequence
+		intersect.x *= (intersect.w<0)?-1:1;
+		intersect.w *= (intersect.w<0)?-1:1;
+		intersect.y *= (intersect.h<0)?-1:1;
+		intersect.h *= (intersect.h<0)?-1:1;
+
+		return intersect;
+	};
+
+	// Dummy rect. w/h=0 should make it invalid
+	return Z_PlaneMeta {
+		.x = 0,
+		.y = 0,
+		.w = 0,
+		.h = 0,
+	};
+};

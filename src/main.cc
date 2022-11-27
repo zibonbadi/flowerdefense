@@ -66,6 +66,21 @@ int main(int argc, char* argv[]) {
 		game.attach(&board);
 		game.attach(&hud_plane);
 
+		Z_PlaneMeta collide_player{
+			.x = 0,
+			.y = 0,
+			.w = 32,
+			.h = 64
+		},
+		collide_enemy{
+			.x = 8,
+			.y = 8,
+			.w = 48,
+			.h = 48
+		};
+
+		player.GetSprite()->setCollider(&collide_player);
+		enemy.GetSprite()->setCollider(&collide_enemy);
 
 		std::cout << "Entering main loop..." << std::endl;
 
@@ -83,12 +98,24 @@ int main(int argc, char* argv[]) {
 			};
 		};
 
+		EBus_Fn f_debug_collide = [&](Event* e) {
+			if (e->get("status_edge") == "down") {
+				std::cout 
+					<< "Collision player->enemy (bool):" << player.GetSprite()->collision(enemy.GetSprite()) << std::endl
+					<< "Collision enemy->player (bool):" << enemy.GetSprite()->collision(player.GetSprite()) << std::endl
+				;
+			};
+		};
+
 		// Create Keymap Quit event
 		Event e_quit("engine.quit");
+		Event e_debug_collide("debug.collide");
 		keymap.bind(SDLK_q, e_quit);
+		keymap.bind(SDLK_c, e_debug_collide);
 
 		// Register events
 		ebus.subscribe("engine.quit", &f_quit);
+		ebus.subscribe("debug.collide", &f_debug_collide);
 
 
 		uint32_t past = 0;
