@@ -40,7 +40,7 @@ void BFS::execute(const int& x_root, const int& y_root) {
 								// t,  b,  l,  r, tl, br, bl, tr
 	const int deltaX[] =		{  0,  0, -1,  1, -1,  1, -1,  1 };
 	const int deltaY[] =		{ -1,  1,  0,  0, -1,  1,  1, -1 };
-	const char reverseDir[] =	{'b','t','r','l','4','1','2',' 3' };
+	const char reverseDir[] =	{'b','t','r','l','4','1','2', '3'};
 	std::vector<int> order =	{  0,  1,  2,  3,  4,  5,  6,  7 };
 	std::random_device rd;
 	std::mt19937 g(rd());
