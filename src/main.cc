@@ -3,6 +3,8 @@
 #include "enemy.hh"
 #include "bfs.hh"
 
+//test
+
 int uninit();
 int update(Tilemap* tmap);
 int poll();
