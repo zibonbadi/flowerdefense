@@ -155,6 +155,24 @@ Sprite* Enemy::GetSprite() {
 	return enemy;
 }
 
+void Enemy::dying(){
+			animations[0] = new Animation(_rc.get_texture("spritesheet"), 1);
+			animations[0]->add_frame(Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 5, .uw = 32, .vw = 32 });
+			animations[0]->add_xsheet_phase(0, 1);
+			_rc.add_anim(_id+"enemy.dead", animations[0]);
+			sprite.add_animation("dead", _rc.get_anim(_id + "enemy.dead"));
+			sprite.switch_to_anim("dead");
+			enemy = _rc.get_sprite(_id + "enemy");
+
+		isdead = true;
+}
+
+void Enemy::disappear(){
+			enemy->setTransform(Z_PlaneMeta{  });
+
+}
+
+
 Enemy::~Enemy() {
 	for (int i = 0; i < 4; i++) {
 		delete animations[i];

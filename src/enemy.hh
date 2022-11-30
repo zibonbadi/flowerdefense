@@ -24,12 +24,15 @@ class Enemy {
 		EEnemyDirection enemyDir;
 		Sprite* enemy;
 		std::string _id;
+		bool isdead = false;
 	public:
 		SDL_FPoint coordinates				= { .x = 0, .y = 0 };
 		Enemy(float x, float y, ResourceManager& rc, EventBus& eb, std::string id);
 		void initAnimations();
 		void Update(Tilemap* bfsArrows);
 		Sprite* GetSprite();
+		void disappear();
+		void dying();
 		~Enemy();
 };
 

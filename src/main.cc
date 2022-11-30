@@ -3,8 +3,6 @@
 #include "enemy.hh"
 #include "bfs.hh"
 
-//test
-
 int uninit();
 int update(Tilemap* tmap);
 int poll();
@@ -156,6 +154,11 @@ int main(int argc, char* argv[]) {
 			enemy.Update(bfs.bfsArrows);
 			enemy2.Update(bfs.bfsArrows);
 			enemy3.Update(bfs.bfsArrows);
+
+			//test zum toten Gegner
+			enemy3.dying();
+			enemy.disappear();
+
 			player.Update();
 
 			/* Advance the player animation */
