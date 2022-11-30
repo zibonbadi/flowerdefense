@@ -17,7 +17,7 @@ class Enemy {
 		ResourceManager& _rc;
 		EventBus& _eb;
 		Sprite sprite;
-		Animation* animations[8];
+		Animation* animations[9];
 		float enemySpeed					= 0.5f;
 		SDL_Point goalTileCoordinates		= { .x = 0, .y = 0 };
 		SDL_FPoint interpolStepSize			= { .x = 0, .y = 0 };
@@ -33,6 +33,7 @@ class Enemy {
 		Sprite* GetSprite();
 		void disappear();
 		void dying();
+		void reborn(float x, float y);
 		~Enemy();
 };
 

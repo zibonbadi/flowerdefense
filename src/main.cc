@@ -16,6 +16,9 @@ int main(int argc, char* argv[]) {
 
 		Game game((int)SCREEN_WIDTH, (int)SCREEN_HEIGHT, bgcolor);
 
+		//damit gegner nur einmal Stirbt 
+		int i = 0;
+
 		EventBus ebus;
 		KeyMapper keymap(&ebus);
 
@@ -69,7 +72,7 @@ int main(int argc, char* argv[]) {
 		board.attach(enemy3.GetSprite());
 
 		Hud hud(rc,hud_plane);
-		hud.exp_create(5,8);
+		//hud.exp_create(5,8);
 
 		// Hook plane into scene
 		game.attach(&board);
@@ -155,9 +158,15 @@ int main(int argc, char* argv[]) {
 			enemy2.Update(bfs.bfsArrows);
 			enemy3.Update(bfs.bfsArrows);
 
+
+			if(i == 0){
 			//test zum toten Gegner
 			enemy3.dying();
-			enemy.disappear();
+			//enemy3.disappear();
+			//enemy3.reborn(16*24, 16 * 20);
+			i++;
+			}
+
 
 			player.Update();
 

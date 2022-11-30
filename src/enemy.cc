@@ -52,6 +52,11 @@ void Enemy::initAnimations() {
 	animations[7]->add_xsheet_phase(0, 1);
 	_rc.add_anim(_id + "enemy.topright", animations[7]);
 
+	animations[8] = new Animation(_rc.get_texture("spritesheet"), 1);
+	animations[8]->add_frame(Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 5, .uw = 32, .vw = 32 });
+	animations[8]->add_xsheet_phase(0, 1);
+	_rc.add_anim(_id+"enemy.dead", animations[8]);
+
 	_rc.add_sprite(_id + "enemy", &sprite);
 	sprite.add_animation("top",		_rc.get_anim(_id + "enemy.top"));
 	sprite.add_animation("bottom",	_rc.get_anim(_id + "enemy.bottom"));
@@ -61,6 +66,8 @@ void Enemy::initAnimations() {
 	sprite.add_animation("topright", _rc.get_anim(_id + "enemy.topright"));
 	sprite.add_animation("bottomleft", _rc.get_anim(_id + "enemy.bottomleft"));
 	sprite.add_animation("bottomright", _rc.get_anim(_id + "enemy.bottomright"));
+	sprite.add_animation("dead", _rc.get_anim(_id + "enemy.dead"));
+
 	sprite.switch_to_anim("right");
 	enemy = _rc.get_sprite(_id + "enemy");
 }
@@ -157,20 +164,22 @@ Sprite* Enemy::GetSprite() {
 }
 
 void Enemy::dying(){
-			animations[0] = new Animation(_rc.get_texture("spritesheet"), 1);
-			animations[0]->add_frame(Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 5, .uw = 32, .vw = 32 });
-			animations[0]->add_xsheet_phase(0, 1);
-			_rc.add_anim(_id+"enemy.dead", animations[0]);
-			sprite.add_animation("dead", _rc.get_anim(_id + "enemy.dead"));
-			sprite.switch_to_anim("dead");
-			enemy = _rc.get_sprite(_id + "enemy");
-
-		isdead = true;
+	isdead = true;
+	sprite.switch_to_anim("dead");
 }
 
 void Enemy::disappear(){
-			enemy->setTransform(Z_PlaneMeta{  });
+	enemy->setTransform(Z_PlaneMeta{});
 
+}
+
+void Enemy::reborn(float x, float y){
+	isdead = false;
+
+	coordinates.x = x;
+	coordinates.y = y;
+	goalTileCoordinates.x = x;
+	goalTileCoordinates.y = y;
 }
 
 
