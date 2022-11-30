@@ -66,6 +66,7 @@ void Enemy::initAnimations() {
 }
 
 void Enemy::Update(Tilemap* bfsArrows) {
+	if(!isdead){
 	const int tileSize = bfsArrows->get_transform().w;
 	char movingDir = bfsArrows->get_spot(coordinates.x / tileSize, coordinates.y / tileSize);
 
@@ -149,7 +150,7 @@ void Enemy::Update(Tilemap* bfsArrows) {
 
 	/* Adjust enemy sprite transform*/             // x - 8 so that the sprite centroid moves exactly along the bfs path
 	enemy->setTransform(Z_PlaneMeta{ .x = coordinates.x - 8, .y = coordinates.y - 8, .w = 32, .h = 32 });
-}
+}}
 
 Sprite* Enemy::GetSprite() {
 	return enemy;
