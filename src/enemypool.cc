@@ -60,18 +60,6 @@ void Enemypool::initAnimations() {
 	animations[8]->add_xsheet_phase(0, 1);
 	g_rc.add_anim(_id+"enemy.dead", animations[8]);
 
-	g_rc.add_sprite(_id + "enemy", &sprite);
-	sprite.add_animation(_id + "top",		g_rc.get_anim(_id + "enemy.top"));
-	sprite.add_animation(_id + "bottom",	g_rc.get_anim(_id + "enemy.bottom"));
-	sprite.add_animation(_id + "left",	g_rc.get_anim(_id + "enemy.left"));
-	sprite.add_animation(_id + "right",	g_rc.get_anim(_id + "enemy.right"));
-	sprite.add_animation(_id + "topleft", g_rc.get_anim(_id + "enemy.topleft"));
-	sprite.add_animation(_id + "topright", g_rc.get_anim(_id + "enemy.topright"));
-	sprite.add_animation(_id + "bottomleft", g_rc.get_anim(_id + "enemy.bottomleft"));
-	sprite.add_animation(_id + "bottomright", g_rc.get_anim(_id + "enemy.bottomright"));
-	sprite.add_animation(_id + "dead", g_rc.get_anim(_id + "enemy.dead"));
-	sprite.switch_to_anim(_id + "right");
-	enemy = g_rc.get_sprite(_id + "enemy");
 }
 
 Enemypool::~Enemypool() {

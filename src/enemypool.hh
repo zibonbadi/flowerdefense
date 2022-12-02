@@ -4,11 +4,13 @@
 class Enemypool
 {
 private:
+	// Store animations in pool to save redundancy
 	Animation* animations[9];
 public:
 	std::vector<Enemy*> enemies;
-	void initAnimations();
 	Enemypool(int count);
-	// Globally store animations to save redundancy
+	void initAnimations();
+	void create();
+	void destroy(Enemy* enemy);
 };
 
