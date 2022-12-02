@@ -1,5 +1,4 @@
-#ifndef HEADERS_H
-#define HEADERS_H
+#pragma once
 
 /* SDL setup */
 #include <SDL2/SDL.h>
@@ -51,10 +50,8 @@ class Hud;
 
 // Global Engine Objects
 extern EventBus g_eventbus;
-//extern KeyMapper g_keymapper(&g_eventbus);
+extern ResourceManager g_resourcemanager;
+extern KeyMapper g_keymapper;
 
 #define SCREEN_HEIGHT 800
 #define SCREEN_WIDTH 800
-
-#endif
-

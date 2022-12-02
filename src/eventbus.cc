@@ -1,10 +1,6 @@
 #include "eventbus.hh"
 
-EventBus::EventBus(){
-};
-
-EventBus::~EventBus(){
-};
+EventBus g_eventbus;
 
 void EventBus::send(Event *event){
 	//this->pending.push(event);

@@ -1,6 +1,4 @@
-#ifndef ANIMATION_H
-#define ANIMATION_H
-
+#pragma once
 #include "headers.hh"
 
 class Animation {
@@ -35,6 +33,5 @@ class Animation {
 		void render(SDL_Renderer* renderer);
 		void render(SDL_Renderer* renderer, Z_PlaneMeta transform);
 };
-#endif
 
 

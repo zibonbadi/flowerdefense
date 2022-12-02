@@ -1,12 +1,6 @@
 #include "keymapper.hh"
 
-KeyMapper::KeyMapper(EventBus* target){
-	this->bus = target;
-};
-
-KeyMapper::~KeyMapper(){
-};
-
+KeyMapper g_keymapper;
 
 int KeyMapper::bind(SDL_Keycode key, Event event){
 	try{
@@ -46,7 +40,7 @@ int KeyMapper::probe(SDL_KeyboardEvent sdlevent){
 				break;
 			}
 			};
-			this->bus->send(&e_send);
+			g_eventbus.send(&e_send);
 			std::cerr << "KeyMapper.probe(" << sdlevent.keysym.sym << "): Called. \"" << e_send.get("status_edge") << "\"" << std::endl;
 		};
 		return 0;

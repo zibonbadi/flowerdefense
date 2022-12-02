@@ -1,6 +1,6 @@
 #include "enemy.hh"
 
-Enemy::Enemy(float x, float y, ResourceManager &rc, EventBus &eb, std::string id) : _rc(rc), _eb(eb), _id(id) {
+Enemy::Enemy(float x, float y, std::string id) : _id(id) {
 	coordinates.x = x;
 	coordinates.y = y;
 	goalTileCoordinates.x = x;
@@ -12,63 +12,63 @@ void Enemy::initAnimations() {
 
 	/* Enemy animation definition */
 
-	animations[0] = new Animation(_rc.get_texture("spritesheet"), 1);
+	animations[0] = new Animation(g_resourcemanager.get_texture("spritesheet"), 1);
 	animations[0]->add_frame(Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[0]->add_xsheet_phase(0, 1);
-	_rc.add_anim(_id+"enemy.top", animations[0]);
+	g_resourcemanager.add_anim(_id+"enemy.top", animations[0]);
 
-	animations[1] = new Animation(_rc.get_texture("spritesheet"), 1);
+	animations[1] = new Animation(g_resourcemanager.get_texture("spritesheet"), 1);
 	animations[1]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[1]->add_xsheet_phase(0, 1);
-	_rc.add_anim(_id + "enemy.topleft", animations[1]);
+	g_resourcemanager.add_anim(_id + "enemy.topleft", animations[1]);
 
-	animations[2] = new Animation(_rc.get_texture("spritesheet"), 1);
+	animations[2] = new Animation(g_resourcemanager.get_texture("spritesheet"), 1);
 	animations[2]->add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[2]->add_xsheet_phase(0, 1);
-	_rc.add_anim(_id + "enemy.left", animations[2]);
+	g_resourcemanager.add_anim(_id + "enemy.left", animations[2]);
 
-	animations[3] = new Animation(_rc.get_texture("spritesheet"), 1);
+	animations[3] = new Animation(g_resourcemanager.get_texture("spritesheet"), 1);
 	animations[3]->add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[3]->add_xsheet_phase(0, 1);
-	_rc.add_anim(_id + "enemy.bottomleft", animations[3]);
+	g_resourcemanager.add_anim(_id + "enemy.bottomleft", animations[3]);
 
-	animations[4] = new Animation(_rc.get_texture("spritesheet"), 1);
+	animations[4] = new Animation(g_resourcemanager.get_texture("spritesheet"), 1);
 	animations[4]->add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[4]->add_xsheet_phase(0, 1);
-	_rc.add_anim(_id + "enemy.bottom", animations[4]);
+	g_resourcemanager.add_anim(_id + "enemy.bottom", animations[4]);
 
-	animations[5] = new Animation(_rc.get_texture("spritesheet"), 1);
+	animations[5] = new Animation(g_resourcemanager.get_texture("spritesheet"), 1);
 	animations[5]->add_frame(Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[5]->add_xsheet_phase(0, 1);
-	_rc.add_anim(_id + "enemy.bottomright", animations[5]);
+	g_resourcemanager.add_anim(_id + "enemy.bottomright", animations[5]);
 
-	animations[6] = new Animation(_rc.get_texture("spritesheet"), 1);
+	animations[6] = new Animation(g_resourcemanager.get_texture("spritesheet"), 1);
 	animations[6]->add_frame(Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[6]->add_xsheet_phase(0, 1);
-	_rc.add_anim(_id + "enemy.right", animations[6]);
+	g_resourcemanager.add_anim(_id + "enemy.right", animations[6]);
 
-	animations[7] = new Animation(_rc.get_texture("spritesheet"), 1);
+	animations[7] = new Animation(g_resourcemanager.get_texture("spritesheet"), 1);
 	animations[7]->add_frame(Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[7]->add_xsheet_phase(0, 1);
-	_rc.add_anim(_id + "enemy.topright", animations[7]);
+	g_resourcemanager.add_anim(_id + "enemy.topright", animations[7]);
 
-	animations[8] = new Animation(_rc.get_texture("spritesheet"), 1);
+	animations[8] = new Animation(g_resourcemanager.get_texture("spritesheet"), 1);
 	animations[8]->add_frame(Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 5, .uw = 32, .vw = 32 });
 	animations[8]->add_xsheet_phase(0, 1);
-	_rc.add_anim(_id+"enemy.dead", animations[8]);
+	g_resourcemanager.add_anim(_id+"enemy.dead", animations[8]);
 
-	_rc.add_sprite(_id + "enemy", &sprite);
-	sprite.add_animation(_id + "top",		_rc.get_anim(_id + "enemy.top"));
-	sprite.add_animation(_id + "bottom",	_rc.get_anim(_id + "enemy.bottom"));
-	sprite.add_animation(_id + "left",	_rc.get_anim(_id + "enemy.left"));
-	sprite.add_animation(_id + "right",	_rc.get_anim(_id + "enemy.right"));
-	sprite.add_animation(_id + "topleft", _rc.get_anim(_id + "enemy.topleft"));
-	sprite.add_animation(_id + "topright", _rc.get_anim(_id + "enemy.topright"));
-	sprite.add_animation(_id + "bottomleft", _rc.get_anim(_id + "enemy.bottomleft"));
-	sprite.add_animation(_id + "bottomright", _rc.get_anim(_id + "enemy.bottomright"));
-	sprite.add_animation(_id + "dead", _rc.get_anim(_id + "enemy.dead"));
+	g_resourcemanager.add_sprite(_id + "enemy", &sprite);
+	sprite.add_animation(_id + "top",		g_resourcemanager.get_anim(_id + "enemy.top"));
+	sprite.add_animation(_id + "bottom",	g_resourcemanager.get_anim(_id + "enemy.bottom"));
+	sprite.add_animation(_id + "left",	g_resourcemanager.get_anim(_id + "enemy.left"));
+	sprite.add_animation(_id + "right",	g_resourcemanager.get_anim(_id + "enemy.right"));
+	sprite.add_animation(_id + "topleft", g_resourcemanager.get_anim(_id + "enemy.topleft"));
+	sprite.add_animation(_id + "topright", g_resourcemanager.get_anim(_id + "enemy.topright"));
+	sprite.add_animation(_id + "bottomleft", g_resourcemanager.get_anim(_id + "enemy.bottomleft"));
+	sprite.add_animation(_id + "bottomright", g_resourcemanager.get_anim(_id + "enemy.bottomright"));
+	sprite.add_animation(_id + "dead", g_resourcemanager.get_anim(_id + "enemy.dead"));
 	sprite.switch_to_anim(_id + "right");
-	enemy = _rc.get_sprite(_id + "enemy");
+	enemy = g_resourcemanager.get_sprite(_id + "enemy");
 }
 
 void Enemy::Update(Tilemap* bfsArrows) {

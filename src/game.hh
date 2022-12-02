@@ -1,6 +1,4 @@
-#ifndef GAME_H
-#define GAME_H
-
+#pragma once
 #include "headers.hh"
 
 class Game {
@@ -39,5 +37,3 @@ class Game {
 		int load_mod(std::string path, int32_t subsong = -1, int32_t repeats = 0);
 		int load_mod(openmpt::module* mod, int32_t subsong = -1, int32_t repeats = 0);
 };
-#endif
-

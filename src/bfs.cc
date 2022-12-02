@@ -168,19 +168,19 @@ bool BFS::isValid(const  std::vector<std::vector<bool>>& visited, const int& x, 
 	return true;
 }
 
-BFS::BFS(ResourceManager& rc, EventBus& eb, KeyMapper& keymap, Plane& board, Tilemap& obstacles) : _rc(rc), _eb(eb), _keymap(keymap), _board(board), _obstacles(obstacles) {
-	/* Breadth First Search Tilemap */
+BFS::BFS(Plane& board, Tilemap& obstacles) : _board(board), _obstacles(obstacles) {
+	/* Breadth First Seag_resourcemanagerh Tilemap */
 	bfsArrows = new Tilemap(16, 16);
 	auto dd = bfsArrows->get_transform();
 	/* Select tiles from tileset */
-	auto arrowTop = rc.make_static_sprite_from_texture("tiles.bfs.arrowTop", "spritesheet", Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowTopLeft = rc.make_static_sprite_from_texture("tiles.bfs.arrowTopLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowLeft = rc.make_static_sprite_from_texture("tiles.bfs.arrowLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowBottomLeft = rc.make_static_sprite_from_texture("tiles.bfs.arrowBottomLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowBottom = rc.make_static_sprite_from_texture("tiles.bfs.arrowBottom", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowBottomRight = rc.make_static_sprite_from_texture("tiles.bfs.arrowBottomRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowRight = rc.make_static_sprite_from_texture("tiles.bfs.arrowRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowTopRight = rc.make_static_sprite_from_texture("tiles.bfs.arrowTopRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowTop = g_resourcemanager.make_static_sprite_from_texture("tiles.bfs.arrowTop", "spritesheet", Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowTopLeft = g_resourcemanager.make_static_sprite_from_texture("tiles.bfs.arrowTopLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowLeft = g_resourcemanager.make_static_sprite_from_texture("tiles.bfs.arrowLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowBottomLeft = g_resourcemanager.make_static_sprite_from_texture("tiles.bfs.arrowBottomLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowBottom = g_resourcemanager.make_static_sprite_from_texture("tiles.bfs.arrowBottom", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowBottomRight = g_resourcemanager.make_static_sprite_from_texture("tiles.bfs.arrowBottomRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowRight = g_resourcemanager.make_static_sprite_from_texture("tiles.bfs.arrowRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowTopRight = g_resourcemanager.make_static_sprite_from_texture("tiles.bfs.arrowTopRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
 
 	// Possible arrow pointing direction
 	// towards one of its eight neighburs:
@@ -223,10 +223,10 @@ BFS::BFS(ResourceManager& rc, EventBus& eb, KeyMapper& keymap, Plane& board, Til
 	};
 
 	e_bfs_visibility = new Event("bfs.set_visibility");
-	_keymap.bind(SDLK_k, *e_bfs_visibility);
+	g_keymapper.bind(SDLK_k, *e_bfs_visibility);
 
 	// Register event
-	_eb.subscribe("bfs.set_visibility", &f_set_visibility);
+	g_eventbus.subscribe("bfs.set_visibility", &f_set_visibility);
 }
 
 BFS::~BFS() {

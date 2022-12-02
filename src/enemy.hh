@@ -14,8 +14,6 @@ enum class EEnemyDirection {
 
 class Enemy {
 	private:
-		ResourceManager& _rc;
-		EventBus& _eb;
 		Sprite sprite;
 		Animation* animations[9];
 		float enemySpeed					= 0.5f;
@@ -27,7 +25,7 @@ class Enemy {
 		bool isdead = false;
 	public:
 		SDL_FPoint coordinates				= { .x = 0, .y = 0 };
-		Enemy(float x, float y, ResourceManager& rc, EventBus& eb, std::string id);
+		Enemy(float x, float y, std::string id);
 		void initAnimations();
 		void Update(Tilemap* bfsArrows);
 		Sprite* GetSprite();

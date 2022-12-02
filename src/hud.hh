@@ -1,11 +1,8 @@
-#ifndef HUD_H
-#define HUD_H
-
+#pragma once
 #include "headers.hh"
 
 class Hud{
 private:
-	ResourceManager &_rc;
 	Plane &_board ;
 	Animation* ex_balken_anzeige;
 	Animation* gaertner_leben_1;
@@ -20,7 +17,7 @@ private:
 	int gaetner_akt_leben = 4;
 	int rose_akt_leben =4;
 public:
-	Hud(ResourceManager &rc, Plane &board);
+	Hud(Plane &board);
 	// Hud();
 	// void setResourceManager(ResourceManager &rc) { _rc = rc;}
 	// void setPlane(Plane &board){_board = board;}
@@ -36,4 +33,3 @@ public:
 	void exp_create(float x, float y);
 
 };
-#endif

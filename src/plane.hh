@@ -1,6 +1,4 @@
-#ifndef PLANE_H
-#define PLANE_H
-
+#pragma once
 #include "headers.hh"
 #include "sprite.hh"
 #include "tilemap.hh"
@@ -40,5 +38,3 @@ class Plane {
 		void set_transform(Z_PlaneMeta new_tf);
 		void render(SDL_Renderer *renderer);
 };
-#endif
-

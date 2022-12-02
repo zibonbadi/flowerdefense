@@ -1,6 +1,7 @@
 #include "headers.hh"
 #include "player.hh"
 #include "enemy.hh"
+#include "enemypool.hh"
 #include "bfs.hh"
 
 int uninit();
@@ -8,39 +9,39 @@ int update(Tilemap* tmap);
 int poll();
 bool running = true;
 
+Z_RGBA bgcolor = { .r =0x00, .g = 0x00, .b = 0x00 };
+Game game((int)SCREEN_WIDTH, (int)SCREEN_HEIGHT, bgcolor);
+ResourceManager g_resourcemanager(game.getRenderer());
+
 int main(int argc, char* argv[]) {
 	std::cout << "Engine launched!" << std::endl;
 	try {
 		std::cout << "Building system..." << std::endl;
-		Z_RGBA bgcolor = { .r = 0x00, .g = 0x00, .b = 0x00 };
 
-		Game game((int)SCREEN_WIDTH, (int)SCREEN_HEIGHT, bgcolor);
 
 		//damit gegner nur einmal Stirbt 
 		int i = 0;
 
-		EventBus ebus;
-		KeyMapper keymap(&ebus);
-
-		ResourceManager rc(game.getRenderer());
 		/* Import spritesheet */
-		rc.import_texture("spritesheet", "./assets/spritesheet.png");
+		g_resourcemanager.import_texture("spritesheet", "./assets/spritesheet.png");
 
 		/* Select tiles from tileset */
-		auto grass = rc.make_static_sprite_from_texture("tiles.grass", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
-		auto rose = rc.make_static_sprite_from_texture("tiles.rose", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
-		auto obstacle = rc.make_static_sprite_from_texture("tiles.obstacle", "spritesheet", Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
+		auto grass = g_resourcemanager.make_static_sprite_from_texture("tiles.grass", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
+		auto rose = g_resourcemanager.make_static_sprite_from_texture("tiles.rose", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
+		auto obstacle = g_resourcemanager.make_static_sprite_from_texture("tiles.obstacle", "spritesheet", Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 
 
-		Player player((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200, rc, ebus, keymap);
-		Enemy enemy(16*5, 16 * 45, rc, ebus, "1");
-		Enemy enemy2(16 * 24, 16 * 13, rc, ebus, "2");
-		Enemy enemy3(16 * 10, 16 * 35, rc, ebus, "3");
+		Player player((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200);
+		Enemy enemy(16*5, 16 * 45, "1");
+		Enemy enemy2(16 * 24, 16 * 13, "2");
+		Enemy enemy3(16 * 10, 16 * 35, "3");
+
+		Enemypool enemyPool(3);
 		std::vector<Enemy*> enemies;
 		enemies.push_back(&enemy);
 		enemies.push_back(&enemy2);
 		enemies.push_back(&enemy3);
-		//Enemy enemy(0, 0, rc, ebus, keymap);
+		//Enemy enemy(0, 0 ebus, keymap);
 
 		Tilemap ground(32, 32), plants(32, 32), obstacles;
 		
@@ -62,7 +63,7 @@ int main(int argc, char* argv[]) {
 		Plane board(Z_PlaneMeta{ .x = 0, .y = 0, .w = 800, .h = 800 });
 		Plane hud_plane(Z_PlaneMeta{ .x = 0, .y = 0, .w = 800, .h = 800 });
 
-		BFS bfs(rc, ebus, keymap, board, obstacles);
+		BFS bfs(board, obstacles);
 		bfs.execute(10, 10);
 
 		// Construct scene planes
@@ -74,7 +75,7 @@ int main(int argc, char* argv[]) {
 		board.attach(enemy2.GetSprite());
 		board.attach(enemy3.GetSprite());
 
-		Hud hud(rc,hud_plane);
+		Hud hud(hud_plane);
 		//hud.exp_create(5,8);
 
 		// Hook plane into scene
@@ -102,8 +103,8 @@ int main(int argc, char* argv[]) {
 		std::cout << "Entering main loop..." << std::endl;
 
 		// Gloptastic tracker beats
-		if(rc.import_mod("bgm", "./assets/cycle.stm") != nullptr){
-			game.load_mod(rc.get_mod("bgm"), -1, -1);
+		if(g_resourcemanager.import_mod("bgm", "./assets/cycle.stm") != nullptr){
+			game.load_mod(g_resourcemanager.get_mod("bgm"), -1, -1);
 		}
 
 
@@ -130,12 +131,12 @@ int main(int argc, char* argv[]) {
 		// Create Keymap Quit event
 		Event e_quit("engine.quit");
 		Event e_debug_collide("debug.collide");
-		keymap.bind(SDLK_q, e_quit);
-		keymap.bind(SDLK_c, e_debug_collide);
+		g_keymapper.bind(SDLK_q, e_quit);
+		g_keymapper.bind(SDLK_c, e_debug_collide);
 
 		// Register events
-		ebus.subscribe("engine.quit", &f_quit);
-		ebus.subscribe("debug.collide", &f_debug_collide);
+		g_eventbus.subscribe("engine.quit", &f_quit);
+		g_eventbus.subscribe("debug.collide", &f_debug_collide);
 
 
 		uint32_t past = 0;
@@ -155,7 +156,7 @@ int main(int argc, char* argv[]) {
 				}
 				case SDL_KEYUP:
 				case SDL_KEYDOWN: {
-					keymap.probe(e.key);
+					g_keymapper.probe(e.key);
 				}
 				default: {
 					break;
@@ -180,7 +181,7 @@ int main(int argc, char* argv[]) {
 			player.Update(deltaTime, enemies);
 
 			/* Advance the player animation */
-			rc.advance_all_anim(now);
+			g_resourcemanager.advance_all_anim(now);
 			game.render();
 			past = now;
 		}

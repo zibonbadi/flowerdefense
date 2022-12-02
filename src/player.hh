@@ -11,9 +11,6 @@ enum class EPlayerDirection {
 
 class Player {
 	private:
-		ResourceManager& _rc;
-		EventBus& _eb;
-		KeyMapper& _keymap;
 		Sprite sprite;
 		Animation* animations[8];
 		float playerSpeed = 300.f;
@@ -26,7 +23,7 @@ class Player {
 		Event *e_player_up, *e_player_down, *e_player_left, *e_player_right;
 		float damageAnimCooldown = 0;
 	public:
-		Player(float x, float y, ResourceManager& rc, EventBus& eb, KeyMapper& keymap);
+		Player(float x, float y);
 		void initAnimations();
 		void initControls();
 		void ChangePlayerAnimation(const std::string animIDadditional);

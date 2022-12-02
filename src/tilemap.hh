@@ -1,6 +1,4 @@
-#ifndef TILEMAP_H
-#define TILEMAP_H
-
+#pragma once
 #include "headers.hh"
 
 class Tilemap {
@@ -55,6 +53,4 @@ class Tilemap {
 		void render(SDL_Renderer* renderer);
 		void render(SDL_Renderer *renderer, Z_PlaneMeta transform);
 };
-#endif
-
 

@@ -1,5 +1,4 @@
-#ifndef GAMEOBJECT_H
-#define GAMEOBJECT_H
+#pragma once
 class GameObject {
 	private:
 		int x,y,w,h;
@@ -13,7 +12,5 @@ class GameObject {
 		virtual int render();
 		virtual bool is_collide();
 }
-#endif
-
 
 

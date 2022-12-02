@@ -1,6 +1,4 @@
-#ifndef EVENT_H
-#define EVENT_H
-
+#pragma once
 #include "headers.hh"
 
 class Event{
@@ -16,7 +14,6 @@ class Event{
 		std::string find(std::string value); // Find key by value
 		void set(std::string key, std::string value);
 };
-#endif
 
 
 

@@ -1,6 +1,4 @@
-#ifndef RESOURCEPOOL_H
-#define RESOURCEPOOL_H
-
+#pragma once
 #include "headers.hh"
 
 class ResourceManager {
@@ -56,8 +54,3 @@ class ResourceManager {
 
 		/* Tilemaps */
 };
-
-//ResourceManager g_resourcemanager;
-
-#endif
-

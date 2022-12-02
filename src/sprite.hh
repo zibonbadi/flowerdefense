@@ -1,6 +1,4 @@
-#ifndef SPRITE_H
-#define SPRITE_H
-
+#pragma once
 #include "headers.hh"
 
 class Sprite {
@@ -44,5 +42,3 @@ class Sprite {
 		bool collision(Sprite* opponent); // Boolean collision
 		Z_PlaneMeta getCollisionArea(Sprite* sprite); // Collide rect (intersection
 };
-#endif
-

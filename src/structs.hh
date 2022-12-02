@@ -1,5 +1,4 @@
-#ifndef STRUCTS_H
-#define STRUCTS_H
+#pragma once
 /*
 typedef struct {
 	SDL_Renderer *renderer;
@@ -46,4 +45,3 @@ typedef struct Z_PlaneMeta {
 		vw = 0.0f
 	;
 } Z_PlaneMeta;
-#endif
