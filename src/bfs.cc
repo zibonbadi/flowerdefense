@@ -213,13 +213,20 @@ BFS::BFS(Plane& board, Tilemap& obstacles) : _board(board), _obstacles(obstacles
 
 
 	f_set_visibility = [&](Event* e) {
-		isAttached = !isAttached;
-		if (isAttached == true) {
-			_board.attach(bfsArrows);
-		}
-		else {
-			_board.detach(bfsArrows);
-		}
+		//isAttached = !isAttached;
+		if (e->get("status_edge") == "up") {
+			Event e_toggle_bfs("bfs.set_visibility");
+			e_toggle_bfs.set("status_edge", "toggle");
+			g_eventbus.send(&e_toggle_bfs);
+		} else if (e->get("status_edge") == "toggle") {
+			isAttached = !isAttached;
+			if(isAttached == true) {
+				_board.attach(bfsArrows);
+			}
+			else {
+				_board.detach(bfsArrows);
+			}
+		};
 	};
 
 	e_bfs_visibility = new Event("bfs.set_visibility");
