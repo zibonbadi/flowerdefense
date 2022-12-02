@@ -27,6 +27,23 @@ void Player::initAnimations() {
 	animations[0]->add_xsheet_phase(1, 1);
 	_rc.add_anim("player.up", animations[0]);
 
+	animations[4] = new Animation(_rc.get_texture("spritesheet"), 5);
+	animations[4]->add_frame(Z_PlaneMeta{ .u = 0, .v = 32 * 1, .uw = 32, .vw = 32 });
+	animations[4]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 1, .uw = 32, .vw = 32 });
+	animations[4]->add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 1, .uw = 32, .vw = 32 });
+	animations[4]->add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 1, .uw = 32, .vw = 32 });
+	animations[4]->add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 1, .uw = 32, .vw = 32 });
+	animations[4]->add_frame(Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 1, .uw = 32, .vw = 32 });
+	animations[4]->add_xsheet_phase(0, 1);
+	animations[4]->add_xsheet_phase(5, 1);
+	animations[4]->add_xsheet_phase(2, 1);
+	animations[4]->add_xsheet_phase(5, 1);
+	animations[4]->add_xsheet_phase(4, 1);
+	animations[4]->add_xsheet_phase(5, 1);
+	animations[4]->add_xsheet_phase(2, 1);
+	animations[4]->add_xsheet_phase(5, 1);
+	_rc.add_anim("player.up.damage", animations[4]);
+
 	animations[1] = new Animation(_rc.get_texture("spritesheet"), 5);
 	animations[1]->add_frame(Z_PlaneMeta{ .u = 0, .v = 32 * 0, .uw = 32, .vw = 32 });
 	animations[1]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 0, .uw = 32, .vw = 32 });
@@ -42,6 +59,23 @@ void Player::initAnimations() {
 	animations[1]->add_xsheet_phase(2, 1);
 	animations[1]->add_xsheet_phase(1, 1);
 	_rc.add_anim("player.down", animations[1]);
+
+	animations[5] = new Animation(_rc.get_texture("spritesheet"), 5);
+	animations[5]->add_frame(Z_PlaneMeta{ .u = 0, .v = 32 * 0, .uw = 32, .vw = 32 });
+	animations[5]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 0, .uw = 32, .vw = 32 });
+	animations[5]->add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 0, .uw = 32, .vw = 32 });
+	animations[5]->add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 0, .uw = 32, .vw = 32 });
+	animations[5]->add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 0, .uw = 32, .vw = 32 });
+	animations[5]->add_frame(Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 0, .uw = 32, .vw = 32 });
+	animations[5]->add_xsheet_phase(0, 1);
+	animations[5]->add_xsheet_phase(5, 1);
+	animations[5]->add_xsheet_phase(2, 1);
+	animations[5]->add_xsheet_phase(5, 1);
+	animations[5]->add_xsheet_phase(4, 1);
+	animations[5]->add_xsheet_phase(5, 1);
+	animations[5]->add_xsheet_phase(2, 1);
+	animations[5]->add_xsheet_phase(5, 1);
+	_rc.add_anim("player.down.damage", animations[5]);
 
 	animations[2] = new Animation(_rc.get_texture("spritesheet"), 5);
 	animations[2]->add_frame(Z_PlaneMeta{ .u = 0, .v = 32 * 2, .uw = 32, .vw = 32 });
@@ -59,6 +93,23 @@ void Player::initAnimations() {
 	animations[2]->add_xsheet_phase(1, 1);
 	_rc.add_anim("player.left", animations[2]);
 
+	animations[6] = new Animation(_rc.get_texture("spritesheet"), 5);
+	animations[6]->add_frame(Z_PlaneMeta{ .u = 0, .v = 32 * 2, .uw = 32, .vw = 32 });
+	animations[6]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 2, .uw = 32, .vw = 32 });
+	animations[6]->add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 2, .uw = 32, .vw = 32 });
+	animations[6]->add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 2, .uw = 32, .vw = 32 });
+	animations[6]->add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 2, .uw = 32, .vw = 32 });
+	animations[6]->add_frame(Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 2, .uw = 32, .vw = 32 });
+	animations[6]->add_xsheet_phase(0, 1);
+	animations[6]->add_xsheet_phase(5, 1);
+	animations[6]->add_xsheet_phase(2, 1);
+	animations[6]->add_xsheet_phase(5, 1);
+	animations[6]->add_xsheet_phase(4, 1);
+	animations[6]->add_xsheet_phase(5, 1);
+	animations[6]->add_xsheet_phase(2, 1);
+	animations[6]->add_xsheet_phase(5, 1);
+	_rc.add_anim("player.left.damage", animations[6]);
+
 	animations[3] = new Animation(_rc.get_texture("spritesheet"), 5);
 	animations[3]->add_frame(Z_PlaneMeta{ .u = 0, .v = 32 * 3, .uw = 32, .vw = 32 });
 	animations[3]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 3, .uw = 32, .vw = 32 });
@@ -75,11 +126,32 @@ void Player::initAnimations() {
 	animations[3]->add_xsheet_phase(1, 1);
 	_rc.add_anim("player.right", animations[3]);
 
+	animations[7] = new Animation(_rc.get_texture("spritesheet"), 5);
+	animations[7]->add_frame(Z_PlaneMeta{ .u = 0, .v = 32 * 3, .uw = 32, .vw = 32 });
+	animations[7]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 3, .uw = 32, .vw = 32 });
+	animations[7]->add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 3, .uw = 32, .vw = 32 });
+	animations[7]->add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 3, .uw = 32, .vw = 32 });
+	animations[7]->add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 3, .uw = 32, .vw = 32 });
+	animations[7]->add_frame(Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 3, .uw = 32, .vw = 32 });
+	animations[7]->add_xsheet_phase(0, 1);
+	animations[7]->add_xsheet_phase(5, 1);
+	animations[7]->add_xsheet_phase(2, 1);
+	animations[7]->add_xsheet_phase(5, 1);
+	animations[7]->add_xsheet_phase(4, 1);
+	animations[7]->add_xsheet_phase(5, 1);
+	animations[7]->add_xsheet_phase(2, 1);
+	animations[7]->add_xsheet_phase(5, 1);
+	_rc.add_anim("player.right.damage", animations[7]);
+
 	_rc.add_sprite("player", &sprite);
 	sprite.add_animation("up", _rc.get_anim("player.up"));
 	sprite.add_animation("down", _rc.get_anim("player.down"));
 	sprite.add_animation("left", _rc.get_anim("player.left"));
 	sprite.add_animation("right", _rc.get_anim("player.right"));
+	sprite.add_animation("up.damage", _rc.get_anim("player.up.damage"));
+	sprite.add_animation("down.damage", _rc.get_anim("player.down.damage"));
+	sprite.add_animation("left.damage", _rc.get_anim("player.left.damage"));
+	sprite.add_animation("right.damage", _rc.get_anim("player.right.damage"));
 	sprite.switch_to_anim("left");
 	player = _rc.get_sprite("player");
 }
@@ -136,24 +208,52 @@ void Player::initControls() {
 	_eb.subscribe("player.set_direction", &f_set_dir);
 }
 
-void Player::Update() {
+void Player::ChangePlayerAnimation(const std::string animIDadditional = "")
+{
+	std::string animID;
+	switch (playerDir) {
+	case EPlayerDirection::UP:
+		animID = "up";
+		break;
+	case EPlayerDirection::DOWN:
+		animID = "down";
+		break;
+	case EPlayerDirection::LEFT:
+		animID = "left";
+		break;
+	case EPlayerDirection::RIGHT:
+		animID = "right";
+		break;
+	}
+	_animID = animID + animIDadditional;
+	player->switch_to_anim(_animID);
+}
+
+void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) {
+
+	bool isColliding = false;
+	for (Enemy* enemy : enemies) {
+		if (this->player->collision(enemy->GetSprite())) {
+			isColliding = true;
+			break;
+		}
+	}
+	if (isColliding) {
+		if (_animID.find(".damage") == std::string::npos) {
+			ChangePlayerAnimation(".damage");
+		}
+		this->damageAnimCooldown = 0.5;
+	}
+	else if (this->damageAnimCooldown > 0) {
+		this->damageAnimCooldown -= deltaTime;
+		if (this->damageAnimCooldown <= 0) {
+			ChangePlayerAnimation();
+		}
+	}
 
 	/* Change player sprite animation*/
 	if (pastPlayerDir != playerDir) {
-		switch (playerDir) {
-		case EPlayerDirection::UP:
-			player->switch_to_anim("up");
-			break;
-		case EPlayerDirection::DOWN:
-			player->switch_to_anim("down");
-			break;
-		case EPlayerDirection::LEFT:
-			player->switch_to_anim("left");
-			break;
-		case EPlayerDirection::RIGHT:
-			player->switch_to_anim("right");
-			break;
-		}
+		ChangePlayerAnimation();
 	}
 
 	/* Normalize delta length */
@@ -164,8 +264,8 @@ void Player::Update() {
 	}
 
 	/* Add delta to player coordinates */
-	playerCoordinates.x += delta.x;
-	playerCoordinates.y += delta.y;
+	playerCoordinates.x += delta.x * deltaTime;
+	playerCoordinates.y += delta.y * deltaTime;
 
 	/* Handle Offscreen Movement */
 	if (playerCoordinates.y < 0)				

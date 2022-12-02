@@ -58,17 +58,16 @@ void Enemy::initAnimations() {
 	_rc.add_anim(_id+"enemy.dead", animations[8]);
 
 	_rc.add_sprite(_id + "enemy", &sprite);
-	sprite.add_animation("top",		_rc.get_anim(_id + "enemy.top"));
-	sprite.add_animation("bottom",	_rc.get_anim(_id + "enemy.bottom"));
-	sprite.add_animation("left",	_rc.get_anim(_id + "enemy.left"));
-	sprite.add_animation("right",	_rc.get_anim(_id + "enemy.right"));
-	sprite.add_animation("topleft", _rc.get_anim(_id + "enemy.topleft"));
-	sprite.add_animation("topright", _rc.get_anim(_id + "enemy.topright"));
-	sprite.add_animation("bottomleft", _rc.get_anim(_id + "enemy.bottomleft"));
-	sprite.add_animation("bottomright", _rc.get_anim(_id + "enemy.bottomright"));
-	sprite.add_animation("dead", _rc.get_anim(_id + "enemy.dead"));
-
-	sprite.switch_to_anim("right");
+	sprite.add_animation(_id + "top",		_rc.get_anim(_id + "enemy.top"));
+	sprite.add_animation(_id + "bottom",	_rc.get_anim(_id + "enemy.bottom"));
+	sprite.add_animation(_id + "left",	_rc.get_anim(_id + "enemy.left"));
+	sprite.add_animation(_id + "right",	_rc.get_anim(_id + "enemy.right"));
+	sprite.add_animation(_id + "topleft", _rc.get_anim(_id + "enemy.topleft"));
+	sprite.add_animation(_id + "topright", _rc.get_anim(_id + "enemy.topright"));
+	sprite.add_animation(_id + "bottomleft", _rc.get_anim(_id + "enemy.bottomleft"));
+	sprite.add_animation(_id + "bottomright", _rc.get_anim(_id + "enemy.bottomright"));
+	sprite.add_animation(_id + "dead", _rc.get_anim(_id + "enemy.dead"));
+	sprite.switch_to_anim(_id + "right");
 	enemy = _rc.get_sprite(_id + "enemy");
 }
 
@@ -83,45 +82,45 @@ void Enemy::Update(Tilemap* bfsArrows) {
 		switch (movingDir) {
 			case 't':
 				enemyDir = EEnemyDirection::TOP;
-				sprite.switch_to_anim("top");
+				sprite.switch_to_anim(_id + "top");
 				goalTileCoordinates.y -= tileSize;
 				break;
 			case 'b':
 				enemyDir = EEnemyDirection::BOTTOM;
-				sprite.switch_to_anim("bottom");
+				sprite.switch_to_anim(_id + "bottom");
 				goalTileCoordinates.y += tileSize;
 				break;
 			case 'l':
 				enemyDir = EEnemyDirection::LEFT;
-				sprite.switch_to_anim("left");
+				sprite.switch_to_anim(_id + "left");
 				goalTileCoordinates.x -= tileSize;
 				break;
 			case 'r':
 				enemyDir = EEnemyDirection::RIGHT;
-				sprite.switch_to_anim("right");
+				sprite.switch_to_anim(_id + "right");
 				goalTileCoordinates.x += tileSize;
 				break;
 			case '1':
 				enemyDir = EEnemyDirection::TOPLEFT;
-				sprite.switch_to_anim("topleft");
+				sprite.switch_to_anim(_id + "topleft");
 				goalTileCoordinates.x -= tileSize;
 				goalTileCoordinates.y -= tileSize;
 				break;
 			case '2':
 				enemyDir = EEnemyDirection::TOPRIGHT;
-				sprite.switch_to_anim("topright");
+				sprite.switch_to_anim(_id + "topright");
 				goalTileCoordinates.x += tileSize;
 				goalTileCoordinates.y -= tileSize;
 				break;
 			case '3':
 				enemyDir = EEnemyDirection::BOTTOMLEFT;
-				sprite.switch_to_anim("bottomleft");
+				sprite.switch_to_anim(_id + "bottomleft");
 				goalTileCoordinates.x -= tileSize;
 				goalTileCoordinates.y += tileSize;
 				break;
 			case '4':
 				enemyDir = EEnemyDirection::BOTTOMRIGHT;
-				sprite.switch_to_anim("bottomright");
+				sprite.switch_to_anim(_id + "bottomright");
 				goalTileCoordinates.x += tileSize;
 				goalTileCoordinates.y += tileSize;
 				break;
@@ -165,7 +164,7 @@ Sprite* Enemy::GetSprite() {
 
 void Enemy::dying(){
 	isdead = true;
-	sprite.switch_to_anim("dead");
+	sprite.switch_to_anim(_id + "dead");
 }
 
 void Enemy::disappear(){

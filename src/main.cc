@@ -33,10 +33,13 @@ int main(int argc, char* argv[]) {
 
 
 		Player player((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200, rc, ebus, keymap);
-		Enemy enemy(16*20, 16 * 45, rc, ebus, "1");
-		Enemy enemy2(16 * 10, 16 * 45, rc, ebus, "2");
+		Enemy enemy(16*5, 16 * 45, rc, ebus, "1");
+		Enemy enemy2(16 * 24, 16 * 13, rc, ebus, "2");
 		Enemy enemy3(16 * 10, 16 * 35, rc, ebus, "3");
-
+		std::vector<Enemy*> enemies;
+		enemies.push_back(&enemy);
+		enemies.push_back(&enemy2);
+		enemies.push_back(&enemy3);
 		//Enemy enemy(0, 0, rc, ebus, keymap);
 
 		Tilemap ground(32, 32), plants(32, 32), obstacles;
@@ -81,18 +84,20 @@ int main(int argc, char* argv[]) {
 		Z_PlaneMeta collide_player{
 			.x = 0,
 			.y = 0,
-			.w = 32,
+			.w = 64,
 			.h = 64
 		},
 		collide_enemy{
-			.x = 8,
-			.y = 8,
-			.w = 48,
-			.h = 48
+			.x = 0,
+			.y = 0,
+			.w = 32,
+			.h = 32
 		};
 
 		player.GetSprite()->setCollider(&collide_player);
 		enemy.GetSprite()->setCollider(&collide_enemy);
+		enemy2.GetSprite()->setCollider(&collide_enemy);
+		enemy3.GetSprite()->setCollider(&collide_enemy);
 
 		std::cout << "Entering main loop..." << std::endl;
 
@@ -112,9 +117,12 @@ int main(int argc, char* argv[]) {
 
 		EBus_Fn f_debug_collide = [&](Event* e) {
 			if (e->get("status_edge") == "down") {
+				bool sfdfs = player.GetSprite()->collision(enemy.GetSprite());
 				std::cout 
 					<< "Collision player->enemy (bool):" << player.GetSprite()->collision(enemy.GetSprite()) << std::endl
 					<< "Collision enemy->player (bool):" << enemy.GetSprite()->collision(player.GetSprite()) << std::endl
+					<< "Collision player->enemy2 (bool):" << player.GetSprite()->collision(enemy2.GetSprite()) << std::endl
+					<< "Collision enemy2->player (bool):" << enemy2.GetSprite()->collision(player.GetSprite()) << std::endl
 				;
 			};
 		};
@@ -134,7 +142,8 @@ int main(int argc, char* argv[]) {
 		while (running) {
 			auto now = SDL_GetTicks();
 			const Uint8* state = SDL_GetKeyboardState(nullptr);
-
+			auto deltaMilliseconds = now - past;
+			float deltaTime = (float)deltaMilliseconds / 1000;
 
 			// poll Events
 			SDL_Event e;
@@ -160,15 +169,15 @@ int main(int argc, char* argv[]) {
 
 
 			if(i == 0){
-			//test zum toten Gegner
-			enemy3.dying();
-			//enemy3.disappear();
-			//enemy3.reborn(16*24, 16 * 20);
-			i++;
+				//test zum toten Gegner
+				enemy3.dying();
+				//enemy3.disappear();
+				//enemy3.reborn(16*24, 16 * 20);
+				i++;
 			}
 
 
-			player.Update();
+			player.Update(deltaTime, enemies);
 
 			/* Advance the player animation */
 			rc.advance_all_anim(now);

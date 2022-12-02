@@ -1,5 +1,6 @@
 #pragma once
 #include "headers.hh"
+#include "enemy.hh"
 
 enum class EPlayerDirection {
 	LEFT,
@@ -14,8 +15,8 @@ class Player {
 		EventBus& _eb;
 		KeyMapper& _keymap;
 		Sprite sprite;
-		Animation* animations[4];
-		float playerSpeed = 4.f;
+		Animation* animations[8];
+		float playerSpeed = 300.f;
 		SDL_FPoint playerCoordinates	= { .x = 0, .y = 0 };
 		SDL_FPoint delta				= { .x = 0, .y = 0 };
 		EPlayerDirection playerDir = EPlayerDirection::LEFT;
@@ -23,12 +24,15 @@ class Player {
 		Sprite* player;
 		EBus_Fn f_set_dir;
 		Event *e_player_up, *e_player_down, *e_player_left, *e_player_right;
+		float damageAnimCooldown = 0;
 	public:
 		Player(float x, float y, ResourceManager& rc, EventBus& eb, KeyMapper& keymap);
 		void initAnimations();
 		void initControls();
-		void Update();
+		void ChangePlayerAnimation(const std::string animIDadditional);
+		void Update(const float& deltaTime, const std::vector<Enemy*>& enemies);
 		Sprite* GetSprite();
 		~Player();
+		std::string _animID;
 };
 
