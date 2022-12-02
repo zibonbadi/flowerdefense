@@ -50,7 +50,7 @@ class Hud;
 
 // Global Engine Objects
 extern EventBus g_eventbus;
-extern ResourceManager g_resourcemanager;
+extern ResourceManager g_rc;
 extern KeyMapper g_keymapper;
 
 #define SCREEN_HEIGHT 800

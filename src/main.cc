@@ -11,7 +11,7 @@ bool running = true;
 
 Z_RGBA bgcolor = { .r =0x00, .g = 0x00, .b = 0x00 };
 Game game((int)SCREEN_WIDTH, (int)SCREEN_HEIGHT, bgcolor);
-ResourceManager g_resourcemanager(game.getRenderer());
+ResourceManager g_rc(game.getRenderer());
 
 int main(int argc, char* argv[]) {
 	std::cout << "Engine launched!" << std::endl;
@@ -23,12 +23,12 @@ int main(int argc, char* argv[]) {
 		int i = 0;
 
 		/* Import spritesheet */
-		g_resourcemanager.import_texture("spritesheet", "./assets/spritesheet.png");
+		g_rc.import_texture("spritesheet", "./assets/spritesheet.png");
 
 		/* Select tiles from tileset */
-		auto grass = g_resourcemanager.make_static_sprite_from_texture("tiles.grass", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
-		auto rose = g_resourcemanager.make_static_sprite_from_texture("tiles.rose", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
-		auto obstacle = g_resourcemanager.make_static_sprite_from_texture("tiles.obstacle", "spritesheet", Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
+		auto grass = g_rc.make_static_sprite_from_texture("tiles.grass", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
+		auto rose = g_rc.make_static_sprite_from_texture("tiles.rose", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
+		auto obstacle = g_rc.make_static_sprite_from_texture("tiles.obstacle", "spritesheet", Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 
 
 		Player player((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200);
@@ -103,8 +103,8 @@ int main(int argc, char* argv[]) {
 		std::cout << "Entering main loop..." << std::endl;
 
 		// Gloptastic tracker beats
-		if(g_resourcemanager.import_mod("bgm", "./assets/cycle.stm") != nullptr){
-			game.load_mod(g_resourcemanager.get_mod("bgm"), -1, -1);
+		if(g_rc.import_mod("bgm", "./assets/cycle.stm") != nullptr){
+			game.load_mod(g_rc.get_mod("bgm"), -1, -1);
 		}
 
 
@@ -181,7 +181,7 @@ int main(int argc, char* argv[]) {
 			player.Update(deltaTime, enemies);
 
 			/* Advance the player animation */
-			g_resourcemanager.advance_all_anim(now);
+			g_rc.advance_all_anim(now);
 			game.render();
 			past = now;
 		}

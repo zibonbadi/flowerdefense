@@ -173,14 +173,14 @@ BFS::BFS(Plane& board, Tilemap& obstacles) : _board(board), _obstacles(obstacles
 	bfsArrows = new Tilemap(16, 16);
 	auto dd = bfsArrows->get_transform();
 	/* Select tiles from tileset */
-	auto arrowTop = g_resourcemanager.make_static_sprite_from_texture("tiles.bfs.arrowTop", "spritesheet", Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowTopLeft = g_resourcemanager.make_static_sprite_from_texture("tiles.bfs.arrowTopLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowLeft = g_resourcemanager.make_static_sprite_from_texture("tiles.bfs.arrowLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowBottomLeft = g_resourcemanager.make_static_sprite_from_texture("tiles.bfs.arrowBottomLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowBottom = g_resourcemanager.make_static_sprite_from_texture("tiles.bfs.arrowBottom", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowBottomRight = g_resourcemanager.make_static_sprite_from_texture("tiles.bfs.arrowBottomRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowRight = g_resourcemanager.make_static_sprite_from_texture("tiles.bfs.arrowRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowTopRight = g_resourcemanager.make_static_sprite_from_texture("tiles.bfs.arrowTopRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowTop = g_rc.make_static_sprite_from_texture("tiles.bfs.arrowTop", "spritesheet", Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowTopLeft = g_rc.make_static_sprite_from_texture("tiles.bfs.arrowTopLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowLeft = g_rc.make_static_sprite_from_texture("tiles.bfs.arrowLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowBottomLeft = g_rc.make_static_sprite_from_texture("tiles.bfs.arrowBottomLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowBottom = g_rc.make_static_sprite_from_texture("tiles.bfs.arrowBottom", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowBottomRight = g_rc.make_static_sprite_from_texture("tiles.bfs.arrowBottomRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowRight = g_rc.make_static_sprite_from_texture("tiles.bfs.arrowRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowTopRight = g_rc.make_static_sprite_from_texture("tiles.bfs.arrowTopRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
 
 	// Possible arrow pointing direction
 	// towards one of its eight neighburs:
