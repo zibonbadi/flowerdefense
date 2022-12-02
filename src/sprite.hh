@@ -19,6 +19,9 @@ class Sprite {
 		std::string current_anime; // Selected for rendering
 
 	public:
+		bool debug_sprite = false;
+		bool debug_collide = false;
+
 		Sprite();
 		Sprite(std::string first_anim_name, Animation* first_anim, Z_PlaneMeta init);
 		Sprite(Z_PlaneMeta init);

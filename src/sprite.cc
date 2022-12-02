@@ -172,6 +172,26 @@ void Sprite::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 			//SDL_RenderFillRect(renderer, &pos);
 		//}else{
 			//std::clog << "Rendering animation \"" << this->current_anime << "\":" << this->anime.size() << "\"..." << std::endl;
+			if(this->debug_sprite){
+				SDL_Rect dest = {
+					.x = (int)plane_meta.x,
+					.y = (int)plane_meta.y,
+					.w = (int)plane_meta.w,
+					.h = (int)plane_meta.h
+				};
+				SDL_SetRenderDrawColor(renderer, 0x00,0x00,0x7F, 0x5F);
+				SDL_RenderDrawRect(renderer, &dest);
+			}
+			if(this->debug_collide && this->box_collide != nullptr){
+				SDL_Rect dest = {
+					.x = (int)plane_meta.x+(int)this->box_collide->x,
+					.y = (int)plane_meta.y+(int)this->box_collide->y,
+					.w = (int)this->box_collide->w,
+					.h = (int)this->box_collide->h
+				};
+				SDL_SetRenderDrawColor(renderer, 0x7F,0x00,0x00, 0x5F);
+				SDL_RenderDrawRect(renderer, &dest);
+			};
 			this->anime.at(this->current_anime)->render(renderer, plane_meta);
 		//}
 	}catch(std::exception &e){
