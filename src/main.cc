@@ -5,8 +5,6 @@
 #include "bfs.hh"
 
 int uninit();
-int update(Tilemap* tmap);
-int poll();
 
 Z_RGBA bgcolor = { .r =0x00, .g = 0x00, .b = 0x00 };
 Game game((int)SCREEN_WIDTH, (int)SCREEN_HEIGHT, bgcolor);
@@ -19,10 +17,6 @@ int main(int argc, char* argv[]) {
 	try {
 		DEBUG_MSG("Building system...");
 
-
-		//////////////damit gegner nur einmal Stirbt 
-		////////////int i = 0;
-
 		/* Import spritesheet */
 		g_rc.import_texture("spritesheet", "./assets/spritesheet.png");
 
@@ -33,9 +27,7 @@ int main(int argc, char* argv[]) {
 
 
 		Player player((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200);
-
 		Tilemap ground(32, 32), plants(32, 32), obstacles;
-		
 
 		// Set backup color for rose tile
 		rose->set_color(Z_RGBA{ .r = 0xff, .g = 0x7f, .b = 0xcf, .a = 0xff });
@@ -47,8 +39,6 @@ int main(int argc, char* argv[]) {
 		ground.fill(0, 0, 25, 25, '.');
 		plants.fill(12, 12, 1, 1, '%');
 		obstacles.fill(4, 9, 4, 1, 'x');
-
-		
 
 		/* Game board */
 		Plane board(Z_PlaneMeta{ .x = 0, .y = 0, .w = 800, .h = 800 });
@@ -166,7 +156,6 @@ int main(int argc, char* argv[]) {
 		g_eventbus.subscribe("debug.colliders.toggle", &f_toggle_colliders);
 		g_eventbus.subscribe("print.debug", &f_print_debug);
 
-
 		uint32_t past = 0;
 		while (running) {
 			auto now = SDL_GetTicks();
@@ -198,15 +187,6 @@ int main(int argc, char* argv[]) {
 			}
 
 
-			//if(i == 0){
-			//	//test zum toten Gegner
-			//	enemy3.dying();
-			//	//enemy3.disappear();
-			//	//enemy3.reborn(16*24, 16 * 20);
-			//	i++;
-			//}
-
-
 			player.Update(deltaTime, enemyPool.enemies);
 			enemyPool.Update(deltaTime);
 			/* Advance the player animation */
@@ -231,62 +211,3 @@ int uninit() {
 	return 0;
 }
 
-int update(Tilemap* tmap) {
-	return 0;
-};
-
-int poll() {
-	SDL_Event e;
-	while (SDL_PollEvent(&e)) {
-		switch (e.type) {
-		case SDL_QUIT: {
-			throw std::runtime_error("Received QUIT signal");
-			break;
-		}
-		case SDL_KEYDOWN: {
-			switch (e.key.keysym.sym) {
-			case SDLK_q: {
-				throw std::runtime_error("Received QUIT signal from user");
-				break;
-			}
-			case SDLK_UP:
-			case SDLK_w: {
-				// Game logic
-				//current_dir = UP;
-				break;
-			}
-			case SDLK_DOWN:
-			case SDLK_s: {
-				// Game logic
-				//current_dir = DOWN;
-				break;
-			}
-			case SDLK_LEFT:
-			case SDLK_a: {
-				// Game logic
-				//current_dir = LEFT;
-				break;
-			}
-			case SDLK_RIGHT:
-			case SDLK_d: {
-				// Game logic
-				//current_dir = RIGHT;
-				break;
-			}
-			case SDLK_p: {
-				//SDL_PauseAudio(adev, 1);
-				break;
-			}
-			default: {
-				break;
-			}
-			}
-			break;
-		}
-		default: {
-			break;
-		}
-		}
-	}
-	return 0;
-};
