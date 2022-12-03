@@ -38,5 +38,6 @@ class Player {
 		std::string _animID;
 
 		int leben = 0;
+		int xp_bar = 200;
 };
 
