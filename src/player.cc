@@ -5,6 +5,12 @@ Player::Player(float x, float y) {
 	playerCoordinates.y = y;
 	initAnimations();
 	initControls();
+	
+	// Hook handleEvents into event handler
+	this->f_eHandler = new EBus_Fn( std::bind(&Player::handleEvents, this, std::placeholders::_1) );
+	// Specify event subscriptions
+	g_eventbus.subscribe("player.die", f_eHandler);
+	g_eventbus.subscribe("player.set_direction", f_eHandler);
 }
 
 void Player::initAnimations() {
@@ -157,7 +163,30 @@ void Player::initAnimations() {
 }
 
 void Player::initControls() {
-	f_set_dir = [&](Event* e) {
+	// Up
+	e_player_up = new Event("player.set_direction");
+	e_player_up->set("direction", "up");
+	g_keymapper.bind(SDLK_w, *e_player_up);
+	// Down
+	e_player_down = new Event("player.set_direction");
+	e_player_down->set("direction", "down");
+	g_keymapper.bind(SDLK_s, *e_player_down);
+	// Left
+	e_player_left = new Event("player.set_direction");
+	e_player_left->set("direction", "left");
+	g_keymapper.bind(SDLK_a, *e_player_left);
+	// Right
+	e_player_right = new Event("player.set_direction");
+	e_player_right->set("direction", "right");
+	g_keymapper.bind(SDLK_d, *e_player_right);
+}
+
+void Player::handleEvents(Event* e){
+	if(e->get("type") == "player.die"){
+		Event e_gameover("game.gameover");
+		g_eventbus.send(&e_gameover);
+	}
+	if(e->get("type") == "player.set_direction"){
 		auto dir = e->get("direction");
 		if (e->get("status_edge") == "down") {
 			if (dir == "right") {
@@ -186,27 +215,7 @@ void Player::initControls() {
 			}
 		}
 	};
-
-	// Up
-	e_player_up = new Event("player.set_direction");
-	e_player_up->set("direction", "up");
-	g_keymapper.bind(SDLK_w, *e_player_up);
-	// Down
-	e_player_down = new Event("player.set_direction");
-	e_player_down->set("direction", "down");
-	g_keymapper.bind(SDLK_s, *e_player_down);
-	// Left
-	e_player_left = new Event("player.set_direction");
-	e_player_left->set("direction", "left");
-	g_keymapper.bind(SDLK_a, *e_player_left);
-	// Right
-	e_player_right = new Event("player.set_direction");
-	e_player_right->set("direction", "right");
-	g_keymapper.bind(SDLK_d, *e_player_right);
-
-	// Register event
-	g_eventbus.subscribe("player.set_direction", &f_set_dir);
-}
+};
 
 void Player::ChangePlayerAnimation(const std::string animIDadditional = "")
 {
@@ -292,6 +301,7 @@ Player::~Player() {
 	for (int i = 0; i < 4; i++) {
 		delete animations[i];
 	}
+	delete f_eHandler;
 	delete e_player_up;
 	delete e_player_down;
 	delete e_player_left;

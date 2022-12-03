@@ -19,7 +19,7 @@ class Player {
 		EPlayerDirection playerDir = EPlayerDirection::LEFT;
 		EPlayerDirection pastPlayerDir;
 		Sprite* player;
-		EBus_Fn f_set_dir;
+		EBus_Fn *f_eHandler;
 		Event *e_player_up, *e_player_down, *e_player_left, *e_player_right;
 		float damageAnimCooldown = 0;
 	public:
@@ -29,6 +29,7 @@ class Player {
 		void ChangePlayerAnimation(const std::string animIDadditional);
 		void Update(const float& deltaTime, const std::vector<Enemy*>& enemies);
 		Sprite* GetSprite();
+		void handleEvents(Event* e);
 		~Player();
 		std::string _animID;
 };

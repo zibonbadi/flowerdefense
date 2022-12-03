@@ -171,10 +171,14 @@ int main(int argc, char* argv[]) {
 		Event e_debug_collide("debug.collide");
 		Event e_debug_spritebox_toggle("debug.spritebox.toggle");
 		Event e_debug_colliders_toggle("debug.colliders.toggle");
+
+		Event e_debug_playerdie("player.die");
+
 		g_keymapper.bind(SDLK_q, e_quit);
 		g_keymapper.bind(SDLK_r, e_restart);
 		g_keymapper.bind(SDLK_F1, e_debug_spritebox_toggle);
 		g_keymapper.bind(SDLK_F2, e_debug_colliders_toggle);
+		g_keymapper.bind(SDLK_F12, e_debug_playerdie);
 
 		// Register events
 		g_eventbus.subscribe("engine.quit", &f_quit);
