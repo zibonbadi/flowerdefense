@@ -16,6 +16,7 @@ void Hud::eBus_setup(){
 	// Specify event subscriptions
 	g_eventbus.subscribe("player.obstacles.update", f_eHandler);
 	g_eventbus.subscribe("player.health.update", f_eHandler);
+	g_eventbus.subscribe("game.gameover", f_eHandler);
 }
 
 void Hud::font_create(){
@@ -363,5 +364,8 @@ void Hud::handleEvents(Event* e){
 		tm_inventory->write(std::pair(0,2), "+"+e->get("count"));
 		// TODO: Zelda-Style Quarter-Heart generator
 	};
+	if(e->get("type") == "game.gameover"){
+		text->visible = true;
+	}
 };
 
