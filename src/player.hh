@@ -32,7 +32,7 @@ class Player {
 		void initControls();
 		void ChangePlayerAnimation(const std::string animIDadditional);
 		void Update(const float& deltaTime, const std::vector<Enemy*> &enemies);
-		void reset();
+		void reset(float x, float y);
 		Sprite* GetSprite();
 		void handleEvents(Event* e);
 		~Player();

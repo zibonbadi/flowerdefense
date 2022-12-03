@@ -329,8 +329,10 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 	pastPlayerDir = playerDir;
 }
 
-void Player::reset(){
+void Player::reset(float x, float y){
 	DEBUG_MSG("Player.reset(): Caught.");
+	playerCoordinates.x = x;
+	playerCoordinates.y = y;
 }
 
 Sprite* Player::GetSprite() {

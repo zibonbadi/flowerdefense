@@ -41,7 +41,8 @@ class Tilemap {
 		void transform(Z_PlaneMeta transform);
 		Z_PlaneMeta get_transform();
 		void set_transform(Z_PlaneMeta new_tf);
-		//int clear_crops();
+		int clear_map();
+		int clear_tileset();
 		//int import_map(std::map<std::pair<unsigned int,unsigned int>, int> data);
 		int import_map(std::map<std::pair<unsigned int,unsigned int>, char> data);
 		void write(std::pair<unsigned int,unsigned int> top_left, std::string text);

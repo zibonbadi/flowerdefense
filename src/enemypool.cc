@@ -83,7 +83,20 @@ void Enemypool::Spawn(int count)
 }
 
 void Enemypool::reset(){
-	DEBUG_MSG("Enemypool.reset(): Caught.");
+	bool done = false;
+	//enemies.clear();
+	//availableEnemies.clear();
+	for(; enemies.size() > 0; _availableEnemiesSize++)
+	{
+		done = true;
+		auto en = enemies.back();
+		enemies.pop_back();
+		availableEnemies.push_back(en);
+		//en->init(-100.0f, -100.0f);
+		en->disappear();
+	}
+	
+	DEBUG_MSG("Enemypool.reset(): Caught." << done);
 }
 
 Enemypool::~Enemypool()

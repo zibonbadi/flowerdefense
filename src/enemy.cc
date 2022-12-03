@@ -2,6 +2,7 @@
 
 Enemy::Enemy(float x, float y) {
 	init(x, y);
+	setSpriteAnimations();
 }
 
 void Enemy::init(float x, float y)
@@ -10,7 +11,6 @@ void Enemy::init(float x, float y)
 	coordinates.y = y;
 	goalTileCoordinates.x = x;
 	goalTileCoordinates.y = y;
-	setSpriteAnimations();
 }
 
 void Enemy::setSpriteAnimations() {
