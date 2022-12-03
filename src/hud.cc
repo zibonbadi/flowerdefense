@@ -7,7 +7,15 @@ Hud::Hud(Plane &board) : _board(board){
 			rose_leben_create();
 			text_layer_create();
 			font_create();
+			eBus_setup();
+}
 
+void Hud::eBus_setup(){
+	// Hook handleEvents into event handler
+	this->f_eHandler = new EBus_Fn( std::bind(&Hud::handleEvents, this, std::placeholders::_1) );
+	// Specify event subscriptions
+	g_eventbus.subscribe("player.obstacles.update", f_eHandler);
+	g_eventbus.subscribe("player.health.update", f_eHandler);
 }
 
 void Hud::font_create(){
@@ -123,7 +131,7 @@ void Hud::font_create(){
 					.u = i.second.first, .v = 0, .uw = i.second.second, .vw = 9
 				}).second;
 				text->add_tile(i.first, lettersprite);
-				ex_rahmen->add_tile(i.first, lettersprite);
+				tm_inventory->add_tile(i.first, lettersprite);
 			};
 }
 
@@ -140,21 +148,16 @@ void Hud::ex_rahmen_create(){
 			auto xp_rahmen_links = g_rc.make_static_sprite_from_texture("tiles.xp_rahmen_links", "spritesheet", Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 			auto xp_rahmen_rechts = g_rc.make_static_sprite_from_texture("tiles.xp_rahmen_rechts", "spritesheet", Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 			auto xp_rahmen_mitte = g_rc.make_static_sprite_from_texture("tiles.xp_rahmen_mitte", "spritesheet", Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
-			auto t_obstacle = g_rc.get_sprite("tiles.obstacle");
 
 			ex_rahmen =  new Tilemap(32,32);
 
 			ex_rahmen->add_tile('-', xp_rahmen_links);
 			ex_rahmen->add_tile('/', xp_rahmen_rechts);
 			ex_rahmen->add_tile('+', xp_rahmen_mitte);
-			ex_rahmen->add_tile('^', t_obstacle);
-
 
 			ex_rahmen->fill(0, 0, 1, 1, '-');
 			ex_rahmen->fill(24, 0, 1, 1, '/');
 			ex_rahmen->fill(0, 0, 24, 1, '+');
-			ex_rahmen->fill(3, 0, 5, 2, ' ');
-			ex_rahmen->write(std::pair(0,2), "^0");
 
 			_board.attach(ex_rahmen);
 
@@ -172,29 +175,23 @@ void Hud::ex_bar_create(){
 
 void Hud::gaertner_leben_create(){
 
-			gaertner_leben_1 = new Animation(g_rc.get_texture("spritesheet"), 1);
-		
+	gaertner_leben_1 = new Animation(g_rc.get_texture("spritesheet"), 1);
+	gaertner_leben_1->add_frame(Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 4, .uw = 32, .vw = 32 });
+	gaertner_leben_1->add_xsheet_phase(0, 1);
 
-			gaertner_leben_1->add_frame(Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 4, .uw = 32, .vw = 32 });
+	auto a_heart = g_rc.add_anim("player.health.4_4", gaertner_leben_1);
+	auto t_heart = g_rc.make_sprite_from_anim("player.health.4_4", "player.health.4_4", Z_PlaneMeta { .x = 0, .y = 32, .w = 32, .h = 32 });
+	auto t_obstacle = g_rc.get_sprite("tiles.obstacle");
+	tm_inventory =  new Tilemap(32,32);
 
+	tm_inventory->add_tile('+', t_heart.second);
+	tm_inventory->add_tile('^', t_obstacle);
 
+	tm_inventory->fill(0, 0, 16, 2, ' ');
+	tm_inventory->write(std::pair(0,1), "+X");
+	tm_inventory->write(std::pair(0,2), "^X");
 
-			gaertner_leben_1->add_xsheet_phase(0, 1);
-
-			
-			g_rc.add_anim("gaertner_leben.gaertner_leben_1", gaertner_leben_1);
-
-
-			 gaertner_leben[0] = g_rc.make_sprite_from_anim("gaertner_leben", "gaertner_leben.gaertner_leben_1", Z_PlaneMeta { .x = 0, .y = 32, .w = 32, .h = 32 }).second;
-			 gaertner_leben[1] = g_rc.make_sprite_from_anim("gaertner_leben", "gaertner_leben.gaertner_leben_1", Z_PlaneMeta { .x = 32 * 1, .y = 32, .w = 32, .h = 32 }).second;
-			 gaertner_leben[2] = g_rc.make_sprite_from_anim("gaertner_leben", "gaertner_leben.gaertner_leben_1", Z_PlaneMeta { .x = 32 * 2, .y = 32, .w = 32, .h = 32 }).second;
-			 gaertner_leben[3] = g_rc.make_sprite_from_anim("gaertner_leben", "gaertner_leben.gaertner_leben_1", Z_PlaneMeta { .x = 32 * 3, .y = 32, .w = 32, .h = 32 }).second;
-
-
-			 _board.attach(gaertner_leben[0]);
-			 _board.attach(gaertner_leben[1]);
-			 _board.attach(gaertner_leben[2]);
-			 _board.attach(gaertner_leben[3]);
+	_board.attach(tm_inventory);
 }
 
 void Hud::rose_leben_create(){
@@ -354,3 +351,17 @@ void Hud::exp_create(float x, float y){
 		_board.attach(ex);
 
 }
+
+void Hud::handleEvents(Event* e){
+	if(e->get("type") == "player.obstacles.update"){
+		ex_rahmen->fill(0, 2, 15, 1, ' ');
+		ex_rahmen->write(std::pair(0,2), "^"+e->get("count"));
+	}
+	if(e->get("type") == "player.health.update"){
+		// Three fields: "current", "max" & 
+		ex_rahmen->fill(0, 2, 15, 1, ' ');
+		ex_rahmen->write(std::pair(0,2), "+"+e->get("count"));
+		// TODO: Zelda-Style Quarter-Heart generator
+	};
+};
+
