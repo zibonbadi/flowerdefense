@@ -194,13 +194,19 @@ char Tilemap::get_spot(int x, int y){
 int Tilemap::fill(int map_x, int map_y, int w, int h, char tile){
 	try{
 		//if(this->tiles != nullptr && this->map.find(tile) != this->map.end()){
-		if(this->tiles.find(tile) != this->tiles.end()){
+		if(this->tiles.find(tile) != this->tiles.end() || tile == ' '){
 			//std::clog << "Tilefind is valid" << std::endl;
 			// Is this even valid? If no -> skip
 			for(int y = map_y; y < map_y+h; y++){
 				for(int x = map_x; x < map_x+w; x++){
-					//std::clog << '(' << x << ',' << y << ") => " << tile << std::endl;
-					this->map[std::pair<int,int> (y,x)] = tile;
+					std::clog << '(' << x << ',' << y << ") => '" << tile << '\'' << std::endl;
+					if(tile == ' '){
+						// Remove tile
+						std::clog << "Tilemap.fill(): Clearing tile (" << x << ',' << y << ")." << std::endl;
+						this->map.erase(std::pair(y,x));
+					}else{
+						this->map[std::pair<int,int> (y,x)] = tile;
+					}
 				}
 			}
 		}
@@ -248,6 +254,8 @@ void Tilemap::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 	*/
 
 	//if(this->tiles != nullptr){
+	if(!this->visible){ return; }
+
 		Z_PlaneMeta zp_tmp = {
 			.x = 0.0f,
 				.y = 0.0f,
