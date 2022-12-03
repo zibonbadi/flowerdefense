@@ -248,8 +248,8 @@ int main(int argc, char* argv[]) {
 
 			enemyPool.Update(deltaTime);
 
-			int x_tile = ((int)player.playerCoordinates.x) / BFS_TILE_WIDTH;
-			int y_tile = ((int)player.playerCoordinates.y) / BFS_TILE_HEIGHT;
+			int x_tile = ((int)player.playerCoordinates.x + 32) / BFS_TILE_WIDTH;
+			int y_tile = ((int)player.playerCoordinates.y + 32) / BFS_TILE_HEIGHT;
 			
 			bfsPlayer.execute(x_tile, y_tile);
 

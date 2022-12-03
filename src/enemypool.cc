@@ -110,7 +110,7 @@ void Enemypool::reset(){
 		//en->init(-100.0f, -100.0f);
 		en->disappear();
 	}
-	
+
 	DEBUG_MSG("Enemypool.reset(): Caught." << done);
 }
 
