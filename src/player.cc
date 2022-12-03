@@ -200,7 +200,8 @@ void Player::initControls() {
 
 void Player::handleEvents(Event* e){
 	if(e->get("type") == "player.die"){
-		Event e_gameover("game.gameover");
+		Event e_gameover("game.state.set");
+		e_gameover.set("scene", "gameover");
 		g_eventbus.send(&e_gameover);
 	}
 	if(e->get("type") == "player.set_direction"){
@@ -260,13 +261,18 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 	bool isColliding = false;
 	for (Enemy* enemy : enemies) {
 		if (this->player->collision(enemy->GetSprite())) {
+			if(enemy->isdead){
+			enemy->disappear();
+			}else{
 			isColliding = true;
+			}
 			break;
 		}
 	}
 	if (isColliding) {
 		if (_animID.find(".damage") == std::string::npos) {
 			ChangePlayerAnimation(".damage");
+			leben = -1;
 		}
 		this->damageAnimCooldown = 0.3;
 	}
@@ -274,6 +280,7 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 		this->damageAnimCooldown -= deltaTime;
 		if (this->damageAnimCooldown <= 0) {
 			ChangePlayerAnimation();
+
 		}
 	}
 

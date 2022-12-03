@@ -16,7 +16,7 @@ void Hud::eBus_setup(){
 	// Specify event subscriptions
 	g_eventbus.subscribe("player.obstacles.update", f_eHandler);
 	g_eventbus.subscribe("player.health.update", f_eHandler);
-	g_eventbus.subscribe("game.gameover", f_eHandler);
+	g_eventbus.subscribe("game.state.set", f_eHandler);
 }
 
 void Hud::font_create(){
@@ -129,7 +129,7 @@ void Hud::font_create(){
 			for(auto &i : xcrops){
 				std::string letter_str(1, i.first);
 				auto lettersprite = g_rc.make_static_sprite_from_texture("font."+letter_str, "font", Z_PlaneMeta {
-					.u = i.second.first, .v = 0, .uw = i.second.second, .vw = 9
+					.u = (float)i.second.first, .v = 0, .uw = (float)i.second.second, .vw = 9
 				}).second;
 				text->add_tile(i.first, lettersprite);
 				tm_inventory->add_tile(i.first, lettersprite);
@@ -200,16 +200,20 @@ void Hud::rose_leben_create(){
 			 rose_leben_a[1] = new Animation(g_rc.get_texture("spritesheet"), 1);
 			 rose_leben_a[2] = new Animation(g_rc.get_texture("spritesheet"), 1);
 			 rose_leben_a[3] = new Animation(g_rc.get_texture("spritesheet"), 1);
+			 rose_leben_a[4] = new Animation(g_rc.get_texture("spritesheet"), 1);
+
 
 		
 
-			rose_leben_a[3]->add_frame(Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 4, .uw = 32, .vw = 32 });
-			rose_leben_a[2]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 4, .uw = 32, .vw = 32 });
-			rose_leben_a[1]->add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 4, .uw = 32, .vw = 32 });
-			rose_leben_a[0]->add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 4, .uw = 32, .vw = 32 });
+			rose_leben_a[4]->add_frame(Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 4, .uw = 32, .vw = 32 });
+			rose_leben_a[3]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 4, .uw = 32, .vw = 32 });
+			rose_leben_a[2]->add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 4, .uw = 32, .vw = 32 });
+			rose_leben_a[1]->add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 4, .uw = 32, .vw = 32 });
+			rose_leben_a[0]->add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 4, .uw = 32, .vw = 32 });
 
 
 
+			rose_leben_a[4]->add_xsheet_phase(0, 1);
 			rose_leben_a[3]->add_xsheet_phase(0, 1);
 			rose_leben_a[2]->add_xsheet_phase(0, 1);
 			rose_leben_a[1]->add_xsheet_phase(0, 1);
@@ -217,13 +221,14 @@ void Hud::rose_leben_create(){
 
 
 		
-
+			g_rc.add_anim("rose_leben.rose_leben_5", rose_leben_a[4]);
 			g_rc.add_anim("rose_leben.rose_leben_4", rose_leben_a[3]);
 			g_rc.add_anim("rose_leben.rose_leben_3", rose_leben_a[2]);
 			g_rc.add_anim("rose_leben.rose_leben_2", rose_leben_a[1]);
 			g_rc.add_anim("rose_leben.rose_leben_1", rose_leben_a[0]);
 
-			 rose_leben[3] = g_rc.make_sprite_from_anim("rose_leben", "rose_leben.rose_leben_4", Z_PlaneMeta { .x = 32*23, .y = 32, .w = 64, .h = 64}).second;
+			 rose_leben[4] = g_rc.make_sprite_from_anim("rose_leben", "rose_leben.rose_leben_5", Z_PlaneMeta { .x = 32*23, .y = 32, .w = 64, .h = 64}).second;
+			 rose_leben[3] = g_rc.make_sprite_from_anim("rose_leben", "rose_leben.rose_leben_4", Z_PlaneMeta { }).second;
 			 rose_leben[2] = g_rc.make_sprite_from_anim("rose_leben", "rose_leben.rose_leben_3", Z_PlaneMeta { }).second;
 			 rose_leben[1] = g_rc.make_sprite_from_anim("rose_leben", "rose_leben.rose_leben_2", Z_PlaneMeta {  }).second;
 			 rose_leben[0] = g_rc.make_sprite_from_anim("rose_leben", "rose_leben.rose_leben_1", Z_PlaneMeta { }).second;
@@ -232,6 +237,8 @@ void Hud::rose_leben_create(){
 			_board.attach(rose_leben[1]);
 			_board.attach(rose_leben[2]);
 			_board.attach(rose_leben[3]);
+			_board.attach(rose_leben[4]);
+
 
 }
 
@@ -239,22 +246,24 @@ void Hud::rose_leben_runter(){
 	switch (rose_akt_leben)
 	{
 	case 4:
+		rose_leben[4]->setTransform(Z_PlaneMeta{});	
+		rose_leben[3]->setTransform(Z_PlaneMeta{.x = 32*23, .y = 32, .w = 64, .h = 64});
+		rose_akt_leben--;
+		return;
+	case 3:
 		rose_leben[3]->setTransform(Z_PlaneMeta{});	
 		rose_leben[2]->setTransform(Z_PlaneMeta{.x = 32*23, .y = 32, .w = 64, .h = 64});
 		rose_akt_leben--;
 		return;
-	case 3:
+	case 2:
 		rose_leben[2]->setTransform(Z_PlaneMeta{});	
 		rose_leben[1]->setTransform(Z_PlaneMeta{.x = 32*23, .y = 32, .w = 64, .h = 64});
 		rose_akt_leben--;
 		return;
-	case 2:
+	case 1:
 		rose_leben[1]->setTransform(Z_PlaneMeta{});	
 		rose_leben[0]->setTransform(Z_PlaneMeta{.x = 32*23, .y = 32, .w = 64, .h = 64});
 		rose_akt_leben--;
-		return;
-	case 1:
-		//game over
 		break;
 	
 	default:
@@ -364,8 +373,29 @@ void Hud::handleEvents(Event* e){
 		tm_inventory->write(std::pair(0,2), "+"+e->get("count"));
 		// TODO: Zelda-Style Quarter-Heart generator
 	};
-	if(e->get("type") == "game.gameover"){
-		text->visible = true;
+	if(e->get("type") == "game.state.set"){
+		if(e->get("scene") == "gameover"){
+			text->visible = true;
+		}
+		if(e->get("scene") == "game"){
+			// Reset everything
+			text->visible = false;
+		}
 	}
 };
 
+void Hud::Update(Player &player){
+	if(player.leben < 0){
+		//gaertner_leben_runter();
+		rose_leben_runter();
+		player.leben = 0;
+		std::cout<<"------> Leben runter"<<std::endl;
+	}
+	else if(player.leben > 0){
+		//gaertner_leben_hoch();
+		player.leben = 0;
+
+		std::cout<<"------> Leben hoch"<<std::endl;
+	}
+
+}

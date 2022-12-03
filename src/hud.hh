@@ -1,18 +1,20 @@
 #pragma once
 #include "headers.hh"
+#include "player.hh"
 
+class Player;
 class Hud{
 public:
 	Plane &_board ;
 	Animation* ex_balken_anzeige;
 	Animation* gaertner_leben_1;
-	Animation* rose_leben_a[4];
+	Animation* rose_leben_a[5];
 	Animation* ex_anzeige;
 	EBus_Fn* f_eHandler;
 	Sprite *ex_bar;
 	Sprite *ex;
 	Sprite *gaertner_leben[4];
-	Sprite *rose_leben[4];
+	Sprite *rose_leben[5];
 	Tilemap *ex_rahmen, *tm_inventory , *text;
 
 	int gaetner_akt_leben = 4;
@@ -36,5 +38,6 @@ public:
 	void exp_create(float x, float y);
 	void text_layer_create();
 	void font_create();
+	void Update(Player &player);
 
 };

@@ -9,6 +9,7 @@ enum class EPlayerDirection {
 	DOWN
 };
 
+class Enemy;
 class Player {
 	private:
 		Sprite sprite;
@@ -30,10 +31,12 @@ class Player {
 		void initAnimations();
 		void initControls();
 		void ChangePlayerAnimation(const std::string animIDadditional);
-		void Update(const float& deltaTime, const std::vector<Enemy*>& enemies);
+		void Update(const float& deltaTime, const std::vector<Enemy*> &enemies);
 		Sprite* GetSprite();
 		void handleEvents(Event* e);
 		~Player();
 		std::string _animID;
+
+		int leben = 0;
 };
 

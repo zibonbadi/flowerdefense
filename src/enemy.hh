@@ -19,7 +19,8 @@ class Enemy {
 		SDL_Point goalTileCoordinates		= { .x = 0, .y = 0 };
 		SDL_FPoint interpolStepSize			= { .x = 0, .y = 0 };
 		EEnemyDirection enemyDir;
-		bool isdead = false;
+		Sprite* enemy;
+		std::string _id;
 	public:
 		SDL_FPoint coordinates				= { .x = 0, .y = 0 };
 		Enemy(float x, float y);
@@ -30,5 +31,9 @@ class Enemy {
 		void disappear();
 		void dying();
 		void reborn(float x, float y);
+
+		bool isdead = false;
+
+		//~Enemy();
 };
 
