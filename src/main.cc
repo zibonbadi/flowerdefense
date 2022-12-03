@@ -228,6 +228,7 @@ int main(int argc, char* argv[]) {
 
 
 			player.Update(deltaTime, enemies);
+			hud.Update(player);
 
 			/* Advance the player animation */
 			g_rc.advance_all_anim(now);

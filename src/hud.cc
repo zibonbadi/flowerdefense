@@ -129,7 +129,7 @@ void Hud::font_create(){
 			for(auto &i : xcrops){
 				std::string letter_str(1, i.first);
 				auto lettersprite = g_rc.make_static_sprite_from_texture("font."+letter_str, "font", Z_PlaneMeta {
-					.u = i.second.first, .v = 0, .uw = i.second.second, .vw = 9
+					.u = (float)i.second.first, .v = 0, .uw = (float)i.second.second, .vw = 9
 				}).second;
 				text->add_tile(i.first, lettersprite);
 				tm_inventory->add_tile(i.first, lettersprite);
@@ -369,3 +369,17 @@ void Hud::handleEvents(Event* e){
 	}
 };
 
+void Hud::Update(Player &player){
+	if(player.leben < 0){
+		//gaertner_leben_runter();
+		player.leben = 0;
+		std::cout<<"------> Leben runter"<<std::endl;
+	}
+	else if(player.leben > 0){
+		//gaertner_leben_hoch();
+		player.leben = 0;
+
+		std::cout<<"------> Leben hoch"<<std::endl;
+	}
+
+}

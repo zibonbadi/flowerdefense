@@ -260,7 +260,11 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 	bool isColliding = false;
 	for (Enemy* enemy : enemies) {
 		if (this->player->collision(enemy->GetSprite())) {
+			if(enemy->isdead){
+			enemy->disappear();
+			}else{
 			isColliding = true;
+			}
 			break;
 		}
 	}
@@ -274,6 +278,8 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 		this->damageAnimCooldown -= deltaTime;
 		if (this->damageAnimCooldown <= 0) {
 			ChangePlayerAnimation();
+			leben = -1;
+
 		}
 	}
 

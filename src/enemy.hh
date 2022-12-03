@@ -22,7 +22,6 @@ class Enemy {
 		EEnemyDirection enemyDir;
 		Sprite* enemy;
 		std::string _id;
-		bool isdead = false;
 	public:
 		SDL_FPoint coordinates				= { .x = 0, .y = 0 };
 		Enemy(float x, float y, std::string id);
@@ -32,6 +31,9 @@ class Enemy {
 		void disappear();
 		void dying();
 		void reborn(float x, float y);
+
+		bool isdead = false;
+
 		~Enemy();
 };
 
