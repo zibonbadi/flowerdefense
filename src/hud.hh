@@ -1,6 +1,8 @@
 #pragma once
 #include "headers.hh"
+#include "player.hh"
 
+class Player;
 class Hud{
 public:
 	Plane &_board ;
@@ -36,5 +38,6 @@ public:
 	void exp_create(float x, float y);
 	void text_layer_create();
 	void font_create();
+	void Update(Player &player);
 
 };

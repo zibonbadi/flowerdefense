@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "new": "cpp",
-        "exception": "cpp"
+        "exception": "cpp",
+        "string": "cpp"
     }
 }
