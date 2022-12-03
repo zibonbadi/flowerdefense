@@ -1,74 +1,30 @@
 #include "enemy.hh"
 
-Enemy::Enemy(float x, float y, std::string id) : _id(id) {
+Enemy::Enemy(float x, float y) {
+	init(x, y);
+}
+
+void Enemy::init(float x, float y)
+{
 	coordinates.x = x;
 	coordinates.y = y;
 	goalTileCoordinates.x = x;
 	goalTileCoordinates.y = y;
-	initAnimations();
+	setSpriteAnimations();
 }
 
-void Enemy::initAnimations() {
-
-	/* Enemy animation definition */
-
-	animations[0] = new Animation(g_rc.get_texture("spritesheet"), 1);
-	animations[0]->add_frame(Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 6, .uw = 32, .vw = 32 });
-	animations[0]->add_xsheet_phase(0, 1);
-	g_rc.add_anim(_id+"enemy.top", animations[0]);
-
-	animations[1] = new Animation(g_rc.get_texture("spritesheet"), 1);
-	animations[1]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 6, .uw = 32, .vw = 32 });
-	animations[1]->add_xsheet_phase(0, 1);
-	g_rc.add_anim(_id + "enemy.topleft", animations[1]);
-
-	animations[2] = new Animation(g_rc.get_texture("spritesheet"), 1);
-	animations[2]->add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 6, .uw = 32, .vw = 32 });
-	animations[2]->add_xsheet_phase(0, 1);
-	g_rc.add_anim(_id + "enemy.left", animations[2]);
-
-	animations[3] = new Animation(g_rc.get_texture("spritesheet"), 1);
-	animations[3]->add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 6, .uw = 32, .vw = 32 });
-	animations[3]->add_xsheet_phase(0, 1);
-	g_rc.add_anim(_id + "enemy.bottomleft", animations[3]);
-
-	animations[4] = new Animation(g_rc.get_texture("spritesheet"), 1);
-	animations[4]->add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 6, .uw = 32, .vw = 32 });
-	animations[4]->add_xsheet_phase(0, 1);
-	g_rc.add_anim(_id + "enemy.bottom", animations[4]);
-
-	animations[5] = new Animation(g_rc.get_texture("spritesheet"), 1);
-	animations[5]->add_frame(Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 6, .uw = 32, .vw = 32 });
-	animations[5]->add_xsheet_phase(0, 1);
-	g_rc.add_anim(_id + "enemy.bottomright", animations[5]);
-
-	animations[6] = new Animation(g_rc.get_texture("spritesheet"), 1);
-	animations[6]->add_frame(Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 6, .uw = 32, .vw = 32 });
-	animations[6]->add_xsheet_phase(0, 1);
-	g_rc.add_anim(_id + "enemy.right", animations[6]);
-
-	animations[7] = new Animation(g_rc.get_texture("spritesheet"), 1);
-	animations[7]->add_frame(Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 6, .uw = 32, .vw = 32 });
-	animations[7]->add_xsheet_phase(0, 1);
-	g_rc.add_anim(_id + "enemy.topright", animations[7]);
-
-	animations[8] = new Animation(g_rc.get_texture("spritesheet"), 1);
-	animations[8]->add_frame(Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 5, .uw = 32, .vw = 32 });
-	animations[8]->add_xsheet_phase(0, 1);
-	g_rc.add_anim(_id+"enemy.dead", animations[8]);
-
-	g_rc.add_sprite(_id + "enemy", &sprite);
-	sprite.add_animation(_id + "top",		g_rc.get_anim(_id + "enemy.top"));
-	sprite.add_animation(_id + "bottom",	g_rc.get_anim(_id + "enemy.bottom"));
-	sprite.add_animation(_id + "left",	g_rc.get_anim(_id + "enemy.left"));
-	sprite.add_animation(_id + "right",	g_rc.get_anim(_id + "enemy.right"));
-	sprite.add_animation(_id + "topleft", g_rc.get_anim(_id + "enemy.topleft"));
-	sprite.add_animation(_id + "topright", g_rc.get_anim(_id + "enemy.topright"));
-	sprite.add_animation(_id + "bottomleft", g_rc.get_anim(_id + "enemy.bottomleft"));
-	sprite.add_animation(_id + "bottomright", g_rc.get_anim(_id + "enemy.bottomright"));
-	sprite.add_animation(_id + "dead", g_rc.get_anim(_id + "enemy.dead"));
-	sprite.switch_to_anim(_id + "right");
-	enemy = g_rc.get_sprite(_id + "enemy");
+void Enemy::setSpriteAnimations() {
+	g_rc.add_sprite("enemy", &sprite);
+	sprite.add_animation("top",		g_rc.get_anim("enemy.top"));
+	sprite.add_animation("bottom",	g_rc.get_anim("enemy.bottom"));
+	sprite.add_animation("left",	g_rc.get_anim("enemy.left"));
+	sprite.add_animation("right",	g_rc.get_anim("enemy.right"));
+	sprite.add_animation("topleft", g_rc.get_anim("enemy.topleft"));
+	sprite.add_animation("topright", g_rc.get_anim("enemy.topright"));
+	sprite.add_animation("bottomleft", g_rc.get_anim("enemy.bottomleft"));
+	sprite.add_animation("bottomright", g_rc.get_anim("enemy.bottomright"));
+	sprite.add_animation("dead", g_rc.get_anim("enemy.dead"));
+	sprite.switch_to_anim("right");
 }
 
 void Enemy::Update(Tilemap* bfsArrows) {
@@ -82,45 +38,45 @@ void Enemy::Update(Tilemap* bfsArrows) {
 		switch (movingDir) {
 			case 't':
 				enemyDir = EEnemyDirection::TOP;
-				sprite.switch_to_anim(_id + "top");
+				sprite.switch_to_anim("top");
 				goalTileCoordinates.y -= tileSize;
 				break;
 			case 'b':
 				enemyDir = EEnemyDirection::BOTTOM;
-				sprite.switch_to_anim(_id + "bottom");
+				sprite.switch_to_anim("bottom");
 				goalTileCoordinates.y += tileSize;
 				break;
 			case 'l':
 				enemyDir = EEnemyDirection::LEFT;
-				sprite.switch_to_anim(_id + "left");
+				sprite.switch_to_anim("left");
 				goalTileCoordinates.x -= tileSize;
 				break;
 			case 'r':
 				enemyDir = EEnemyDirection::RIGHT;
-				sprite.switch_to_anim(_id + "right");
+				sprite.switch_to_anim("right");
 				goalTileCoordinates.x += tileSize;
 				break;
 			case '1':
 				enemyDir = EEnemyDirection::TOPLEFT;
-				sprite.switch_to_anim(_id + "topleft");
+				sprite.switch_to_anim("topleft");
 				goalTileCoordinates.x -= tileSize;
 				goalTileCoordinates.y -= tileSize;
 				break;
 			case '2':
 				enemyDir = EEnemyDirection::TOPRIGHT;
-				sprite.switch_to_anim(_id + "topright");
+				sprite.switch_to_anim("topright");
 				goalTileCoordinates.x += tileSize;
 				goalTileCoordinates.y -= tileSize;
 				break;
 			case '3':
 				enemyDir = EEnemyDirection::BOTTOMLEFT;
-				sprite.switch_to_anim(_id + "bottomleft");
+				sprite.switch_to_anim("bottomleft");
 				goalTileCoordinates.x -= tileSize;
 				goalTileCoordinates.y += tileSize;
 				break;
 			case '4':
 				enemyDir = EEnemyDirection::BOTTOMRIGHT;
-				sprite.switch_to_anim(_id + "bottomright");
+				sprite.switch_to_anim("bottomright");
 				goalTileCoordinates.x += tileSize;
 				goalTileCoordinates.y += tileSize;
 				break;
@@ -155,20 +111,20 @@ void Enemy::Update(Tilemap* bfsArrows) {
 	coordinates.y += adjustedInterpolStepSize.y;
 
 	/* Adjust enemy sprite transform*/             // x - 8 so that the sprite centroid moves exactly along the bfs path
-	enemy->setTransform(Z_PlaneMeta{ .x = coordinates.x - 8, .y = coordinates.y - 8, .w = 32, .h = 32 });
+	sprite.setTransform(Z_PlaneMeta{ .x = coordinates.x - 8, .y = coordinates.y - 8, .w = 32, .h = 32 });
 }}
 
 Sprite* Enemy::GetSprite() {
-	return enemy;
+	return &sprite;
 }
 
 void Enemy::dying(){
 	isdead = true;
-	sprite.switch_to_anim(_id + "dead");
+	sprite.switch_to_anim("dead");
 }
 
 void Enemy::disappear(){
-	enemy->setTransform(Z_PlaneMeta{});
+	sprite.setTransform(Z_PlaneMeta{});
 
 }
 
@@ -179,11 +135,4 @@ void Enemy::reborn(float x, float y){
 	coordinates.y = y;
 	goalTileCoordinates.x = x;
 	goalTileCoordinates.y = y;
-}
-
-
-Enemy::~Enemy() {
-	for (int i = 0; i < 4; i++) {
-		delete animations[i];
-	}
 }

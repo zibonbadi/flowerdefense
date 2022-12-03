@@ -15,17 +15,18 @@ enum class EEnemyDirection {
 class Enemy {
 	private:
 		Sprite sprite;
-		Animation* animations[9];
 		float enemySpeed					= 0.5f;
 		SDL_Point goalTileCoordinates		= { .x = 0, .y = 0 };
 		SDL_FPoint interpolStepSize			= { .x = 0, .y = 0 };
 		EEnemyDirection enemyDir;
 		Sprite* enemy;
 		std::string _id;
+		bool isdead = false;
 	public:
 		SDL_FPoint coordinates				= { .x = 0, .y = 0 };
-		Enemy(float x, float y, std::string id);
-		void initAnimations();
+		Enemy(float x, float y);
+		void init(float x, float y);
+		void setSpriteAnimations();
 		void Update(Tilemap* bfsArrows);
 		Sprite* GetSprite();
 		void disappear();

@@ -83,12 +83,12 @@ void Plane::render(SDL_Renderer *renderer){
 	};
 	
 	// Render planes in registration order
-	//std::clog << "Plane.render(): Calling Tilemaps..." << std::endl;
+	//ENGINE_DEBUG_MSG("Plane.render(): Calling Tilemaps...");
 	//for(auto & t : this->tilemaps){ t->render(renderer, tmp); }
 	for(auto i = 0; i < this->tilemaps.size(); i++){
 	//for(auto & t : this->tilemaps){
 		try{
-			//std::clog << "Plane.render(): Calling Tilemap " << i << std::endl;
+			//ENGINE_DEBUG_MSG("Plane.render(): Calling Tilemap " << i);
 			// Plane-based Frustum culling
 			/*
 			auto pos = i.first;
@@ -111,7 +111,7 @@ void Plane::render(SDL_Renderer *renderer){
 		}
 	}
 	//for(auto & t : this->tilemaps){ std::get<1>(t)->render(renderer, this->transform_rect); }
-	//std::clog << "Plane.render(): Calling Sprites..." << std::endl;
+	//ENGINE_DEBUG_MSG("Plane.render(): Calling Sprites...");
 	//for(auto & s : this->sprites){ s->render(renderer, tmp); }
 	for(auto & s : this->sprites){
 		try{
@@ -121,6 +121,6 @@ void Plane::render(SDL_Renderer *renderer){
 		}
 	}
 	//for(auto & s : this->sprites){ std::get<1>(s)->render(renderer, this->transform_rect); }
-	//std::clog << "Plane.render(): Done." << std::endl;
+	//ENGINE_DEBUG_MSG("Plane.render(): Done.");
 
 };

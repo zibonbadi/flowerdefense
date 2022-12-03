@@ -6,7 +6,7 @@ int KeyMapper::bind(SDL_Keycode key, Event event){
 	try{
 		//this->key_events.at(key) = event;
 		this->key_events.insert(std::pair<SDL_Keycode, Event>(key,event));
-		std::clog << "KeyMapper.bind(" << key << "): Bound key " << key << " to \"" << this->key_events.at(key).get("type") << "\"." << std::endl;
+		ENGINE_DEBUG_MSG("KeyMapper.bind(" << key << "): Bound key " << key << " to \"" << this->key_events.at(key).get("type") << "\".");
 		return 0;
 	}catch(std::exception &e){
 		std::cerr << "KeyMapper.bind(" << key << ") exception: " << e.what() << std::endl;
@@ -17,7 +17,7 @@ int KeyMapper::bind(SDL_Keycode key, Event event){
 int KeyMapper::unbind(SDL_Keycode key){
 	try{
 		this->key_events.erase(key);
-		std::clog << "KeyMapper.unbind(" << key << "): Unbound key " << key << std::endl;
+		ENGINE_DEBUG_MSG("KeyMapper.unbind(" << key << "): Unbound key " << key);
 		return 0;
 	}catch (std::exception &e){
 		std::cerr << "KeyMapper.unbind(" << key << ") exception: " << e.what() << std::endl;

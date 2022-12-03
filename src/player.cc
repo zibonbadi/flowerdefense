@@ -272,7 +272,7 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 		if (_animID.find(".damage") == std::string::npos) {
 			ChangePlayerAnimation(".damage");
 		}
-		this->damageAnimCooldown = 0.5;
+		this->damageAnimCooldown = 0.3;
 	}
 	else if (this->damageAnimCooldown > 0) {
 		this->damageAnimCooldown -= deltaTime;

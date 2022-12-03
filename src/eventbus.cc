@@ -11,14 +11,14 @@ void EventBus::send(Event *event){
 		throw std::runtime_error("Invalid Event type");
 	}
 
-	std::clog << "EventBus.send(): Propagating event \"" << e_type << "\"." << std::endl;
+	ENGINE_DEBUG_MSG("EventBus.send(): Propagating event \"" << e_type << "\".");
 	auto type_i = this->callbacks.find(e_type);
 	if(type_i != this->callbacks.end()){
 		if(this->callbacks[e_type].empty()){
 			throw std::runtime_error("No subscribers found");
 		}
 		for(auto & cb : this->callbacks[e_type]){
-			//std::clog << cb << std::endl;
+			//ENGINE_DEBUG_MSG(cb << std::endl;
 			(*cb)(event);
 		}
 	}else{
@@ -45,7 +45,7 @@ int EventBus::subscribe(std::string type, EBus_Fn* callback){
 	type_i = this->callbacks.find(type);
 	if(type_i != this->callbacks.end() && this->callbacks[type].find(callback) == this->callbacks[type].end() ){
 		this->callbacks[type].insert(callback);
-		std::clog << "EventBus.subscribe(\"" << type << "\", " << callback << "): Successfully subscribed." << std::endl;
+		ENGINE_DEBUG_MSG("EventBus.subscribe(\"" << type << "\", " << callback << "): Successfully subscribed.");
 		return 0;
 	}
 	return -1;
@@ -86,7 +86,7 @@ int EventBus::unsubscribe(std::string type, EBus_Fn* callback){
 		if(callback_i == this->callbacks[type].end()){
 			this->callbacks.erase(type);
 		}
-		std::clog << "EventBus.unsubscribe(\"" << type << "\", " << callback << "): Successfully unsubscribed." << std::endl;
+		ENGINE_DEBUG_MSG("EventBus.unsubscribe(\"" << type << "\", " << callback << "): Successfully unsubscribed.");
 		return 0;
 	}
 	std::cerr << "EventBus.unsubscribe(\"" << type << "\", " << callback << "): Failed." << std::endl;

@@ -14,7 +14,7 @@ class Player {
 	private:
 		Sprite sprite;
 		Animation* animations[8];
-		float playerSpeed = 300.f;
+		float playerSpeed = 200.f;
 		SDL_FPoint playerCoordinates	= { .x = 0, .y = 0 };
 		SDL_FPoint delta				= { .x = 0, .y = 0 };
 		EPlayerDirection playerDir = EPlayerDirection::LEFT;

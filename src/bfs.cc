@@ -91,19 +91,19 @@ void BFS::execute(const int& x_root, const int& y_root) {
 		const std::pair<int, int>& cell = q.front();
 		const int x = cell.first;
 		const int y = cell.second;
-		//std::cout << arrowMap.get_spot(x, y) << " ";
+		//DEBUG_MSG(arrowMap.get_spot(x, y) << " ");
 
 		q.pop();
 
-		// Go to the adjacent cells
-		
 		std::shuffle(order.begin(), order.end(), g);
+		
+		// Go to the adjacent cells
 		for (int k= 0; k < 8; k++) {
 			int i = order[k];
 
 			const int& adjx = x + deltaX[i];
 			const int& adjy = y + deltaY[i];
-			//std::cout << "i: " << i << "    " << x << " , " << y << std::endl;
+			//DEBUG_MSG("i: " << i << "    " << x << " , " << y);
 
 			if (isValid(visited, adjx, adjy, cellCountX, cellCountY, charVec)) {
 				q.push(std::pair{ adjx, adjy });
@@ -141,7 +141,7 @@ void BFS::execute(const int& x_root, const int& y_root) {
 		}
 		ss << "\r\n";
 	}
-	std::cout << ss.str() << std::endl;
+	DEBUG_MSG(ss.str());
 	bfsArrows->write(std::pair{ 0, 0 }, ss.str());
 	ss.str("");
 }
@@ -170,7 +170,7 @@ bool BFS::isValid(const  std::vector<std::vector<bool>>& visited, const int& x, 
 
 BFS::BFS(Plane& board, Tilemap& obstacles) : _board(board), _obstacles(obstacles) {
 	/* Breadth First Seag_resourcemanagerh Tilemap */
-	bfsArrows = new Tilemap(16, 16);
+	bfsArrows = new Tilemap(BFS_TILE_WIDTH, BFS_TILE_HEIGHT);
 	auto dd = bfsArrows->get_transform();
 	/* Select tiles from tileset */
 	auto arrowTop = g_rc.make_static_sprite_from_texture("tiles.bfs.arrowTop", "spritesheet", Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
