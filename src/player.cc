@@ -9,7 +9,7 @@ Player::Player(float x, float y) {
 	// Hook handleEvents into event handler
 	this->f_eHandler = new EBus_Fn( std::bind(&Player::handleEvents, this, std::placeholders::_1) );
 	// Specify event subscriptions
-	g_eventbus.subscribe("game.state.set", f_eHandler);
+	//g_eventbus.subscribe("game.state.set", f_eHandler);
 	g_eventbus.subscribe("player.die", f_eHandler);
 	g_eventbus.subscribe("player.set_direction", f_eHandler);
 }
@@ -325,6 +325,10 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 
 
 	pastPlayerDir = playerDir;
+}
+
+void Player::reset(){
+	DEBUG_MSG("Player.reset(): Caught.");
 }
 
 Sprite* Player::GetSprite() {

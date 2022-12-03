@@ -114,6 +114,8 @@ int main(int argc, char* argv[]) {
 			if (e->get("type") == "game.state.set"){
 				// Reset everything
 				DEBUG_MSG("f_restart(e): Caught." << e->get("scene"));
+				player.reset();
+				enemyPool.reset();
 			};
 		};
 

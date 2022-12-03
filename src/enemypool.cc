@@ -17,7 +17,7 @@ Enemypool::Enemypool(Plane& board, Z_PlaneMeta& collide_enemy, float spawnTime, 
 	// Hook handleEvents into event handler
 	this->f_eHandler = new EBus_Fn( std::bind(&Enemypool::handleEvents, this, std::placeholders::_1) );
 	// Specify event subscriptions
-	g_eventbus.subscribe("game.state.set", f_eHandler);
+	//g_eventbus.subscribe("game.state.set", f_eHandler);
 }
 
 void Enemypool::Update(const float& deltaTime)
@@ -80,6 +80,10 @@ void Enemypool::Spawn(int count)
 		_board.attach(enemy->GetSprite());
 		enemies.push_back(enemy);
 	}
+}
+
+void Enemypool::reset(){
+	DEBUG_MSG("Enemypool.reset(): Caught.");
 }
 
 Enemypool::~Enemypool()

@@ -23,6 +23,7 @@ public:
 	void Spawn(int count);
 	void initAnimations();
 	void create();
+	void reset();
 	void destroy(Enemy* enemy);
 	void handleEvents(Event* e);
 };
