@@ -37,6 +37,6 @@ class Player {
 		~Player();
 		std::string _animID;
 
-		int leben = -1;
+		int leben = 0;
 };
 
