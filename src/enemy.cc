@@ -30,7 +30,25 @@ void Enemy::setSpriteAnimations() {
 }
 
 void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer) {
-	Tilemap* bfsArrows = bfsFlower.bfsArrows;
+	SDL_FPoint flightPathPlayer = {
+		.x = _player.playerCoordinates.x - coordinates.x,
+		.y = _player.playerCoordinates.y - coordinates.y,
+	};
+	SDL_FPoint flightPathRose = {
+	.x = (SCREEN_WIDTH / 2) - coordinates.x,
+	.y = (SCREEN_HEIGHT / 2) - coordinates.y,
+	};
+
+	float flightPathPlayerLength = sqrt(flightPathPlayer.x * flightPathPlayer.x + flightPathPlayer.y * flightPathPlayer.y);
+	float flightPathRoseLength = sqrt(flightPathRose.x * flightPathRose.x + flightPathRose.y * flightPathRose.y);
+
+	Tilemap* bfsArrows;
+	if (flightPathPlayerLength < flightPathRoseLength) {
+		bfsArrows = bfsPlayer.bfsArrows;
+	}
+	else {
+		bfsArrows = bfsFlower.bfsArrows;
+	}
 	if(!isdead){
 	const int tileSize = bfsArrows->get_transform().w;
 	char movingDir = bfsArrows->get_spot(coordinates.x / tileSize, coordinates.y / tileSize);
