@@ -179,6 +179,23 @@ void Player::initControls() {
 	e_player_right = new Event("player.set_direction");
 	e_player_right->set("direction", "right");
 	g_keymapper.bind(SDLK_d, *e_player_right);
+
+	// Fence Up
+	e_player_fence_up = new Event("player.place_fence");
+	e_player_fence_up->set("direction", "up");
+	g_keymapper.bind(SDLK_k, *e_player_fence_up);
+	// Fence Down
+	e_player_fence_down = new Event("player.place_fence");
+	e_player_fence_down->set("direction", "down");
+	g_keymapper.bind(SDLK_j, *e_player_fence_down);
+	// Fence Left
+	e_player_fence_left = new Event("player.place_fence");
+	e_player_fence_left->set("direction", "left");
+	g_keymapper.bind(SDLK_h, *e_player_fence_left);
+	// Fence Right
+	e_player_fence_right = new Event("player.place_fence");
+	e_player_fence_right->set("direction", "right");
+	g_keymapper.bind(SDLK_l, *e_player_fence_right);
 }
 
 void Player::handleEvents(Event* e){

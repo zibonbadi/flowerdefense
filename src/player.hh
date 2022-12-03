@@ -20,7 +20,10 @@ class Player {
 		EPlayerDirection pastPlayerDir;
 		Sprite* player;
 		EBus_Fn *f_eHandler;
-		Event *e_player_up, *e_player_down, *e_player_left, *e_player_right;
+		Event
+			*e_player_up, *e_player_down, *e_player_left, *e_player_right,
+			*e_player_fence_up, *e_player_fence_down, *e_player_fence_left, *e_player_fence_right
+			;
 		float damageAnimCooldown = 0;
 	public:
 		Player(float x, float y);
