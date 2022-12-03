@@ -26,6 +26,7 @@ class Player {
 			;
 		float damageAnimCooldown = 0;
 	public:
+		unsigned int health = 4, obstacles = 0;
 		Player(float x, float y);
 		void initAnimations();
 		void initControls();

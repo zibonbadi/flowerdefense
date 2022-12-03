@@ -301,19 +301,19 @@ void Hud::rose_leben_hoch(){
 }
 
 void Hud::gaertner_leben_runter(){
-	switch (gaetner_akt_leben)
+	switch (gaertner_akt_leben)
 	{
 	case 4:
 		gaertner_leben[3]->setTransform(Z_PlaneMeta{});	
-		gaetner_akt_leben--;
+		gaertner_akt_leben--;
 		return;
 	case 3:
 		gaertner_leben[2]->setTransform(Z_PlaneMeta{});	
-		gaetner_akt_leben--;
+		gaertner_akt_leben--;
 		return;
 	case 2:
 		gaertner_leben[1]->setTransform(Z_PlaneMeta{});	
-		gaetner_akt_leben--;
+		gaertner_akt_leben--;
 		return;
 	case 1:
 		//game over
@@ -325,20 +325,20 @@ void Hud::gaertner_leben_runter(){
 }
 
 void Hud::gaertner_leben_hoch(){
-	switch (gaetner_akt_leben)
+	switch (gaertner_akt_leben)
 	{
 	case 1:
 		gaertner_leben[1]->setTransform(Z_PlaneMeta{.x = 32 * 1, .y = 32, .w = 32, .h = 32 });
 
-		gaetner_akt_leben++;
+		gaertner_akt_leben++;
 		return;
 	case 2:
 		gaertner_leben[2]->setTransform(Z_PlaneMeta{.x = 32 * 2, .y = 32, .w = 32, .h = 32 });
-		gaetner_akt_leben++;
+		gaertner_akt_leben++;
 		return;
 	case 3:
 		gaertner_leben[3]->setTransform(Z_PlaneMeta{.x = 32 * 3, .y = 32, .w = 32, .h = 32 });
-		gaetner_akt_leben++;
+		gaertner_akt_leben++;
 		return;
 	
 	default:
@@ -387,16 +387,23 @@ void Hud::handleEvents(Event* e){
 void Hud::Update(Player &player){
 	if(player.leben < 0){
 		//gaertner_leben_runter();
+		player.health--;
 		rose_leben_runter();
 		player.leben = 0;
 		std::cout<<"------> Leben runter"<<std::endl;
 	}
 	else if(player.leben > 0){
 		//gaertner_leben_hoch();
+		player.health++;
 		player.leben = 0;
 
 		std::cout<<"------> Leben hoch"<<std::endl;
 	}
+	// Update gaertner health display
+	tm_inventory->fill(0, 1, 15, 2, ' ');
+	tm_inventory->fill(0, 1, player.health, 1, '+');
+	tm_inventory->write(std::pair(0,2), "^"+std::to_string(player.obstacles));
+
 	ex_bar_steuern(player.xp_bar);
 	if(player.xp_bar>= 800){
 		std::cout<<"############## XP voll"<<std::endl;

@@ -15,7 +15,7 @@ public:
 	Sprite *rose_leben[5];
 	Tilemap *ex_rahmen, *tm_inventory , *text;
 
-	int gaetner_akt_leben = 4;
+	int gaertner_akt_leben = 4;
 	int rose_akt_leben =4;
 	int xp_akt = 0;
 
