@@ -1,8 +1,4 @@
 #include "headers.hh"
-#include "player.hh"
-#include "enemy.hh"
-#include "enemypool.hh"
-#include "bfs.hh"
 
 int uninit();
 
@@ -44,8 +40,13 @@ int main(int argc, char* argv[]) {
 		Plane board(Z_PlaneMeta{ .x = 0, .y = 0, .w = 800, .h = 800 });
 		Plane hud_plane(Z_PlaneMeta{ .x = 0, .y = 0, .w = 800, .h = 800 });
 
-		BFS bfs(board, obstacles);
-		bfs.execute(10, 10);
+
+
+		BFS bfsPlayer(obstacles, "bfsPlayer.");
+		bfsPlayer.execute(10, 10);
+
+		BFS bfsFlower(obstacles, "bfsFlower.");
+		bfsFlower.execute(25, 25);
 
 		// Construct scene planes
 		board.attach(&ground);
@@ -74,7 +75,7 @@ int main(int argc, char* argv[]) {
 		};
 
 		player.GetSprite()->setCollider(&collide_player);
-		
+
 		
 		const float spawnTime				= 2.0f;
 		const float spawnTimeWaveEndDelta	= -0.2f;
@@ -83,7 +84,7 @@ int main(int argc, char* argv[]) {
 		const float poolSize				= 100;
 		const float waveTime				= 6.f;
 
-		Enemypool enemyPool(board, collide_enemy, spawnTime, spawnCount, poolSize);
+		Enemypool enemyPool(board, player, collide_enemy, spawnTime, spawnCount, poolSize);
 
 		float waveTimer = waveTime;
 
@@ -111,41 +112,57 @@ int main(int argc, char* argv[]) {
 		};
 		EBus_Fn f_restart = [&](Event* e) {
 			if (e->get("status_edge") == "up") {
-				Event e_up_to_toggle("debug.gameover.toggle");
-				e_up_to_toggle.set("status_edge", "toggle");
-				g_eventbus.send(&e_up_to_toggle);
 				DEBUG_MSG("restarting..");
-
-			} else if (e->get("status_edge") == "toggle") {
 				hud.text->visible = !hud.text->visible;
-			};
+			} 
 		};
 
 		EBus_Fn f_toggle_spritebox = [&](Event* e) {
 			if (e->get("status_edge") == "up") {
-				Event e_up_to_toggle("debug.spritebox.toggle");
-				e_up_to_toggle.set("status_edge", "toggle");
-				g_eventbus.send(&e_up_to_toggle);
-			} else if (e->get("status_edge") == "toggle") {
 				player.GetSprite()->debug_sprite = !player.GetSprite()->debug_sprite;
-				for(auto & enemy : enemyPool.enemies){
-					enemy->GetSprite()->debug_sprite = !enemy->GetSprite()->debug_sprite;
+				for (auto& enemy : enemyPool.enemies) {
+					enemy->GetSprite()->debug_sprite = player.GetSprite()->debug_sprite;
 				}
-			};
+			}
 		};
 
 		EBus_Fn f_toggle_colliders = [&](Event* e) {
 			if (e->get("status_edge") == "up") {
-				Event e_up_to_toggle("debug.colliders.toggle");
-				e_up_to_toggle.set("status_edge", "toggle");
-				g_eventbus.send(&e_up_to_toggle);
-			} else if (e->get("status_edge") == "toggle") {
 				player.GetSprite()->debug_collide = !player.GetSprite()->debug_collide;
-				for(auto & enemy : enemyPool.enemies){
-					enemy->GetSprite()->debug_collide = !enemy->GetSprite()->debug_collide;
+				for (auto& enemy : enemyPool.enemies) {
+					enemy->GetSprite()->debug_collide = player.GetSprite()->debug_collide;
 				}
-			};
+			}
 		};
+			
+		EBus_Fn f_bfs_player_visibility = [&](Event* e) {
+			if (e->get("status_edge") == "up") {
+				bfsPlayer.isAttached = !bfsPlayer.isAttached;
+				if (bfsPlayer.isAttached == true) {
+					board.attach(bfsPlayer.bfsArrows);
+				}
+				else {
+					board.detach(bfsPlayer.bfsArrows);
+				}
+			}
+		};
+
+		EBus_Fn f_bfs_flower_visibility = [&](Event* e) {
+			if (e->get("status_edge") == "up") {
+				bfsFlower.isAttached = !bfsFlower.isAttached;
+				if (bfsFlower.isAttached == true) {
+					board.attach(bfsFlower.bfsArrows);
+				}
+				else {
+					board.detach(bfsFlower.bfsArrows);
+				}
+			}
+		};
+
+		Event e_bfs_player_visibility("bfs.player_visibility");
+		Event e_bfs_flower_visibility("bfs.flower_visibility");
+
+		// Register event
 
 		// Create Keymap Quit event
 		Event e_quit("engine.quit");
@@ -159,6 +176,8 @@ int main(int argc, char* argv[]) {
 		g_keymapper.bind(SDLK_r, e_restart);
 		g_keymapper.bind(SDLK_F1, e_debug_spritebox_toggle);
 		g_keymapper.bind(SDLK_F2, e_debug_colliders_toggle);
+		g_keymapper.bind(SDLK_F3, e_bfs_player_visibility);
+		g_keymapper.bind(SDLK_F4, e_bfs_flower_visibility);
 		g_keymapper.bind(SDLK_F9, e_print_debug);
 		g_keymapper.bind(SDLK_F12, e_debug_playerdie);
 
@@ -168,6 +187,8 @@ int main(int argc, char* argv[]) {
 		g_eventbus.subscribe("debug.spritebox.toggle", &f_toggle_spritebox);
 		g_eventbus.subscribe("debug.colliders.toggle", &f_toggle_colliders);
 		g_eventbus.subscribe("print.debug", &f_print_debug);
+		g_eventbus.subscribe("bfs.player_visibility", &f_bfs_player_visibility);
+		g_eventbus.subscribe("bfs.flower_visibility", &f_bfs_flower_visibility);
 
 		uint32_t past = 0;
 		while (running) {
@@ -196,7 +217,7 @@ int main(int argc, char* argv[]) {
 
 			for (int i = 0; i < enemyPool.enemies.size(); i++)
 			{
-				enemyPool.enemies[i]->Update(bfs.bfsArrows);
+				enemyPool.enemies[i]->Update(bfsFlower, bfsPlayer);
 			}
 
 			player.Update(deltaTime, enemyPool.enemies);

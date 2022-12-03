@@ -19,14 +19,14 @@ class Enemy {
 		SDL_Point goalTileCoordinates		= { .x = 0, .y = 0 };
 		SDL_FPoint interpolStepSize			= { .x = 0, .y = 0 };
 		EEnemyDirection enemyDir;
-		Sprite* enemy;
 		std::string _id;
+		Player& _player;
 	public:
 		SDL_FPoint coordinates				= { .x = 0, .y = 0 };
-		Enemy(float x, float y);
+		Enemy(float x, float y, Player& player);
 		void init(float x, float y);
 		void setSpriteAnimations();
-		void Update(Tilemap* bfsArrows);
+		void Update(const BFS& bfsFlower,const BFS& bfsPlayer);
 		Sprite* GetSprite();
 		void disappear();
 		void dying();

@@ -48,6 +48,19 @@ using EBus_Fn = std::function<void(Event*)>;
 #include "resourcemanager.hh"
 #include "sprite.hh"
 #include "tilemap.hh"
+
+/* custom game classes Forward declarations */
+class BFS;
+class Player;
+class Enemy;
+class Enemypool;
+class BFS;
+
+/* custom game classes */
+#include "bfs.hh"
+#include "player.hh"
+#include "enemy.hh"
+#include "enemypool.hh"
 #include "hud.hh"
 
 // Global Engine Objects

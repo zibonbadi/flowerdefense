@@ -1,6 +1,6 @@
 #pragma once
 #include "headers.hh"
-#include "enemy.hh"
+
 
 enum class EPlayerDirection {
 	LEFT,
@@ -9,7 +9,6 @@ enum class EPlayerDirection {
 	DOWN
 };
 
-class Enemy;
 class Player {
 	private:
 		Sprite sprite;

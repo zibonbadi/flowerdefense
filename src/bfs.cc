@@ -8,6 +8,7 @@ void BFS::execute(const std::pair<int, int>& root) {
 }
 
 void BFS::execute(const int& x_root, const int& y_root) {
+	goalTileCoordinates = { .x = x_root, .y = y_root };
 	//char cAtPos95 = arrowMap.get_spot(19, 5);
 
 	//std::map<std::pair<unsigned int, unsigned int>, char> map = bfsArrows->get_map
@@ -168,39 +169,19 @@ bool BFS::isValid(const  std::vector<std::vector<bool>>& visited, const int& x, 
 	return true;
 }
 
-BFS::BFS(Plane& board, Tilemap& obstacles) : _board(board), _obstacles(obstacles) {
+BFS::BFS(Tilemap& obstacles, std::string id) : _obstacles(obstacles) {
 	/* Breadth First Seag_resourcemanagerh Tilemap */
 	bfsArrows = new Tilemap(BFS_TILE_WIDTH, BFS_TILE_HEIGHT);
-	auto dd = bfsArrows->get_transform();
 	/* Select tiles from tileset */
-	auto arrowTop = g_rc.make_static_sprite_from_texture("tiles.bfs.arrowTop", "spritesheet", Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowTopLeft = g_rc.make_static_sprite_from_texture("tiles.bfs.arrowTopLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowLeft = g_rc.make_static_sprite_from_texture("tiles.bfs.arrowLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowBottomLeft = g_rc.make_static_sprite_from_texture("tiles.bfs.arrowBottomLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowBottom = g_rc.make_static_sprite_from_texture("tiles.bfs.arrowBottom", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowBottomRight = g_rc.make_static_sprite_from_texture("tiles.bfs.arrowBottomRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowRight = g_rc.make_static_sprite_from_texture("tiles.bfs.arrowRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
-	auto arrowTopRight = g_rc.make_static_sprite_from_texture("tiles.bfs.arrowTopRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowTop		= g_rc.make_static_sprite_from_texture(id + "tiles.bfs.arrowTop", "spritesheet", Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowTopLeft	= g_rc.make_static_sprite_from_texture(id + "tiles.bfs.arrowTopLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowLeft		= g_rc.make_static_sprite_from_texture(id + "tiles.bfs.arrowLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowBottomLeft= g_rc.make_static_sprite_from_texture(id + "tiles.bfs.arrowBottomLeft", "spritesheet", Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowBottom	= g_rc.make_static_sprite_from_texture(id + "tiles.bfs.arrowBottom", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowBottomRight	= g_rc.make_static_sprite_from_texture(id + "tiles.bfs.arrowBottomRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowRight		= g_rc.make_static_sprite_from_texture(id + "tiles.bfs.arrowRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
+	auto arrowTopRight	= g_rc.make_static_sprite_from_texture(id + "tiles.bfs.arrowTopRight", "spritesheet", Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 7, .uw = 32, .vw = 32 }).second;
 
-	// Possible arrow pointing direction
-	// towards one of its eight neighburs:
-	// 
-	// legend
-	// t: top
-	// b: bottom
-	// l: left
-	// r: right
-	// 
-	// tl  t  tr
-	// l      r
-	// bl  b  br
-	// 
-	// tl, tr, bl and br will be encoded tl = '1', tr = '2',  bl = '3' and br = '4'
-	// because this games engine only supports chars as tile keys:
-	//
-	// 1  t  2
-	// l     r
-	// 3  b  4
 
 	bfsArrows->add_tile('t', arrowTop);
 	bfsArrows->add_tile('l', arrowLeft);
@@ -210,30 +191,6 @@ BFS::BFS(Plane& board, Tilemap& obstacles) : _board(board), _obstacles(obstacles
 	bfsArrows->add_tile('2', arrowTopRight);
 	bfsArrows->add_tile('3', arrowBottomLeft);
 	bfsArrows->add_tile('4', arrowBottomRight);
-
-
-	f_set_visibility = [&](Event* e) {
-		//isAttached = !isAttached;
-		if (e->get("status_edge") == "up") {
-			Event e_toggle_bfs("bfs.set_visibility");
-			e_toggle_bfs.set("status_edge", "toggle");
-			g_eventbus.send(&e_toggle_bfs);
-		} else if (e->get("status_edge") == "toggle") {
-			isAttached = !isAttached;
-			if(isAttached == true) {
-				_board.attach(bfsArrows);
-			}
-			else {
-				_board.detach(bfsArrows);
-			}
-		};
-	};
-
-	e_bfs_visibility = new Event("bfs.set_visibility");
-	g_keymapper.bind(SDLK_F3, *e_bfs_visibility);
-
-	// Register event
-	g_eventbus.subscribe("bfs.set_visibility", &f_set_visibility);
 }
 
 BFS::~BFS() {

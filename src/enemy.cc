@@ -1,6 +1,6 @@
 #include "enemy.hh"
 
-Enemy::Enemy(float x, float y) {
+Enemy::Enemy(float x, float y, Player& player) : _player(player) {
 	init(x, y);
 }
 
@@ -11,6 +11,8 @@ void Enemy::init(float x, float y)
 	goalTileCoordinates.x = x;
 	goalTileCoordinates.y = y;
 	setSpriteAnimations();
+	sprite.debug_sprite = _player.GetSprite()->debug_sprite;
+	sprite.debug_collide = _player.GetSprite()->debug_collide;
 }
 
 void Enemy::setSpriteAnimations() {
@@ -27,7 +29,8 @@ void Enemy::setSpriteAnimations() {
 	sprite.switch_to_anim("right");
 }
 
-void Enemy::Update(Tilemap* bfsArrows) {
+void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer) {
+	Tilemap* bfsArrows = bfsFlower.bfsArrows;
 	if(!isdead){
 	const int tileSize = bfsArrows->get_transform().w;
 	char movingDir = bfsArrows->get_spot(coordinates.x / tileSize, coordinates.y / tileSize);

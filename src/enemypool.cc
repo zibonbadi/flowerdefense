@@ -2,7 +2,7 @@
 #include <cstdio>      /* srand, rand */
 #include <ctime>      /* time */
 
-Enemypool::Enemypool(Plane& board, Z_PlaneMeta& collide_enemy, float spawnTime, int spawnCount, int poolSize) : _board(board), _collide_enemy(collide_enemy), _spawnTime(spawnTime), _spawnCount(spawnCount), _poolSize(poolSize)
+Enemypool::Enemypool(Plane& board, Player& player, Z_PlaneMeta& collide_enemy, float spawnTime, int spawnCount, int poolSize) : _board(board), _player(player), _collide_enemy(collide_enemy), _spawnTime(spawnTime), _spawnCount(spawnCount), _poolSize(poolSize)
 {
 	availableEnemies.resize(poolSize);
 	_availableEnemiesSize = poolSize;
@@ -11,7 +11,7 @@ Enemypool::Enemypool(Plane& board, Z_PlaneMeta& collide_enemy, float spawnTime, 
 
 	for (int i = 0; i < poolSize; i++)
 	{
-		availableEnemies.push_back(new Enemy(-100.0f, -100.0f));
+		availableEnemies.push_back(new Enemy(-100.0f, -100.0f, _player));
 	}
 }
 

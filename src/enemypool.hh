@@ -1,12 +1,13 @@
 #pragma once
 #include "headers.hh"
-#include "enemy.hh"
+
 class Enemypool
 {
 private:
 	// Store animations in pool to save redundancy
 	Animation* animations[9];
 	Plane& _board;
+	Player& _player;
 	Z_PlaneMeta& _collide_enemy;
 public:
 	int _poolSize = 1000;
@@ -16,7 +17,7 @@ public:
 	int _availableEnemiesSize;
 	std::vector<Enemy*> enemies;
 	std::vector<Enemy*> availableEnemies;
-	Enemypool(Plane& board, Z_PlaneMeta& collide_enemy, float spawnTime, int spawnCount, int poolSize);
+	Enemypool(Plane& board, Player& player, Z_PlaneMeta& collide_enemy, float spawnTime, int spawnCount, int poolSize);
 	~Enemypool();
 	void Update(const float& deltaTime);
 	void Spawn(int count);

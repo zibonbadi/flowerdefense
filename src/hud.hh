@@ -1,8 +1,6 @@
 #pragma once
 #include "headers.hh"
-#include "player.hh"
 
-class Player;
 class Hud{
 public:
 	Plane &_board ;
