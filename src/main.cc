@@ -74,7 +74,18 @@ int main(int argc, char* argv[]) {
 		};
 
 		player.GetSprite()->setCollider(&collide_player);
-		Enemypool enemyPool(board, collide_enemy, 2.0f, 5, 100);
+		
+		
+		const float spawnTime				= 2.0f;
+		const float spawnTimeWaveEndDelta	= -0.2f;
+		const float spawnTimeMin			= 0.2f;
+		const float spawnCount				= 1;
+		const float poolSize				= 100;
+		const float waveTime				= 6.f;
+
+		Enemypool enemyPool(board, collide_enemy, spawnTime, spawnCount, poolSize);
+
+		float waveTimer = waveTime;
 
 		DEBUG_MSG("Entering main loop...");
 
@@ -98,13 +109,13 @@ int main(int argc, char* argv[]) {
 				DEBUG_MSG("Engine Debugging " << (g_isPrintEngineDEBUG ? "enabled" : "disabled"));
 			}
 		};
+
 		EBus_Fn f_restart = [&](Event* e) {
-			if (e->get("status_edge") == "up") {
-				Event e_up_to_toggle("debug.gameover.toggle");
-				e_up_to_toggle.set("status_edge", "toggle");
-				g_eventbus.send(&e_up_to_toggle);
-			} else if (e->get("status_edge") == "toggle") {
-				hud.text->visible = !hud.text->visible;
+			if (e->get("type") == "game.state.set"){
+				// Reset everything
+				DEBUG_MSG("f_restart(e): Caught." << e->get("scene"));
+				player.reset();
+				enemyPool.reset();
 			};
 		};
 
@@ -136,7 +147,8 @@ int main(int argc, char* argv[]) {
 
 		// Create Keymap Quit event
 		Event e_quit("engine.quit");
-		Event e_restart("debug.gameover.toggle");
+		Event e_restart("game.state.set");
+		e_restart.set("scene", "game");
 		Event e_debug_spritebox_toggle("debug.spritebox.toggle");
 		Event e_debug_colliders_toggle("debug.colliders.toggle");
 		Event e_print_debug("print.debug");
@@ -151,10 +163,13 @@ int main(int argc, char* argv[]) {
 
 		// Register events
 		g_eventbus.subscribe("engine.quit", &f_quit);
-		g_eventbus.subscribe("debug.gameover.toggle", &f_restart);
+		g_eventbus.subscribe("game.state.set", &f_restart);
 		g_eventbus.subscribe("debug.spritebox.toggle", &f_toggle_spritebox);
 		g_eventbus.subscribe("debug.colliders.toggle", &f_toggle_colliders);
 		g_eventbus.subscribe("print.debug", &f_print_debug);
+
+		// Launch game into play state
+		g_eventbus.send(&e_restart);
 
 		uint32_t past = 0;
 		while (running) {
@@ -188,6 +203,16 @@ int main(int argc, char* argv[]) {
 
 			player.Update(deltaTime, enemyPool.enemies);
 
+			waveTimer -= deltaTime;
+			if (waveTimer < 0)
+			{
+				enemyPool._spawnTime += spawnTimeWaveEndDelta;
+				if (enemyPool._spawnTime < spawnTimeMin)
+				{
+					enemyPool._spawnTime = spawnTimeMin;
+				}
+				waveTimer = waveTime;
+			}
 			hud.Update(player);
 
 
