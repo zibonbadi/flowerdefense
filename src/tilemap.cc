@@ -218,13 +218,17 @@ int Tilemap::fill(int map_x, int map_y, int w, int h, char tile){
 	return 0;
 };
 
-/*
-int Tilemap::clear_crops(){
+int Tilemap::clear_map(){
 	this->map.clear();
-	ENGINE_DEBUG_MSG("Tilemap: Crops deleted" << std::endl;
+	ENGINE_DEBUG_MSG("Tilemap: Map cleared" << std::endl);
 	return 0;
 };
-*/
+
+int Tilemap::clear_tileset(){
+	this->tiles.clear();
+	ENGINE_DEBUG_MSG("Tilemap: Tileset cleared" << std::endl);
+	return 0;
+};
 
 void Tilemap::render(SDL_Renderer* renderer){
 	Z_PlaneMeta zero = {

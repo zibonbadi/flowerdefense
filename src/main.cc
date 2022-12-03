@@ -37,15 +37,12 @@ int main(int argc, char* argv[]) {
 		obstacles.add_tile('x', obstacle);
 
 		ground.fill(0, 0, 25, 25, '.');
-		plants.fill(12, 12, 1, 1, '%');
-		obstacles.fill(4, 9, 4, 1, 'x');
 
 		/* Game board */
 		Plane board(Z_PlaneMeta{ .x = 0, .y = 0, .w = 800, .h = 800 });
 		Plane hud_plane(Z_PlaneMeta{ .x = 0, .y = 0, .w = 800, .h = 800 });
 
 		BFS bfs(board, obstacles);
-		bfs.execute(10, 10);
 
 		// Construct scene planes
 		board.attach(&ground);
@@ -111,10 +108,18 @@ int main(int argc, char* argv[]) {
 		};
 
 		EBus_Fn f_restart = [&](Event* e) {
-			if (e->get("type") == "game.state.set"){
+			if (e->get("status_edge") == "up" && e->get("type") == "game.state.set"){
 				// Reset everything
 				DEBUG_MSG("f_restart(e): Caught." << e->get("scene"));
-				player.reset();
+				plants.clear_map();
+				obstacles.clear_map();
+
+				plants.fill(12, 12, 1, 1, '%');
+				obstacles.fill(4, 9, 4, 1, 'x');
+
+				bfs.execute(10, 10);
+
+				player.reset((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200);
 				enemyPool.reset();
 			};
 		};
@@ -149,6 +154,7 @@ int main(int argc, char* argv[]) {
 		Event e_quit("engine.quit");
 		Event e_restart("game.state.set");
 		e_restart.set("scene", "game");
+		e_restart.set("status_edge", "up");
 		Event e_debug_spritebox_toggle("debug.spritebox.toggle");
 		Event e_debug_colliders_toggle("debug.colliders.toggle");
 		Event e_print_debug("print.debug");
