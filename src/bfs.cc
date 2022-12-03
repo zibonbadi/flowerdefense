@@ -142,7 +142,7 @@ void BFS::execute(const int& x_root, const int& y_root) {
 		}
 		ss << "\r\n";
 	}
-	DEBUG_MSG(ss.str());
+	//DEBUG_MSG(ss.str());
 	bfsArrows->write(std::pair{ 0, 0 }, ss.str());
 	ss.str("");
 }

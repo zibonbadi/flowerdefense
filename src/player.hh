@@ -14,7 +14,6 @@ class Player {
 		Sprite sprite;
 		Animation* animations[8];
 		float playerSpeed = 200.f;
-		SDL_FPoint playerCoordinates	= { .x = 0, .y = 0 };
 		SDL_FPoint delta				= { .x = 0, .y = 0 };
 		EPlayerDirection playerDir = EPlayerDirection::LEFT;
 		EPlayerDirection pastPlayerDir;
@@ -26,6 +25,7 @@ class Player {
 			;
 		float damageAnimCooldown = 0;
 	public:
+		SDL_FPoint playerCoordinates	= { .x = 0, .y = 0 };
 		unsigned int health = 4, obstacles = 0;
 		int xp_bar = 200;
 

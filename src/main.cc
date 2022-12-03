@@ -248,6 +248,11 @@ int main(int argc, char* argv[]) {
 
 			enemyPool.Update(deltaTime);
 
+			int x_tile = ((int)player.playerCoordinates.x) / BFS_TILE_WIDTH;
+			int y_tile = ((int)player.playerCoordinates.y) / BFS_TILE_HEIGHT;
+			
+			bfsPlayer.execute(x_tile, y_tile);
+
 			for (int i = 0; i < enemyPool.enemies.size(); i++)
 			{
 				enemyPool.enemies[i]->Update(bfsFlower, bfsPlayer);
