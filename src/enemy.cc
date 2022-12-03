@@ -125,12 +125,12 @@ void Enemy::dying(){
 
 void Enemy::disappear(){
 	sprite.setTransform(Z_PlaneMeta{});
-
+	visible = false;
 }
 
 void Enemy::reborn(float x, float y){
 	isdead = false;
-
+	visible = true;
 	coordinates.x = x;
 	coordinates.y = y;
 	goalTileCoordinates.x = x;

@@ -13,7 +13,7 @@ public:
 	int _poolSize = 1000;
 	float _spawnTime = 5.f;
 	int _spawnCount = 3;
-	float _spawnTimer = _spawnTime;
+	float _spawnTimer = 0;//_spawnTime;
 	int _availableEnemiesSize;
 	std::vector<Enemy*> enemies;
 	std::vector<Enemy*> availableEnemies;

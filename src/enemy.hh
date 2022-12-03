@@ -33,6 +33,7 @@ class Enemy {
 		void reborn(float x, float y);
 
 		bool isdead = false;
+		bool visible = true;
 
 		//~Enemy();
 };

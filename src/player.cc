@@ -271,9 +271,11 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 	bool isColliding = false;
 	for (Enemy* enemy : enemies) {
 		if (this->player->collision(enemy->GetSprite())) {
-			if(enemy->isdead){
+			if(enemy->isdead && enemy->visible){
 			enemy->disappear();
-			}else{
+			xp_bar += 100;
+
+			}else if(!enemy->isdead){
 			isColliding = true;
 			}
 			break;
