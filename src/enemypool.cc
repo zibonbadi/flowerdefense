@@ -13,6 +13,11 @@ Enemypool::Enemypool(Plane& board, Z_PlaneMeta& collide_enemy, float spawnTimer,
 	{
 		availableEnemies.push_back(new Enemy(-100.0f, -100.0f));
 	}
+	
+	// Hook handleEvents into event handler
+	this->f_eHandler = new EBus_Fn( std::bind(&Enemypool::handleEvents, this, std::placeholders::_1) );
+	// Specify event subscriptions
+	g_eventbus.subscribe("game.state.set", f_eHandler);
 }
 
 void Enemypool::Update(const float& deltaTime)
@@ -137,3 +142,15 @@ void Enemypool::initAnimations() {
 	animations[8]->add_xsheet_phase(0, 1);
 	g_rc.add_anim("enemy.dead", animations[8]);
 }
+
+void Enemypool::handleEvents(Event* e){
+	if(e->get("type") == "game.state.set"){
+		DEBUG_MSG("Enemypool.handleEvents(e): Caught. game.state.set -> " << e->get("scene"));
+		if(e->get("scene") == "gameover"){
+			// Do some gamover stuff
+		}
+		if(e->get("scene") == "game"){
+			// Reset everything
+		}
+	}
+};

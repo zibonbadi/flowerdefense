@@ -98,13 +98,11 @@ int main(int argc, char* argv[]) {
 				DEBUG_MSG("Engine Debugging " << (g_isPrintEngineDEBUG ? "enabled" : "disabled"));
 			}
 		};
+
 		EBus_Fn f_restart = [&](Event* e) {
-			if (e->get("status_edge") == "up") {
-				Event e_up_to_toggle("debug.gameover.toggle");
-				e_up_to_toggle.set("status_edge", "toggle");
-				g_eventbus.send(&e_up_to_toggle);
-			} else if (e->get("status_edge") == "toggle") {
-				hud.text->visible = !hud.text->visible;
+			if (e->get("type") == "game.state.set"){
+				// Reset everything
+				DEBUG_MSG("f_restart(e): Caught." << e->get("scene"));
 			};
 		};
 
@@ -136,7 +134,8 @@ int main(int argc, char* argv[]) {
 
 		// Create Keymap Quit event
 		Event e_quit("engine.quit");
-		Event e_restart("debug.gameover.toggle");
+		Event e_restart("game.state.set");
+		e_restart.set("scene", "game");
 		Event e_debug_spritebox_toggle("debug.spritebox.toggle");
 		Event e_debug_colliders_toggle("debug.colliders.toggle");
 		Event e_print_debug("print.debug");
@@ -151,10 +150,13 @@ int main(int argc, char* argv[]) {
 
 		// Register events
 		g_eventbus.subscribe("engine.quit", &f_quit);
-		g_eventbus.subscribe("debug.gameover.toggle", &f_restart);
+		g_eventbus.subscribe("game.state.set", &f_restart);
 		g_eventbus.subscribe("debug.spritebox.toggle", &f_toggle_spritebox);
 		g_eventbus.subscribe("debug.colliders.toggle", &f_toggle_colliders);
 		g_eventbus.subscribe("print.debug", &f_print_debug);
+
+		// Launch game into play state
+		g_eventbus.send(&e_restart);
 
 		uint32_t past = 0;
 		while (running) {

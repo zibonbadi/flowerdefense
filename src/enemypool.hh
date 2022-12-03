@@ -8,6 +8,7 @@ private:
 	Animation* animations[9];
 	Plane& _board;
 	Z_PlaneMeta& _collide_enemy;
+	EBus_Fn* f_eHandler;
 public:
 	int _poolSize = 1000;
 	float _spawnTime = 5.f;
@@ -23,4 +24,5 @@ public:
 	void initAnimations();
 	void create();
 	void destroy(Enemy* enemy);
+	void handleEvents(Event* e);
 };
