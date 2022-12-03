@@ -28,6 +28,7 @@ class Player {
 		SDL_FPoint playerCoordinates	= { .x = 0, .y = 0 };
 		unsigned int health = 4, obstacles = 0;
 		int xp_bar = 200;
+		int xp_bekommt = 100;
 
 		Player(float x, float y);
 		void initAnimations();

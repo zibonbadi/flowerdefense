@@ -391,9 +391,10 @@ void Hud::Update(Player &player){
 	tm_inventory->write(std::pair(0,2), "^"+std::to_string(player.obstacles));
 
 	ex_bar_steuern(player.xp_bar);
-	if(player.xp_bar>= 800){
+	if(player.xp_bar>= 1000){
 		std::cout<<"############## XP voll"<<std::endl;
 		player.xp_bar = 200;
+		player.xp_bekommt = player.xp_bekommt/ 1.75;
 
 	}
 }
