@@ -397,5 +397,10 @@ void Hud::Update(Player &player){
 
 		std::cout<<"------> Leben hoch"<<std::endl;
 	}
+	ex_bar_steuern(player.xp_bar);
+	if(player.xp_bar>= 800){
+		std::cout<<"############## XP voll"<<std::endl;
+		player.xp_bar = 200;
 
+	}
 }

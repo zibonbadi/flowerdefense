@@ -9,6 +9,7 @@ Player::Player(float x, float y) {
 	// Hook handleEvents into event handler
 	this->f_eHandler = new EBus_Fn( std::bind(&Player::handleEvents, this, std::placeholders::_1) );
 	// Specify event subscriptions
+	//g_eventbus.subscribe("game.state.set", f_eHandler);
 	g_eventbus.subscribe("player.die", f_eHandler);
 	g_eventbus.subscribe("player.set_direction", f_eHandler);
 }
@@ -233,6 +234,15 @@ void Player::handleEvents(Event* e){
 			}
 		}
 	};
+	if(e->get("type") == "game.state.set"){
+		DEBUG_MSG("Player.handleEvents(e): Caught. game.state.set -> " << e->get("scene"));
+		if(e->get("scene") == "gameover"){
+			// Do some gamover stuff
+		}
+		if(e->get("scene") == "game"){
+			// Reset everything
+		}
+	}
 };
 
 void Player::ChangePlayerAnimation(const std::string animIDadditional = "")
@@ -261,9 +271,11 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 	bool isColliding = false;
 	for (Enemy* enemy : enemies) {
 		if (this->player->collision(enemy->GetSprite())) {
-			if(enemy->isdead){
+			if(enemy->isdead && enemy->visible){
 			enemy->disappear();
-			}else{
+			xp_bar += 100;
+
+			}else if(!enemy->isdead){
 			isColliding = true;
 			}
 			break;
@@ -315,6 +327,12 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 
 
 	pastPlayerDir = playerDir;
+}
+
+void Player::reset(float x, float y){
+	DEBUG_MSG("Player.reset(): Caught.");
+	playerCoordinates.x = x;
+	playerCoordinates.y = y;
 }
 
 Sprite* Player::GetSprite() {

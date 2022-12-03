@@ -2,6 +2,7 @@
 
 Enemy::Enemy(float x, float y, Player& player) : _player(player) {
 	init(x, y);
+	setSpriteAnimations();
 }
 
 void Enemy::init(float x, float y)
@@ -128,12 +129,12 @@ void Enemy::dying(){
 
 void Enemy::disappear(){
 	sprite.setTransform(Z_PlaneMeta{});
-
+	visible = false;
 }
 
 void Enemy::reborn(float x, float y){
 	isdead = false;
-
+	visible = true;
 	coordinates.x = x;
 	coordinates.y = y;
 	goalTileCoordinates.x = x;

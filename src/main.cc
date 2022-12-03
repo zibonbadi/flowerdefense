@@ -33,8 +33,6 @@ int main(int argc, char* argv[]) {
 		obstacles.add_tile('x', obstacle);
 
 		ground.fill(0, 0, 25, 25, '.');
-		plants.fill(12, 12, 1, 1, '%');
-		obstacles.fill(4, 9, 4, 1, 'x');
 
 		/* Game board */
 		Plane board(Z_PlaneMeta{ .x = 0, .y = 0, .w = 800, .h = 800 });
@@ -110,11 +108,22 @@ int main(int argc, char* argv[]) {
 				DEBUG_MSG("Engine Debugging " << (g_isPrintEngineDEBUG ? "enabled" : "disabled"));
 			}
 		};
+
 		EBus_Fn f_restart = [&](Event* e) {
-			if (e->get("status_edge") == "up") {
-				DEBUG_MSG("restarting..");
-				hud.text->visible = !hud.text->visible;
-			} 
+			if (e->get("status_edge") == "up" && e->get("type") == "game.state.set"){
+				// Reset everything
+				DEBUG_MSG("f_restart(e): Caught." << e->get("scene"));
+				plants.clear_map();
+				obstacles.clear_map();
+
+				plants.fill(12, 12, 1, 1, '%');
+				obstacles.fill(4, 9, 4, 1, 'x');
+
+				bfs.execute(10, 10);
+
+				player.reset((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200);
+				enemyPool.reset();
+			};
 		};
 
 		EBus_Fn f_toggle_spritebox = [&](Event* e) {
@@ -166,7 +175,9 @@ int main(int argc, char* argv[]) {
 
 		// Create Keymap Quit event
 		Event e_quit("engine.quit");
-		Event e_restart("debug.gameover.toggle");
+		Event e_restart("game.state.set");
+		e_restart.set("scene", "game");
+		e_restart.set("status_edge", "up");
 		Event e_debug_spritebox_toggle("debug.spritebox.toggle");
 		Event e_debug_colliders_toggle("debug.colliders.toggle");
 		Event e_print_debug("print.debug");
@@ -183,12 +194,15 @@ int main(int argc, char* argv[]) {
 
 		// Register events
 		g_eventbus.subscribe("engine.quit", &f_quit);
-		g_eventbus.subscribe("debug.gameover.toggle", &f_restart);
+		g_eventbus.subscribe("game.state.set", &f_restart);
 		g_eventbus.subscribe("debug.spritebox.toggle", &f_toggle_spritebox);
 		g_eventbus.subscribe("debug.colliders.toggle", &f_toggle_colliders);
 		g_eventbus.subscribe("print.debug", &f_print_debug);
 		g_eventbus.subscribe("bfs.player_visibility", &f_bfs_player_visibility);
 		g_eventbus.subscribe("bfs.flower_visibility", &f_bfs_flower_visibility);
+
+		// Launch game into play state
+		g_eventbus.send(&e_restart);
 
 		uint32_t past = 0;
 		while (running) {
