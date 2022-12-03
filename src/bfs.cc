@@ -230,7 +230,7 @@ BFS::BFS(Plane& board, Tilemap& obstacles) : _board(board), _obstacles(obstacles
 	};
 
 	e_bfs_visibility = new Event("bfs.set_visibility");
-	g_keymapper.bind(SDLK_k, *e_bfs_visibility);
+	g_keymapper.bind(SDLK_F3, *e_bfs_visibility);
 
 	// Register event
 	g_eventbus.subscribe("bfs.set_visibility", &f_set_visibility);

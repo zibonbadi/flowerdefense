@@ -36,6 +36,8 @@ class Sprite;
 class Tilemap;
 class Hud;
 
+using EBus_Fn = std::function<void(Event*)>;
+
 /* custom classes */
 #include "animation.hh"
 #include "event.hh"

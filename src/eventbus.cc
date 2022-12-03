@@ -11,15 +11,18 @@ void EventBus::send(Event *event){
 		throw std::runtime_error("Invalid Event type");
 	}
 
+	ENGINE_DEBUG_MSG("EventBus.send(): Propagating event \"" << e_type << "\".");
 	auto type_i = this->callbacks.find(e_type);
 	if(type_i != this->callbacks.end()){
-		ENGINE_DEBUG_MSG("EventBus.send(): Propagating event \"" << e_type << "\".");
+		if(this->callbacks[e_type].empty()){
+			throw std::runtime_error("No subscribers found");
+		}
 		for(auto & cb : this->callbacks[e_type]){
 			//ENGINE_DEBUG_MSG(cb << std::endl;
 			(*cb)(event);
 		}
 	}else{
-		throw std::runtime_error("Event propagation failed");
+		throw std::runtime_error("Event type not found");
 	}
 };
 

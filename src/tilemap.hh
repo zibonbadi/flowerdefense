@@ -29,6 +29,7 @@ class Tilemap {
 
 		void print_map();
 	public:
+		bool visible = true;
 		Tilemap();
 		//Tilemap(SDL_Texture* base, int grit_w, int grit_h);
 		Tilemap(int grit_w, int grit_h);

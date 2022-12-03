@@ -108,17 +108,62 @@ int main(int argc, char* argv[]) {
 				DEBUG_MSG("Engine Debugging " << (g_isPrintEngineDEBUG ? "enabled" : "disabled"));
 			}
 		};
+		EBus_Fn f_restart = [&](Event* e) {
+			if (e->get("status_edge") == "up") {
+				Event e_up_to_toggle("debug.gameover.toggle");
+				e_up_to_toggle.set("status_edge", "toggle");
+				g_eventbus.send(&e_up_to_toggle);
+			} else if (e->get("status_edge") == "toggle") {
+				hud.text->visible = !hud.text->visible;
+			};
+		};
+
+		EBus_Fn f_toggle_spritebox = [&](Event* e) {
+			if (e->get("status_edge") == "up") {
+				Event e_up_to_toggle("debug.spritebox.toggle");
+				e_up_to_toggle.set("status_edge", "toggle");
+				g_eventbus.send(&e_up_to_toggle);
+			} else if (e->get("status_edge") == "toggle") {
+				player.GetSprite()->debug_sprite = !player.GetSprite()->debug_sprite;
+				for(auto & enemy : enemyPool.enemies){
+					enemy->GetSprite()->debug_sprite = !enemy->GetSprite()->debug_sprite;
+				}
+			};
+		};
+
+		EBus_Fn f_toggle_colliders = [&](Event* e) {
+			if (e->get("status_edge") == "up") {
+				Event e_up_to_toggle("debug.colliders.toggle");
+				e_up_to_toggle.set("status_edge", "toggle");
+				g_eventbus.send(&e_up_to_toggle);
+			} else if (e->get("status_edge") == "toggle") {
+				player.GetSprite()->debug_collide = !player.GetSprite()->debug_collide;
+				for(auto & enemy : enemyPool.enemies){
+					enemy->GetSprite()->debug_collide = !enemy->GetSprite()->debug_collide;
+				}
+			};
+		};
 
 		// Create Keymap Quit event
 		Event e_quit("engine.quit");
-		Event e_debug_collide("debug.collide");
+		Event e_restart("debug.gameover.toggle");
+		Event e_debug_spritebox_toggle("debug.spritebox.toggle");
+		Event e_debug_colliders_toggle("debug.colliders.toggle");
 		Event e_print_debug("print.debug");
-		g_keymapper.bind(SDLK_F9, e_print_debug);
+		Event e_debug_playerdie("player.die");
+
 		g_keymapper.bind(SDLK_q, e_quit);
-		g_keymapper.bind(SDLK_c, e_debug_collide);
+		g_keymapper.bind(SDLK_r, e_restart);
+		g_keymapper.bind(SDLK_F1, e_debug_spritebox_toggle);
+		g_keymapper.bind(SDLK_F2, e_debug_colliders_toggle);
+		g_keymapper.bind(SDLK_F9, e_print_debug);
+		g_keymapper.bind(SDLK_F12, e_debug_playerdie);
 
 		// Register events
 		g_eventbus.subscribe("engine.quit", &f_quit);
+		g_eventbus.subscribe("debug.gameover.toggle", &f_restart);
+		g_eventbus.subscribe("debug.spritebox.toggle", &f_toggle_spritebox);
+		g_eventbus.subscribe("debug.colliders.toggle", &f_toggle_colliders);
 		g_eventbus.subscribe("print.debug", &f_print_debug);
 
 
