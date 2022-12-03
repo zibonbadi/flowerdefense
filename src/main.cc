@@ -230,10 +230,6 @@ int main(int argc, char* argv[]) {
 				}
 			}
 
-			for (int i = 0; i < enemyPool.enemies.size(); i++)
-			{
-				enemyPool.enemies[i]->Update(bfsFlower, bfsPlayer);
-			}
 
 			player.Update(deltaTime, enemyPool.enemies);
 
@@ -251,6 +247,12 @@ int main(int argc, char* argv[]) {
 
 
 			enemyPool.Update(deltaTime);
+
+			for (int i = 0; i < enemyPool.enemies.size(); i++)
+			{
+				enemyPool.enemies[i]->Update(bfsFlower, bfsPlayer);
+			}
+
 			/* Advance the player animation */
 			g_rc.advance_all_anim(now);
 			game.render();

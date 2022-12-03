@@ -27,6 +27,21 @@ void Enemypool::Update(const float& deltaTime)
 	{
 		Spawn(_spawnCount);
 		_spawnTimer = _spawnTime;
+		Recollect();
+	}
+}
+
+void Enemypool::Recollect()
+{
+	for (int i = 0; i < enemies.size(); i++)
+	{
+		if (!enemies[i]->visible) {
+
+			enemies[i]->reborn(-100.0f, -100.0f);
+			availableEnemies.push_back(enemies[i]);
+			_availableEnemiesSize++;
+			enemies.erase(enemies.begin() + i);
+		}
 	}
 }
 

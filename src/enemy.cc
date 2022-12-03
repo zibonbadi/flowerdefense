@@ -11,7 +11,6 @@ void Enemy::init(float x, float y)
 	coordinates.y = y;
 	goalTileCoordinates.x = x;
 	goalTileCoordinates.y = y;
-	setSpriteAnimations();
 	sprite.debug_sprite = _player.GetSprite()->debug_sprite;
 	sprite.debug_collide = _player.GetSprite()->debug_collide;
 }
@@ -135,8 +134,5 @@ void Enemy::disappear(){
 void Enemy::reborn(float x, float y){
 	isdead = false;
 	visible = true;
-	coordinates.x = x;
-	coordinates.y = y;
-	goalTileCoordinates.x = x;
-	goalTileCoordinates.y = y;
+	init(x, y);
 }
