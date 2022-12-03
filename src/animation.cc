@@ -4,7 +4,7 @@ Animation::Animation(SDL_Texture* base, unsigned int tickrate){
 	this->base = base;
 	this->set_rate(tickrate);
 	this->restart();
-	std::clog << "Animation created: " << this << std::endl;
+	ENGINE_DEBUG_MSG("Animation created: " << this);
 };
 
 Animation::~Animation(){
@@ -14,7 +14,7 @@ Animation::~Animation(){
 int Animation::advance(unsigned int now){
 	// Only update once per engine step
 	if(this->last_update >= now){
-		std::clog << "Animation.advance() Skipped: " <<  now-this->last_update << std::endl;
+		ENGINE_DEBUG_MSG("Animation.advance() Skipped: " <<  now-this->last_update);
 		return 0;
 	}
 
@@ -26,12 +26,12 @@ int Animation::advance(unsigned int now){
 	}
 
 	this->time_acc += now - this->last_update;
-	//std::clog << "Animation.advance() Tick time beforehand: " <<  this->time_acc << '/' << this->ticktime << std::endl;
+	//ENGINE_DEBUG_MSG("Animation.advance() Tick time beforehand: " <<  this->time_acc << '/' << this->ticktime);
 	while(this->time_acc >= ticktime){ 
 		// Halting frame?
 		/*
-		std::clog << "Animation.advance() timer data: [" << xsheet_i << ':' << this->xsheet.size()-1
-			<< " - " << step_n << ':' << this->xsheet[this->xsheet_i].second-1 << ']' << std::endl;
+		ENGINE_DEBUG_MSG("Animation.advance() timer data: [" << xsheet_i << ':' << this->xsheet.size()-1
+			<< " - " << step_n << ':' << this->xsheet[this->xsheet_i].second-1 << ']');
 			*/
 		if(this->xsheet[this->xsheet_i].second > 0){
 			this->step_n++;
@@ -50,7 +50,7 @@ int Animation::advance(unsigned int now){
 		}
 		this->time_acc -= this->ticktime;
 	}
-	//std::clog << "Animation.advance() Tick time after: " <<  this->time_acc << '/' << this->ticktime << std::endl;
+	//ENGINE_DEBUG_MSG("Animation.advance() Tick time after: " <<  this->time_acc << '/' << this->ticktime);
 	this->last_update = now;
 	return this->time_acc;
 };
@@ -76,8 +76,8 @@ int Animation::add_frame(int u, int v, int uw, int vw){
 			.h = vw
 		};
 		this->frames.push_back(insert);
-		std::clog << "Added frame to animation " << this << ": [" << this->frames.size()-1 << "](" <<
-			insert.x << ',' << insert.y << ':' << insert.w << 'x' << insert.h << ')' << std::endl;
+		ENGINE_DEBUG_MSG("Added frame to animation " << this << ": [" << this->frames.size()-1 << "](" <<
+			insert.x << ',' << insert.y << ':' << insert.w << 'x' << insert.h << ')');
 		return this->frames.size()-1;
 	}catch(std::exception &e){
 		std::cerr << "Animation.add_frame() error: " << e.what() << std::endl;
@@ -93,8 +93,8 @@ int Animation::add_frame(Z_PlaneMeta crop){
 			.h = (int)crop.vw
 		};
 		this->frames.push_back(insert);
-		std::clog << "Added frame to animation " << this << ": [" << this->frames.size()-1 << "](" <<
-			insert.x << ',' << insert.y << ':' << insert.y << 'x' << insert.h << ')' << std::endl;
+		ENGINE_DEBUG_MSG("Added frame to animation " << this << ": [" << this->frames.size()-1 << "](" <<
+			insert.x << ',' << insert.y << ':' << insert.y << 'x' << insert.h << ')');
 		return this->frames.size()-1;
 	}catch(std::exception &e){
 		std::cerr << "Animation.add_frame() error: " << e.what() << std::endl;
@@ -104,18 +104,18 @@ int Animation::add_frame(Z_PlaneMeta crop){
 
 int Animation::add_xsheet_phase(unsigned int frame, unsigned int duration){
 	this->xsheet.push_back(std::pair<int,int>(frame,duration));
-	std::clog << "Added xsheet phase to animation " << this << ": [" << this->xsheet.size()-1 << "]: " << frame << '.' << duration << std::endl;
-	return this->xsheet.size()-1;
+	ENGINE_DEBUG_MSG("Added xsheet phase to animation " << this << ": [" << this->xsheet.size() - 1 << "]: " << frame << '.' << duration);
+	return this->xsheet.size() - 1;
 };
 
-int Animation::clear_frames(){
+int Animation::clear_frames() {
 	this->frames.clear();
-	std::clog << "Cleared frame set of animation " << this << std::endl;
+	ENGINE_DEBUG_MSG("Cleared frame set of animation " << this);
 	return 0;
 };
-int Animation::clear_xsheet(){
+int Animation::clear_xsheet() {
 	this->xsheet.clear();
-	std::clog << "Cleared xsheet of animation " << this << std::endl;
+	ENGINE_DEBUG_MSG("Cleared xsheet of animation " << this);
 	return 0;
 };
 int Animation::clear_all(){
@@ -152,12 +152,12 @@ void Animation::render(SDL_Renderer* renderer){
 void Animation::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 
 	//try{
-		//std::clog << "Animation.render(): " << this->frames.size() << ':' << this->xsheet.size() << std::endl;
+		//ENGINE_DEBUG_MSG("Animation.render(): " << this->frames.size() << ':' << this->xsheet.size());
 		if(this->frames.size() < 1){ throw std::runtime_error("Frame set missing!"); }
 		if(this->xsheet.size() < 1){ throw std::runtime_error("X-Sheet missing!"); }
 		/*
-		std::clog << "Animation.render(): [" << xsheet_i << ':' << this->xsheet.size()-1
-			<< " - " << step_n << ':' << this->xsheet[this->xsheet_i].second-1 << ']' << std::endl;
+		ENGINE_DEBUG_MSG("Animation.render(): [" << xsheet_i << ':' << this->xsheet.size()-1
+			<< " - " << step_n << ':' << this->xsheet[this->xsheet_i].second-1 << ']');
 		*/
 
 		SDL_Rect currentframe = this->frames[this->xsheet[this->xsheet_i].first];
@@ -179,10 +179,9 @@ void Animation::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 		};
 
 		/*
-		std::clog << "Animation.render(): Current frame " <<
+		ENGINE_DEBUG_MSG("Animation.render(): Current frame " <<
 			"[" << crop.x << ',' << crop.y << ':' << crop.w << 'x' << crop.h << ']' << " => " <<
-			"(" << pos.x << ',' << pos.y << ':' << pos.w << 'x' << pos.h << ')' << 
-			std::endl;
+			"(" << pos.x << ',' << pos.y << ':' << pos.w << 'x' << pos.h << ')');
 			*/
 
 

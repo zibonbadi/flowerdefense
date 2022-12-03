@@ -94,7 +94,7 @@ char Tilemap::new_crop(char id, Z_PlaneMeta crop){
 			.h = (int) crop.vw
 		};
 		this->crops[id] = tmp;
-		std::clog << "Tilemap.new_crop(): Added crop [" << id << "]:("
+		ENGINE_DEBUG_MSG("Tilemap.new_crop(): Added crop [" << id << "]:("
 			<< crop.x << ':' << crop.y << ';' << crop.w << 'x' << crop.h << ')' << std::endl;
 		return id;
 	}catch(std::exception &e){
@@ -107,7 +107,7 @@ char Tilemap::new_crop(char id, Z_PlaneMeta crop){
 char Tilemap::add_tile(char id, Sprite* tile){
 	try{
 		this->tiles[id] = tile;
-		std::clog << "Tilemap.add_tile(): Added Tile [" << id << "]" << std::endl;
+		ENGINE_DEBUG_MSG("Tilemap.add_tile(): Added Tile [" << id << "]");
 		return id;
 	}catch(std::exception &e){
 		std::cerr << "Tilemap.new_crop() error: " << e.what() << std::endl;
@@ -116,18 +116,18 @@ char Tilemap::add_tile(char id, Sprite* tile){
 };
 
 void Tilemap::print_map(){
-	std::clog << "Tilemap: Current map = "
-		<< "[" << std::endl;
+	ENGINE_DEBUG_MSG("Tilemap: Current map = "
+		<< "[");
 	//if(this->tiles != nullptr){
 		for(auto & i : this->map){
 			auto pos = std::get<0>(i);
 			auto pos_x = std::get<0>(pos);
 			auto pos_y = std::get<1>(pos);
 			auto val = std::get<1>(i);
-			std::clog << "(" << pos_x << "," << pos_y << "|" << val << "), ";
+			ENGINE_DEBUG_MSG("(" << pos_x << "," << pos_y << "|" << val << "), ");
 		};
 	//};
-		std::clog << "]" << std::endl;
+		ENGINE_DEBUG_MSG("]");
 }
 
 int Tilemap::import_map(std::map<std::pair<unsigned int,unsigned int>, char> data){
@@ -170,15 +170,15 @@ void Tilemap::write(std::pair<unsigned int,unsigned int> top_left, std::string t
 			break;
 		}
 		default:{
-			//std::clog << '(' << (top_left_x+pos_x) << ',' << (top_left_y+pos_y) << "):" << i << ' ' ;
+			//ENGINE_DEBUG_MSG('(' << (top_left_x+pos_x) << ',' << (top_left_y+pos_y) << "):" << i << ' ' ;
 			this->map[std::pair<unsigned int, unsigned int>(top_left_y+pos_y, top_left_x+pos_x)] = i;
 			pos_x++;
 			break;
 		}
 		}
 	}
-		//std::clog << std::endl;
-		//std::clog << "Rendered tilemap text: (" << top_left_x << ',' << top_left_y << ") " << text << std::endl;
+		//ENGINE_DEBUG_MSG(std::endl;
+		//ENGINE_DEBUG_MSG("Rendered tilemap text: (" << top_left_x << ',' << top_left_y << ") " << text << std::endl;
 	//this->print_map();
 
 };
@@ -195,11 +195,11 @@ int Tilemap::fill(int map_x, int map_y, int w, int h, char tile){
 	try{
 		//if(this->tiles != nullptr && this->map.find(tile) != this->map.end()){
 		if(this->tiles.find(tile) != this->tiles.end()){
-			//std::clog << "Tilefind is valid" << std::endl;
+			//ENGINE_DEBUG_MSG("Tilefind is valid" << std::endl;
 			// Is this even valid? If no -> skip
 			for(int y = map_y; y < map_y+h; y++){
 				for(int x = map_x; x < map_x+w; x++){
-					//std::clog << '(' << x << ',' << y << ") => " << tile << std::endl;
+					//ENGINE_DEBUG_MSG('(' << x << ',' << y << ") => " << tile << std::endl;
 					this->map[std::pair<int,int> (y,x)] = tile;
 				}
 			}
@@ -215,7 +215,7 @@ int Tilemap::fill(int map_x, int map_y, int w, int h, char tile){
 /*
 int Tilemap::clear_crops(){
 	this->map.clear();
-	std::clog << "Tilemap: Crops deleted" << std::endl;
+	ENGINE_DEBUG_MSG("Tilemap: Crops deleted" << std::endl;
 	return 0;
 };
 */
@@ -238,10 +238,10 @@ void Tilemap::render(SDL_Renderer* renderer){
 };
 
 void Tilemap::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
-	//std::clog << "Tilemap.render(): " << this->map << std::endl;
+	//ENGINE_DEBUG_MSG("Tilemap.render(): " << this->map << std::endl;
 
 /*
-	std::clog << "Tilemap.render("
+	ENGINE_DEBUG_MSG("Tilemap.render("
 	<< "grit_w = " << (int) this->grit_w << "; " 
 	<< "grit_h = " << (int) this->grit_h
 	<< "): [" << std::endl;
@@ -283,17 +283,17 @@ void Tilemap::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 				};
 	
 				/*
-				std::clog << "Plotting (" << pos_x << ',' << pos_y <<
+				ENGINE_DEBUG_MSG("Plotting (" << pos_x << ',' << pos_y <<
 					'|' << sdlr_tmp.x << ',' << sdlr_tmp.y <<
 					':' << sdlr_tmp.w << 'x' << sdlr_tmp.h <<
 					'|' << val << ")" << std::endl;
 					*/
 				if( this->tiles.find(val) == this->tiles.end() ){
-					//std::clog << "Plotting debug texture " << val << std::endl;
+					//ENGINE_DEBUG_MSG("Plotting debug texture " << val << std::endl;
 					SDL_SetRenderDrawColor(renderer, 0xff,0,0, 255);
 					SDL_RenderDrawRect(renderer, &sdlr_tmp);
 				}else{
-					//std::clog << "Plotting real texture " << val << std::endl;
+					//ENGINE_DEBUG_MSG("Plotting real texture " << val << std::endl;
 					Sprite* to_render = this->tiles[val];
 					//zp_tmp.x = (this->grit_w*pos_x+zp_tmp.x) - to_render->get_transform().x;
 					//zp_tmp.y = (this->grit_h*pos_y+zp_tmp.y) - to_render->get_transform().y;

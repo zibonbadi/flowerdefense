@@ -27,7 +27,7 @@ std::pair<std::string, SDL_Texture*> ResourceManager::import_texture(std::string
 std::pair<std::string, SDL_Texture*> ResourceManager::import_texture(std::string id, SDL_Texture* tex){
 	if(tex){
 		this->textures.insert(std::pair<std::string,SDL_Texture*>(id,tex));
-		std::clog << "Added texture '" << id << "':(" << tex << ") to ResourceManager " << this << std::endl;
+		ENGINE_DEBUG_MSG("Added texture '" << id << "':(" << tex << ") to ResourceManager " << this);
 		//return importbuf;
 		return std::pair(id,tex);
 	}
@@ -40,7 +40,7 @@ int ResourceManager::free_texture(std::string id){
 	try{
 		auto it = this->textures.find(id);
 		if (it != this->textures.end()){
-			std::clog << "Freed texture'" << id << "':(" << this->textures[id] << ") from ResourceManager " << this << std::endl;
+			ENGINE_DEBUG_MSG("Freed texture'" << id << "':(" << this->textures[id] << ") from ResourceManager " << this);
 			SDL_DestroyTexture(this->textures[id]);
 			this->textures.erase(it);
 		};
@@ -71,7 +71,7 @@ openmpt::module* ResourceManager::import_mod(std::string id, std::string path){
 		if (this->mods.find(id) != this->mods.end()){ delete this->mods[id]; }
 		this->mods[id] = new openmpt::module(modfile);
 		if(this->mods[id] == nullptr){ throw std::runtime_error("Failed to initialize tracker"); }
-		std::clog << "ResourceManager<" << this << ">: Added module '" << path << "' -> '" << id << "':(" << this->mods[id] << ")" << std::endl;
+		ENGINE_DEBUG_MSG("ResourceManager<" << this << ">: Added module '" << path << "' -> '" << id << "':(" << this->mods[id] << ")");
 		return this->mods[id];
 	}catch(std::exception &e){
 		std::cerr << "ResourceManager.import_mod(" << path << ") exception: " << e.what() << std::endl;
@@ -104,7 +104,7 @@ openmpt::module* ResourceManager::get_mod(std::string id){
 /* Animation */
 std::pair<std::string, Animation*> ResourceManager::add_anim(std::string id, Animation* anim){
 	if(anim){
-		std::clog << "Added Animation '" << id << "':(<Animation*> " << anim << ") to ResourceManager " << this << std::endl;
+		ENGINE_DEBUG_MSG("Added Animation '" << id << "':(<Animation*> " << anim << ") to ResourceManager " << this);
 		this->animations.insert(std::pair(id,anim));
 		return std::pair(id,anim);
 	}
@@ -147,7 +147,7 @@ std::pair<std::string, Animation*> ResourceManager::make_static_anim_from_textur
 	if (this->animations.find(id) != this->animations.end()){ delete this->animations[id]; }
 	this->animations[id] = new_anim;
 
-	std::clog << "Added animation '" << id << "':(" << new_anim << ") to ResourceManager " << this << std::endl;
+	ENGINE_DEBUG_MSG("Added animation '" << id << "':(" << new_anim << ") to ResourceManager " << this);
 
 	//return this->animations.find(id)->second;
 	return std::pair(id,new_anim);
@@ -160,7 +160,7 @@ std::pair<std::string, Animation*> ResourceManager::make_static_anim_from_textur
 /* Sprites */
 std::pair<std::string, Sprite*> ResourceManager::add_sprite(std::string id, Sprite* spr){
 	if(spr){
-		std::clog << "Added sprite '" << id << "':(<Sprite*> " << spr << ") to ResourceManager " << this << std::endl;
+		ENGINE_DEBUG_MSG("Added sprite '" << id << "':(<Sprite*> " << spr << ") to ResourceManager " << this);
 		this->sprites.insert(std::pair(id,spr));
 		return std::pair(id,spr);
 	}
@@ -191,13 +191,13 @@ int ResourceManager::free_sprite(std::string id){
 std::pair<std::string, Sprite*> ResourceManager::make_sprite(std::string id, Z_PlaneMeta crop){
 	Sprite* new_sprite = new Sprite(crop);
 	this->sprites.insert(std::pair(id,new_sprite));
-	std::clog << "Added sprite '" << id << "'<" << new_sprite << "> to ResourceManager " << this << std::endl;
+	ENGINE_DEBUG_MSG("Added sprite '" << id << "'<" << new_sprite << "> to ResourceManager " << this);
 	return std::pair(id,new_sprite);
 }
 std::pair<std::string, Sprite*> ResourceManager::make_sprite_from_anim(std::string id, Animation* anim, Z_PlaneMeta crop){
 	Sprite* new_sprite = new Sprite("show", anim, crop );
 	this->sprites.insert(std::pair(id,new_sprite));
-	std::clog << "Added sprite '" << id << "'<" << new_sprite << "> to ResourceManager " << this << std::endl;
+	ENGINE_DEBUG_MSG("Added sprite '" << id << "'<" << new_sprite << "> to ResourceManager " << this);
 	return std::pair(id,new_sprite);
 }
 std::pair<std::string, Sprite*> ResourceManager::make_sprite_from_anim(std::string id, std::string animId, Z_PlaneMeta crop){
