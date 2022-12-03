@@ -32,13 +32,13 @@ Sprite::~Sprite(){
 
 int Sprite::set_color(Z_RGBA color){
 	this->color = color;
-	std::clog << "Sprite.set_color(): Updated Color: RGBA("
+	ENGINE_DEBUG_MSG("Sprite.set_color(): Updated Color: RGBA("
 		<< this->color.r
 		<< ", " << this->color.g
 		<< ", " << this->color.b
 		<< ", " << this->color.b
 		<< ", " << this->color.a
-		<< ")." << std::endl;
+		<< ").");
 	return 0;
 };
 
@@ -121,7 +121,7 @@ void Sprite::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 	};
 
 	/*
-	std::clog << "Sprite.render(): Calculative UVs " <<
+	ENGINE_DEBUG_MSG("Sprite.render(): Calculative UVs " <<
 		"[" << this->transform_rect.u << ',' << this->transform_rect.v << ':' << this->transform_rect.uw << 'x' << this->transform_rect.vw << ']' << " => " <<
 		"(" << transform.u << ',' << transform.v << ':' << transform.u << 'x' << transform.vw << ')' << 
 	std::endl;
@@ -143,7 +143,7 @@ void Sprite::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 	crop.h = plane_meta.vw;
 
 	/*
-	std::clog << "Sprite.render(): Current frame " <<
+	ENGINE_DEBUG_MSG("Sprite.render(): Current frame " <<
 		"[" << crop.x << ',' << crop.y << ':' << crop.w << 'x' << crop.h << ']' << " => " <<
 		"(" << pos.x << ',' << pos.y << ':' << pos.w << 'x' << pos.h << ')' << 
 	std::endl;
@@ -171,7 +171,7 @@ void Sprite::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 			//SDL_SetRenderDrawColor(renderer, this->color.r, this->color.g, this->color.b, 255);
 			//SDL_RenderFillRect(renderer, &pos);
 		//}else{
-			//std::clog << "Rendering animation \"" << this->current_anime << "\":" << this->anime.size() << "\"..." << std::endl;
+			//ENGINE_DEBUG_MSG("Rendering animation \"" << this->current_anime << "\":" << this->anime.size() << "\"..." << std::endl;
 			this->anime.at(this->current_anime)->render(renderer, plane_meta);
 		//}
 	}catch(std::exception &e){

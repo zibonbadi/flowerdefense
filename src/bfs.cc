@@ -91,7 +91,7 @@ void BFS::execute(const int& x_root, const int& y_root) {
 		const std::pair<int, int>& cell = q.front();
 		const int x = cell.first;
 		const int y = cell.second;
-		//std::cout << arrowMap.get_spot(x, y) << " ";
+		//DEBUG_MSG(arrowMap.get_spot(x, y) << " ");
 
 		q.pop();
 
@@ -103,7 +103,7 @@ void BFS::execute(const int& x_root, const int& y_root) {
 
 			const int& adjx = x + deltaX[i];
 			const int& adjy = y + deltaY[i];
-			//std::cout << "i: " << i << "    " << x << " , " << y << std::endl;
+			//DEBUG_MSG("i: " << i << "    " << x << " , " << y);
 
 			if (isValid(visited, adjx, adjy, cellCountX, cellCountY, charVec)) {
 				q.push(std::pair{ adjx, adjy });
@@ -141,7 +141,7 @@ void BFS::execute(const int& x_root, const int& y_root) {
 		}
 		ss << "\r\n";
 	}
-	std::cout << ss.str() << std::endl;
+	DEBUG_MSG(ss.str());
 	bfsArrows->write(std::pair{ 0, 0 }, ss.str());
 	ss.str("");
 }

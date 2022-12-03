@@ -13,6 +13,7 @@ public:
 	float _spawnTime = 5.f;
 	int _spawnCount = 3;
 	float _spawnTimer = _spawnTime;
+	int _availableEnemiesSize;
 	std::vector<Enemy*> enemies;
 	std::vector<Enemy*> availableEnemies;
 	Enemypool(Plane& board, Z_PlaneMeta& collide_enemy, float spawnTimer ,int spawnCount, int poolSize);
