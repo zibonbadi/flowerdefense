@@ -84,7 +84,18 @@ int main(int argc, char* argv[]) {
 		};
 
 		player.GetSprite()->setCollider(&collide_player);
-		Enemypool enemyPool(board, collide_enemy, 2.0f, 5, 100);
+		
+		
+		const float spawnTime				= 2.0f;
+		const float spawnTimeWaveEndDelta	= -0.2f;
+		const float spawnTimeMin			= 0.2f;
+		const float spawnCount				= 1;
+		const float poolSize				= 100;
+		const float waveTime				= 6.f;
+
+		Enemypool enemyPool(board, collide_enemy, spawnTime, spawnCount, poolSize);
+
+		float waveTimer = waveTime;
 
 		DEBUG_MSG("Entering main loop...");
 
@@ -113,6 +124,8 @@ int main(int argc, char* argv[]) {
 				Event e_up_to_toggle("debug.gameover.toggle");
 				e_up_to_toggle.set("status_edge", "toggle");
 				g_eventbus.send(&e_up_to_toggle);
+				DEBUG_MSG("restarting..");
+
 			} else if (e->get("status_edge") == "toggle") {
 				hud.text->visible = !hud.text->visible;
 			};
@@ -208,6 +221,18 @@ int main(int argc, char* argv[]) {
 
 
 			player.Update(deltaTime, enemyPool.enemies);
+
+			waveTimer -= deltaTime;
+			if (waveTimer < 0)
+			{
+				enemyPool._spawnTime += spawnTimeWaveEndDelta;
+				if (enemyPool._spawnTime < spawnTimeMin)
+				{
+					enemyPool._spawnTime = spawnTimeMin;
+				}
+				waveTimer = waveTime;
+			}
+
 			enemyPool.Update(deltaTime);
 			/* Advance the player animation */
 			g_rc.advance_all_anim(now);

@@ -16,7 +16,7 @@ public:
 	int _availableEnemiesSize;
 	std::vector<Enemy*> enemies;
 	std::vector<Enemy*> availableEnemies;
-	Enemypool(Plane& board, Z_PlaneMeta& collide_enemy, float spawnTimer ,int spawnCount, int poolSize);
+	Enemypool(Plane& board, Z_PlaneMeta& collide_enemy, float spawnTime, int spawnCount, int poolSize);
 	~Enemypool();
 	void Update(const float& deltaTime);
 	void Spawn(int count);
