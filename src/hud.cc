@@ -354,13 +354,13 @@ void Hud::exp_create(float x, float y){
 
 void Hud::handleEvents(Event* e){
 	if(e->get("type") == "player.obstacles.update"){
-		ex_rahmen->fill(0, 2, 15, 1, ' ');
-		ex_rahmen->write(std::pair(0,2), "^"+e->get("count"));
+		tm_inventory->fill(0, 2, 15, 1, ' ');
+		tm_inventory->write(std::pair(0,2), "^"+e->get("count"));
 	}
 	if(e->get("type") == "player.health.update"){
 		// Three fields: "current", "max" & 
-		ex_rahmen->fill(0, 2, 15, 1, ' ');
-		ex_rahmen->write(std::pair(0,2), "+"+e->get("count"));
+		tm_inventory->fill(0, 2, 15, 1, ' ');
+		tm_inventory->write(std::pair(0,2), "+"+e->get("count"));
 		// TODO: Zelda-Style Quarter-Heart generator
 	};
 };
