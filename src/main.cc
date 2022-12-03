@@ -51,6 +51,7 @@ int main(int argc, char* argv[]) {
 		board.attach(&plants);
 		board.attach(&obstacles);
 		board.attach(player.GetSprite());
+		board.attach(player.attack);
 
 		Hud hud(hud_plane);
 		//hud.exp_create(5,8);

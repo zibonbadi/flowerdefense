@@ -4,6 +4,14 @@ Player::Player(float x, float y) {
 	playerCoordinates.x = x;
 	playerCoordinates.y = y;
 	initAnimations();
+
+	attack = new Sprite(Z_PlaneMeta{
+		.w = 32.0f,
+		.h = 32.0f
+	});
+	attack->set_color(Z_RGBA{.r = 0xff,.g = 0,.b = 0,.a = 0xff});
+	attack->setCollider(atk_collide);
+
 	initControls();
 	
 	// Hook handleEvents into event handler
@@ -268,15 +276,22 @@ void Player::ChangePlayerAnimation(const std::string animIDadditional = "")
 
 void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) {
 
-	bool isColliding = false;
+	bool collide_player = false;
+	bool collide_attack = false;
 	for (Enemy* enemy : enemies) {
+		if (this->attack->collision(enemy->GetSprite())) {
+			if(!enemy->isdead && enemy->visible){
+				enemy->dying();
+			}
+			break;
+		}
 		if (this->player->collision(enemy->GetSprite())) {
 			if(enemy->isdead && enemy->visible){
 			enemy->disappear();
 			xp_bar += xp_bekommt;
 
 			}else if(!enemy->isdead){
-			isColliding = true;
+			collide_player = true;
 			enemy->dying();
 			enemy->disappear();
 			xp_bar += xp_bekommt;
@@ -284,7 +299,7 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 			break;
 		}
 	}
-	if (isColliding) {
+	if (collide_player) {
 		if (_animID.find(".damage") == std::string::npos) {
 			ChangePlayerAnimation(".damage");
 			health--;
@@ -332,6 +347,33 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 
 	/* Adjust player sprite transform*/
 	player->setTransform(Z_PlaneMeta{ .x = playerCoordinates.x, .y = playerCoordinates.y, .w = 64, .h = 64 });
+	Z_PlaneMeta tmp_transform = {.w = 32, .h =32};
+	switch(playerDir){
+	case EPlayerDirection::LEFT:{
+		tmp_transform.x = playerCoordinates.x-32;
+		tmp_transform.y = playerCoordinates.y+16;
+		break;
+	}
+	case EPlayerDirection::RIGHT:{
+		tmp_transform.x = playerCoordinates.x+64;
+		tmp_transform.y = playerCoordinates.y+16;
+		break;
+	}
+	case EPlayerDirection::UP:{
+		tmp_transform.x = playerCoordinates.x+16;
+		tmp_transform.y = playerCoordinates.y-32;
+		break;
+	}
+	case EPlayerDirection::DOWN:{
+		tmp_transform.x = playerCoordinates.x+16;
+		tmp_transform.y = playerCoordinates.y+64;
+		break;
+	}
+	default:{
+		break;
+	}
+	};
+	attack->setTransform(tmp_transform);
 
 
 	pastPlayerDir = playerDir;
@@ -352,6 +394,8 @@ Player::~Player() {
 	for (int i = 0; i < 4; i++) {
 		delete animations[i];
 	}
+	delete attack;
+	delete atk_collide;
 	delete f_eHandler;
 	delete e_player_up;
 	delete e_player_down;

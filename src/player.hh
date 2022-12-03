@@ -17,7 +17,10 @@ class Player {
 		SDL_FPoint delta				= { .x = 0, .y = 0 };
 		EPlayerDirection playerDir = EPlayerDirection::LEFT;
 		EPlayerDirection pastPlayerDir;
+		//Sprite* player, *attack;
 		Sprite* player;
+
+		Z_PlaneMeta* atk_collide = new Z_PlaneMeta{.w = 32.0f, .h = 32.0f};
 		EBus_Fn *f_eHandler;
 		Event
 			*e_player_up, *e_player_down, *e_player_left, *e_player_right,
@@ -25,6 +28,7 @@ class Player {
 			;
 		float damageAnimCooldown = 0;
 	public:
+		Sprite *attack;
 		SDL_FPoint playerCoordinates	= { .x = 0, .y = 0 };
 		unsigned int health = 4, obstacles = 0;
 		int xp_bar = 200;
