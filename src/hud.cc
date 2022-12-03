@@ -25,12 +25,12 @@ void Hud::font_create(){
 			xcrops['\''] = std::pair<int,int>(52,5);
 			xcrops['('] = std::pair<int,int> (57,5);
 			xcrops[')'] = std::pair<int,int> (63,6);
-			xcrops['*'] = std::pair<int,int> (69,7);
-			xcrops['+'] = std::pair<int,int> (76,9);
+			//xcrops['*'] = std::pair<int,int> (69,7);
+			//xcrops['+'] = std::pair<int,int> (76,9);
 			xcrops[','] = std::pair<int,int> (85,6);
-			xcrops['-'] = std::pair<int,int> (91,7);
+			//xcrops['-'] = std::pair<int,int> (91,7);
 			xcrops['.'] = std::pair<int,int> (98,5);
-			xcrops['/'] = std::pair<int,int> (103,7);
+			//xcrops['/'] = std::pair<int,int> (103,7);
 
 			xcrops['0'] = std::pair<int,int> (110,8);
 			xcrops['1'] = std::pair<int,int> (118,5);
@@ -108,7 +108,7 @@ void Hud::font_create(){
 			xcrops['['] = std::pair<int,int> (449, 6);
 			xcrops['\\'] = std::pair<int,int>(455, 7);
 			xcrops[']'] = std::pair<int,int> (462, 6);
-			xcrops['^'] = std::pair<int,int> (468, 9);
+			//xcrops['^'] = std::pair<int,int> (468, 9);
 			xcrops['_'] = std::pair<int,int> (477, 7);
 			xcrops['`'] = std::pair<int,int> (484, 6);
 			xcrops['{'] = std::pair<int,int> (490, 6);
@@ -130,6 +130,7 @@ void Hud::font_create(){
 void Hud::text_layer_create(){
 	this->text = new Tilemap(16,24);
 	text->write(std::pair(24,16), "GAME OVER\r\nPress R to restart.\r\nPress Q to quit.");
+	this->text->visible = false;
 	_board.attach(text);
 }
 
@@ -139,17 +140,21 @@ void Hud::ex_rahmen_create(){
 			auto xp_rahmen_links = g_rc.make_static_sprite_from_texture("tiles.xp_rahmen_links", "spritesheet", Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 			auto xp_rahmen_rechts = g_rc.make_static_sprite_from_texture("tiles.xp_rahmen_rechts", "spritesheet", Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 			auto xp_rahmen_mitte = g_rc.make_static_sprite_from_texture("tiles.xp_rahmen_mitte", "spritesheet", Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
+			auto t_obstacle = g_rc.get_sprite("tiles.obstacle");
 
 			ex_rahmen =  new Tilemap(32,32);
 
 			ex_rahmen->add_tile('-', xp_rahmen_links);
 			ex_rahmen->add_tile('/', xp_rahmen_rechts);
 			ex_rahmen->add_tile('+', xp_rahmen_mitte);
+			ex_rahmen->add_tile('^', t_obstacle);
 
 
 			ex_rahmen->fill(0, 0, 1, 1, '-');
 			ex_rahmen->fill(24, 0, 1, 1, '/');
 			ex_rahmen->fill(0, 0, 24, 1, '+');
+			ex_rahmen->fill(3, 0, 5, 2, ' ');
+			ex_rahmen->write(std::pair(0,2), "^0");
 
 			_board.attach(ex_rahmen);
 

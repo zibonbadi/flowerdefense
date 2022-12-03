@@ -2,7 +2,7 @@
 #include "headers.hh"
 
 class Hud{
-private:
+public:
 	Plane &_board ;
 	Animation* ex_balken_anzeige;
 	Animation* gaertner_leben_1;
@@ -16,7 +16,7 @@ private:
 
 	int gaetner_akt_leben = 4;
 	int rose_akt_leben =4;
-public:
+
 	Hud(Plane &board);
 	// Hud();
 	// void setResourceManager(ResourceManager &rc) { _rc = rc;}
