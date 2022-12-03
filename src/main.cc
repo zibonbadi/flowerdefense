@@ -119,7 +119,8 @@ int main(int argc, char* argv[]) {
 				plants.fill(12, 12, 1, 1, '%');
 				obstacles.fill(4, 9, 4, 1, 'x');
 
-				bfs.execute(10, 10);
+				bfsPlayer.execute(10, 10);
+				bfsFlower.execute(25, 25);
 
 				player.reset((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200);
 				enemyPool.reset();
