@@ -12,7 +12,7 @@ private:
 	Sprite *ex;
 	Sprite *gaertner_leben[4];
 	Sprite *rose_leben[4];
-	Tilemap *ex_rahmen;
+	Tilemap *ex_rahmen, *text;
 
 	int gaetner_akt_leben = 4;
 	int rose_akt_leben =4;
@@ -31,5 +31,7 @@ public:
 	void rose_leben_hoch();
 	void ex_bar_steuern(float w);
 	void exp_create(float x, float y);
+	void text_layer_create();
+	void font_create();
 
 };

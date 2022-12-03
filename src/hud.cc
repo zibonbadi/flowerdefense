@@ -5,8 +5,134 @@ Hud::Hud(Plane &board) : _board(board){
 			ex_bar_create();
 			gaertner_leben_create();
 			rose_leben_create();
+			text_layer_create();
+			font_create();
 
 }
+
+void Hud::font_create(){
+
+			g_rc.import_texture("font", "./assets/boxy_bold_font_linear.png");
+
+			// Crop mappings. 1: x, 2: w
+			std::map<char, std::pair<int, int>> xcrops;
+			xcrops['!'] = std::pair<int,int> (0,5);
+			xcrops['"'] = std::pair<int,int> (5,5);
+			xcrops['#'] = std::pair<int,int> (13,10);
+			xcrops['$'] = std::pair<int,int> (23,8);
+			xcrops['%'] = std::pair<int,int> (31,11);
+			xcrops['&'] = std::pair<int,int> (42,10);
+			xcrops['\''] = std::pair<int,int>(52,5);
+			xcrops['('] = std::pair<int,int> (57,5);
+			xcrops[')'] = std::pair<int,int> (63,6);
+			xcrops['*'] = std::pair<int,int> (69,7);
+			xcrops['+'] = std::pair<int,int> (76,9);
+			xcrops[','] = std::pair<int,int> (85,6);
+			xcrops['-'] = std::pair<int,int> (91,7);
+			xcrops['.'] = std::pair<int,int> (98,5);
+			xcrops['/'] = std::pair<int,int> (103,7);
+
+			xcrops['0'] = std::pair<int,int> (110,8);
+			xcrops['1'] = std::pair<int,int> (118,5);
+			xcrops['2'] = std::pair<int,int> (123,8);
+			xcrops['3'] = std::pair<int,int> (131,8);
+			xcrops['4'] = std::pair<int,int> (139,8);
+			xcrops['5'] = std::pair<int,int> (147,8);
+			xcrops['6'] = std::pair<int,int> (155,8);
+			xcrops['7'] = std::pair<int,int> (163,8);
+			xcrops['8'] = std::pair<int,int> (171,8);
+			xcrops['9'] = std::pair<int,int> (179,8);
+
+			xcrops[':'] = std::pair<int,int> (187,5);
+			xcrops[';'] = std::pair<int,int> (192,5);
+			xcrops['<'] = std::pair<int,int> (197,7);
+			xcrops['='] = std::pair<int,int> (204,7);
+			xcrops['>'] = std::pair<int,int> (211,7);
+			xcrops['?'] = std::pair<int,int> (218,9);
+			xcrops['@'] = std::pair<int,int> (227,9);
+
+			xcrops['A'] = std::pair<int,int> (236, 8);
+			xcrops['B'] = std::pair<int,int> (244, 8);
+			xcrops['C'] = std::pair<int,int> (252, 8);
+			xcrops['D'] = std::pair<int,int> (260, 8);
+			xcrops['E'] = std::pair<int,int> (268, 8);
+			xcrops['F'] = std::pair<int,int> (276, 8);
+			xcrops['G'] = std::pair<int,int> (284, 8);
+			xcrops['H'] = std::pair<int,int> (292, 8);
+			xcrops['I'] = std::pair<int,int> (300, 5);
+			xcrops['J'] = std::pair<int,int> (305, 8);
+			xcrops['K'] = std::pair<int,int> (313, 8);
+			xcrops['L'] = std::pair<int,int> (321, 8);
+			xcrops['M'] = std::pair<int,int> (329, 10);
+			xcrops['N'] = std::pair<int,int> (339, 9);
+			xcrops['O'] = std::pair<int,int> (348, 8);
+			xcrops['P'] = std::pair<int,int> (356, 8);
+			xcrops['Q'] = std::pair<int,int> (364, 9);
+			xcrops['R'] = std::pair<int,int> (373, 8);
+			xcrops['S'] = std::pair<int,int> (381, 8);
+			xcrops['T'] = std::pair<int,int> (389, 9);
+			xcrops['U'] = std::pair<int,int> (398, 8);
+			xcrops['V'] = std::pair<int,int> (406, 8);
+			xcrops['W'] = std::pair<int,int> (414, 10);
+			xcrops['X'] = std::pair<int,int> (424, 8);
+			xcrops['Y'] = std::pair<int,int> (432, 9);
+			xcrops['Z'] = std::pair<int,int> (441, 8);
+
+			xcrops['a'] = std::pair<int,int> (236, 8);
+			xcrops['b'] = std::pair<int,int> (244, 8);
+			xcrops['c'] = std::pair<int,int> (252, 8);
+			xcrops['d'] = std::pair<int,int> (260, 8);
+			xcrops['e'] = std::pair<int,int> (268, 8);
+			xcrops['f'] = std::pair<int,int> (276, 8);
+			xcrops['g'] = std::pair<int,int> (284, 8);
+			xcrops['h'] = std::pair<int,int> (292, 8);
+			xcrops['i'] = std::pair<int,int> (300, 5);
+			xcrops['j'] = std::pair<int,int> (305, 8);
+			xcrops['k'] = std::pair<int,int> (313, 8);
+			xcrops['l'] = std::pair<int,int> (321, 8);
+			xcrops['m'] = std::pair<int,int> (329, 10);
+			xcrops['n'] = std::pair<int,int> (339, 9);
+			xcrops['o'] = std::pair<int,int> (348, 8);
+			xcrops['p'] = std::pair<int,int> (356, 8);
+			xcrops['q'] = std::pair<int,int> (364, 9);
+			xcrops['r'] = std::pair<int,int> (373, 8);
+			xcrops['s'] = std::pair<int,int> (381, 8);
+			xcrops['t'] = std::pair<int,int> (389, 9);
+			xcrops['u'] = std::pair<int,int> (398, 8);
+			xcrops['v'] = std::pair<int,int> (406, 8);
+			xcrops['w'] = std::pair<int,int> (414, 10);
+			xcrops['x'] = std::pair<int,int> (424, 8);
+			xcrops['y'] = std::pair<int,int> (432, 9);
+			xcrops['z'] = std::pair<int,int> (441, 8);
+
+			xcrops['['] = std::pair<int,int> (449, 6);
+			xcrops['\\'] = std::pair<int,int>(455, 7);
+			xcrops[']'] = std::pair<int,int> (462, 6);
+			xcrops['^'] = std::pair<int,int> (468, 9);
+			xcrops['_'] = std::pair<int,int> (477, 7);
+			xcrops['`'] = std::pair<int,int> (484, 6);
+			xcrops['{'] = std::pair<int,int> (490, 6);
+			xcrops['|'] = std::pair<int,int> (496, 5);
+			xcrops['}'] = std::pair<int,int> (501, 6);
+			xcrops['~'] = std::pair<int,int> (507, 10);
+
+
+			for(auto &i : xcrops){
+				std::string letter_str(1, i.first);
+				auto lettersprite = g_rc.make_static_sprite_from_texture("font."+letter_str, "font", Z_PlaneMeta {
+					.u = i.second.first, .v = 0, .uw = i.second.second, .vw = 9
+				}).second;
+				text->add_tile(i.first, lettersprite);
+				ex_rahmen->add_tile(i.first, lettersprite);
+			};
+}
+
+void Hud::text_layer_create(){
+	this->text = new Tilemap(16,24);
+	text->write(std::pair(24,16), "GAME OVER\r\nPress R to restart.\r\nPress Q to quit.");
+	_board.attach(text);
+}
+
 
 void Hud::ex_rahmen_create(){
 			
