@@ -199,10 +199,10 @@ int Tilemap::fill(int map_x, int map_y, int w, int h, char tile){
 			// Is this even valid? If no -> skip
 			for(int y = map_y; y < map_y+h; y++){
 				for(int x = map_x; x < map_x+w; x++){
-					std::clog << '(' << x << ',' << y << ") => '" << tile << '\'' << std::endl;
+					//std::clog << '(' << x << ',' << y << ") => '" << tile << '\'' << std::endl;
 					if(tile == ' '){
 						// Remove tile
-						std::clog << "Tilemap.fill(): Clearing tile (" << x << ',' << y << ")." << std::endl;
+						//std::clog << "Tilemap.fill(): Clearing tile (" << x << ',' << y << ")." << std::endl;
 						this->map.erase(std::pair(y,x));
 					}else{
 						this->map[std::pair<int,int> (y,x)] = tile;
