@@ -1,6 +1,12 @@
 #include "enemy.hh"
 
-Enemy::Enemy(float x, float y, std::string id) : _id(id) {
+Enemy::Enemy(float x, float y, std::string id) {
+	init(x, y, id);
+}
+
+void Enemy::init(float x, float y, std::string id)
+{
+	_id = id;
 	coordinates.x = x;
 	coordinates.y = y;
 	goalTileCoordinates.x = x;

@@ -55,3 +55,9 @@ extern KeyMapper g_keymapper;
 
 #define SCREEN_HEIGHT 800
 #define SCREEN_WIDTH 800
+
+#define TILE_HEIGHT 32
+#define TILE_WIDTH 32
+
+#define BFS_TILE_HEIGHT 16
+#define BFS_TILE_WIDTH 16

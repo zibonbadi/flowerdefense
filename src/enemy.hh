@@ -26,6 +26,7 @@ class Enemy {
 	public:
 		SDL_FPoint coordinates				= { .x = 0, .y = 0 };
 		Enemy(float x, float y, std::string id);
+		void init(float x, float y, std::string id);
 		void initAnimations();
 		void Update(Tilemap* bfsArrows);
 		Sprite* GetSprite();

@@ -19,8 +19,8 @@ int main(int argc, char* argv[]) {
 		std::cout << "Building system..." << std::endl;
 
 
-		//damit gegner nur einmal Stirbt 
-		int i = 0;
+		//////////////damit gegner nur einmal Stirbt 
+		////////////int i = 0;
 
 		/* Import spritesheet */
 		g_rc.import_texture("spritesheet", "./assets/spritesheet.png");
@@ -32,15 +32,14 @@ int main(int argc, char* argv[]) {
 
 
 		Player player((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200);
-		Enemy enemy(16*5, 16 * 45, "1");
-		Enemy enemy2(16 * 24, 16 * 13, "2");
-		Enemy enemy3(16 * 10, 16 * 35, "3");
+		//Enemy enemy(16*5, 16 * 45, "1");
+		//Enemy enemy2(16 * 24, 16 * 13, "2");
+		//Enemy enemy3(16 * 10, 16 * 35, "3");
 
-		Enemypool enemyPool(3);
-		std::vector<Enemy*> enemies;
-		enemies.push_back(&enemy);
-		enemies.push_back(&enemy2);
-		enemies.push_back(&enemy3);
+		//std::vector<Enemy*> enemies;
+		//enemies.push_back(&enemy);
+		//enemies.push_back(&enemy2);
+		//enemies.push_back(&enemy3);
 		//Enemy enemy(0, 0 ebus, keymap);
 
 		Tilemap ground(32, 32), plants(32, 32), obstacles;
@@ -71,9 +70,9 @@ int main(int argc, char* argv[]) {
 		board.attach(&plants);
 		board.attach(&obstacles);
 		board.attach(player.GetSprite());
-		board.attach(enemy.GetSprite());
-		board.attach(enemy2.GetSprite());
-		board.attach(enemy3.GetSprite());
+		//board.attach(enemy.GetSprite());
+		//board.attach(enemy2.GetSprite());
+		//board.attach(enemy3.GetSprite());
 
 		Hud hud(hud_plane);
 		//hud.exp_create(5,8);
@@ -96,9 +95,10 @@ int main(int argc, char* argv[]) {
 		};
 
 		player.GetSprite()->setCollider(&collide_player);
-		enemy.GetSprite()->setCollider(&collide_enemy);
-		enemy2.GetSprite()->setCollider(&collide_enemy);
-		enemy3.GetSprite()->setCollider(&collide_enemy);
+		Enemypool enemyPool(board, collide_enemy, 5.0f, 3, 50);
+		//enemy.GetSprite()->setCollider(&collide_enemy);
+		//enemy2.GetSprite()->setCollider(&collide_enemy);
+		//enemy3.GetSprite()->setCollider(&collide_enemy);
 
 		std::cout << "Entering main loop..." << std::endl;
 
@@ -116,17 +116,17 @@ int main(int argc, char* argv[]) {
 			};
 		};
 
-		EBus_Fn f_debug_collide = [&](Event* e) {
-			if (e->get("status_edge") == "down") {
-				bool sfdfs = player.GetSprite()->collision(enemy.GetSprite());
-				std::cout 
-					<< "Collision player->enemy (bool):" << player.GetSprite()->collision(enemy.GetSprite()) << std::endl
-					<< "Collision enemy->player (bool):" << enemy.GetSprite()->collision(player.GetSprite()) << std::endl
-					<< "Collision player->enemy2 (bool):" << player.GetSprite()->collision(enemy2.GetSprite()) << std::endl
-					<< "Collision enemy2->player (bool):" << enemy2.GetSprite()->collision(player.GetSprite()) << std::endl
-				;
-			};
-		};
+		//EBus_Fn f_debug_collide = [&](Event* e) {
+		//	if (e->get("status_edge") == "down") {
+		//		bool sfdfs = player.GetSprite()->collision(enemy.GetSprite());
+		//		std::cout 
+		//			<< "Collision player->enemy (bool):" << player.GetSprite()->collision(enemy.GetSprite()) << std::endl
+		//			<< "Collision enemy->player (bool):" << enemy.GetSprite()->collision(player.GetSprite()) << std::endl
+		//			<< "Collision player->enemy2 (bool):" << player.GetSprite()->collision(enemy2.GetSprite()) << std::endl
+		//			<< "Collision enemy2->player (bool):" << enemy2.GetSprite()->collision(player.GetSprite()) << std::endl
+		//		;
+		//	};
+		//};
 
 		// Create Keymap Quit event
 		Event e_quit("engine.quit");
@@ -136,7 +136,7 @@ int main(int argc, char* argv[]) {
 
 		// Register events
 		g_eventbus.subscribe("engine.quit", &f_quit);
-		g_eventbus.subscribe("debug.collide", &f_debug_collide);
+		//g_eventbus.subscribe("debug.collide", &f_debug_collide);
 
 
 		uint32_t past = 0;
@@ -164,22 +164,27 @@ int main(int argc, char* argv[]) {
 				}
 			}
 
-			enemy.Update(bfs.bfsArrows);
-			enemy2.Update(bfs.bfsArrows);
-			enemy3.Update(bfs.bfsArrows);
 
-
-			if(i == 0){
-				//test zum toten Gegner
-				enemy3.dying();
-				//enemy3.disappear();
-				//enemy3.reborn(16*24, 16 * 20);
-				i++;
+			for (int i = 0; i < enemyPool.enemies.size(); i++)
+			{
+				enemyPool.enemies[i]->Update(bfs.bfsArrows);
 			}
+			//enemy.Update(bfs.bfsArrows);
+			//enemy2.Update(bfs.bfsArrows);
+			//enemy3.Update(bfs.bfsArrows);
 
 
-			player.Update(deltaTime, enemies);
+			//if(i == 0){
+			//	//test zum toten Gegner
+			//	enemy3.dying();
+			//	//enemy3.disappear();
+			//	//enemy3.reborn(16*24, 16 * 20);
+			//	i++;
+			//}
 
+
+			player.Update(deltaTime, enemyPool.enemies);
+			enemyPool.Update(deltaTime);
 			/* Advance the player animation */
 			g_rc.advance_all_anim(now);
 			game.render();
