@@ -271,6 +271,7 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 	if (isColliding) {
 		if (_animID.find(".damage") == std::string::npos) {
 			ChangePlayerAnimation(".damage");
+			leben = -1;
 		}
 		this->damageAnimCooldown = 0.3;
 	}
@@ -278,7 +279,6 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 		this->damageAnimCooldown -= deltaTime;
 		if (this->damageAnimCooldown <= 0) {
 			ChangePlayerAnimation();
-			leben = -1;
 
 		}
 	}
