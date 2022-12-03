@@ -1,8 +1,6 @@
 #pragma once
 #include "headers.hh"
 
-using EBus_Fn = std::function<void(Event*)>;
-
 class EventBus {
 private:
 	std::map<std::string, std::set<EBus_Fn*>> callbacks;
