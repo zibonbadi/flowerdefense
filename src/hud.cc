@@ -385,20 +385,6 @@ void Hud::handleEvents(Event* e){
 };
 
 void Hud::Update(Player &player){
-	if(player.leben < 0){
-		//gaertner_leben_runter();
-		player.health--;
-		rose_leben_runter();
-		player.leben = 0;
-		std::cout<<"------> Leben runter"<<std::endl;
-	}
-	else if(player.leben > 0){
-		//gaertner_leben_hoch();
-		player.health++;
-		player.leben = 0;
-
-		std::cout<<"------> Leben hoch"<<std::endl;
-	}
 	// Update gaertner health display
 	tm_inventory->fill(0, 1, 15, 2, ' ');
 	tm_inventory->fill(0, 1, player.health, 1, '+');

@@ -27,6 +27,8 @@ class Player {
 		float damageAnimCooldown = 0;
 	public:
 		unsigned int health = 4, obstacles = 0;
+		int xp_bar = 200;
+
 		Player(float x, float y);
 		void initAnimations();
 		void initControls();
@@ -38,7 +40,6 @@ class Player {
 		~Player();
 		std::string _animID;
 
-		int leben = 0;
-		int xp_bar = 200;
+		//int leben = 0;
 };
 

@@ -284,7 +284,7 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 	if (isColliding) {
 		if (_animID.find(".damage") == std::string::npos) {
 			ChangePlayerAnimation(".damage");
-			leben = -1;
+			health--;
 		}
 		this->damageAnimCooldown = 0.3;
 	}
@@ -294,6 +294,11 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 			ChangePlayerAnimation();
 
 		}
+	}
+
+	if(health<1){
+		Event die("player.die");
+		g_eventbus.send(&die);
 	}
 
 	/* Change player sprite animation*/
@@ -331,6 +336,7 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 
 void Player::reset(float x, float y){
 	DEBUG_MSG("Player.reset(): Caught.");
+	health=4;
 	playerCoordinates.x = x;
 	playerCoordinates.y = y;
 }
