@@ -197,12 +197,11 @@ int main(int argc, char* argv[]) {
 				enemyPool.enemies[i]->Update(bfs.bfsArrows);
 			}
 
+			player.Update(deltaTime, enemyPool.enemies);
 
-			player.Update(deltaTime, enemies);
 			hud.Update(player);
 
 
-			player.Update(deltaTime, enemyPool.enemies);
 			enemyPool.Update(deltaTime);
 			/* Advance the player animation */
 			g_rc.advance_all_anim(now);
