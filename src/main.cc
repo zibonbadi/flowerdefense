@@ -76,20 +76,11 @@ int main(int argc, char* argv[]) {
 		player.GetSprite()->setCollider(&collide_player);
 
 		
-		//const float spawnTime				= 2.0f;
-		//const float spawnTimeWaveEndDelta	= -0.2f;
-		//const float spawnTimeMin			= 0.2f;
-		//const float spawnCount				= 1;
-		//const float poolSize				= 100;
-		//const float waveTime				= 6.f;
-
-
-		// SUPER WAVE  welle 10, 20, 30, 40
 		const float spawnTime = 2.0f;
-		const float spawnTimeWaveEndDelta = -0.2f;
+		const float spawnTimeDeltaAtWaveEnd = -0.2f;
 		const float spawnTimeMin = 0.2f;
-		const float spawnCount = 20;
-		const float poolSize = 5000;
+		const float spawnCount = 1;
+		const float poolSize = 100;
 		const float waveTime = 6.f;
 		Enemypool enemyPool(board, player, collide_enemy, spawnTime, spawnCount, poolSize);
 
@@ -258,7 +249,7 @@ int main(int argc, char* argv[]) {
 			waveTimer -= deltaTime;
 			if (waveTimer < 0)
 			{
-				enemyPool._spawnTime += spawnTimeWaveEndDelta;
+				enemyPool._spawnTime += spawnTimeDeltaAtWaveEnd;
 				if (enemyPool._spawnTime < spawnTimeMin)
 				{
 					enemyPool._spawnTime = spawnTimeMin;

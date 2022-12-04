@@ -313,23 +313,23 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 	/* Normalize delta length */
 	if (delta.x != 0 || delta.y != 0) {
 		const float length_inverse = 1.f / sqrt(delta.x * delta.x + delta.y * delta.y);
-		delta.x *= length_inverse * playerSpeed;
-		delta.y *= length_inverse * playerSpeed;
+		delta.x *= length_inverse * playerSpeed * deltaTime;
+		delta.y *= length_inverse * playerSpeed * deltaTime;
 	}
 
 	/* Add delta to player coordinates */
-	playerCoordinates.x += delta.x * deltaTime;
-	playerCoordinates.y += delta.y * deltaTime;
+	playerCoordinates.x += delta.x;
+	playerCoordinates.y += delta.y;
 
 	/* Handle Offscreen Movement */
 	if (playerCoordinates.y < 0)				
-		playerCoordinates.y -= delta.y;
+		playerCoordinates.y = 0;
 	if (playerCoordinates.y > (SCREEN_HEIGHT - 64))
-		playerCoordinates.y -= delta.y;
+		playerCoordinates.y = (SCREEN_HEIGHT - 64);
 	if (playerCoordinates.x < 0)				
-		playerCoordinates.x -= delta.x;
+		playerCoordinates.x = 0;
 	if (playerCoordinates.x > (SCREEN_WIDTH - 64))		
-		playerCoordinates.x -= delta.x;
+		playerCoordinates.x = (SCREEN_WIDTH - 64);
 
 	e_player_place_fence->set("player.x",std::to_string(attack->get_transform().x));
 	e_player_place_fence->set("player.y",std::to_string(attack->get_transform().y));
