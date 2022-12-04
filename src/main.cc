@@ -274,6 +274,7 @@ int main(int argc, char* argv[]) {
 				{
 					enemyPool._spawnTime = spawnTimeMin;
 				}
+				hud.wave++;
 				waveTimer = waveTime;
 			}
 			hud.Update(player);
