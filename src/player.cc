@@ -371,6 +371,7 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 void Player::reset(float x, float y){
 	DEBUG_MSG("Player.reset(): Caught.");
 	health=4;
+	obstacles=0;
 	playerCoordinates.x = x;
 	playerCoordinates.y = y;
 }
