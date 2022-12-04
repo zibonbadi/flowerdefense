@@ -50,6 +50,7 @@ class Tilemap {
 		std::map<std::pair<unsigned int,unsigned int>, char> get_map();
 		//int get_spot(int x, int y);
 		char get_spot(int x, int y);
+		std::pair<int,int> get_coordinate_from_offset(float x, float y);
 		//int fill(int map_x, int map_y, int w, int h, int tile);
 		int fill(int map_x, int map_y, int w, int h, char tile);
 		void render(SDL_Renderer* renderer);

@@ -191,6 +191,13 @@ char Tilemap::get_spot(int x, int y){
 	return this->map[std::pair<int,int> (y,x)];
 };
 
+std::pair<int,int> Tilemap::get_coordinate_from_offset(float x, float y){
+	return std::pair(
+			y / this->grit_h,
+			x / this->grit_w
+			);
+};
+
 int Tilemap::fill(int map_x, int map_y, int w, int h, char tile){
 	try{
 		//if(this->tiles != nullptr && this->map.find(tile) != this->map.end()){

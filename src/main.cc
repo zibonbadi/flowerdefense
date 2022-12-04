@@ -146,6 +146,32 @@ int main(int argc, char* argv[]) {
 			}
 		};
 			
+		EBus_Fn f_place_obstacle = [&](Event* e) {
+			if (e->get("status_edge") == "up" && player.obstacles > 0) {
+				auto target = obstacles.get_coordinate_from_offset(
+					std::stoi(e->get("player.y"))+32,
+					std::stoi(e->get("player.x"))+32
+				);
+				if(e->get("direction") == "up") {
+					obstacles.fill(target.first, target.second-1, 1, 1, 'x');
+					player.obstacles--;
+				}else
+				if(e->get("direction") == "right") {
+					obstacles.fill(target.first+1, target.second, 1, 1, 'x');
+					player.obstacles--;
+				}else
+				if(e->get("direction") == "down") {
+					obstacles.fill(target.first, target.second+1, 1, 1, 'x');
+					player.obstacles--;
+				}else
+				if(e->get("direction") == "left") {
+					obstacles.fill(target.first-1, target.second, 1, 1, 'x');
+					player.obstacles--;
+				}
+				bfsFlower.execute(25, 25);
+			}
+		};
+
 		EBus_Fn f_bfs_player_visibility = [&](Event* e) {
 			if (e->get("status_edge") == "up") {
 				bfsPlayer.isAttached = !bfsPlayer.isAttached;
@@ -185,18 +211,19 @@ int main(int argc, char* argv[]) {
 		Event e_print_debug("print.debug");
 		Event e_debug_playerdie("player.die");
 
-		g_keymapper.bind(SDLK_q, e_quit);
-		g_keymapper.bind(SDLK_r, e_restart);
-		g_keymapper.bind(SDLK_F1, e_debug_spritebox_toggle);
-		g_keymapper.bind(SDLK_F2, e_debug_colliders_toggle);
-		g_keymapper.bind(SDLK_F3, e_bfs_player_visibility);
-		g_keymapper.bind(SDLK_F4, e_bfs_flower_visibility);
-		g_keymapper.bind(SDLK_F9, e_print_debug);
-		g_keymapper.bind(SDLK_F12, e_debug_playerdie);
+		g_keymapper.bind(SDLK_q, &e_quit);
+		g_keymapper.bind(SDLK_r, &e_restart);
+		g_keymapper.bind(SDLK_F1, &e_debug_spritebox_toggle);
+		g_keymapper.bind(SDLK_F2, &e_debug_colliders_toggle);
+		g_keymapper.bind(SDLK_F3, &e_bfs_player_visibility);
+		g_keymapper.bind(SDLK_F4, &e_bfs_flower_visibility);
+		g_keymapper.bind(SDLK_F9, &e_print_debug);
+		g_keymapper.bind(SDLK_F12, &e_debug_playerdie);
 
 		// Register events
 		g_eventbus.subscribe("engine.quit", &f_quit);
 		g_eventbus.subscribe("game.state.set", &f_restart);
+		g_eventbus.subscribe("player.place_fence", &f_place_obstacle);
 		g_eventbus.subscribe("debug.spritebox.toggle", &f_toggle_spritebox);
 		g_eventbus.subscribe("debug.colliders.toggle", &f_toggle_colliders);
 		g_eventbus.subscribe("print.debug", &f_print_debug);

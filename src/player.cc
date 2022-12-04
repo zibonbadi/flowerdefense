@@ -175,36 +175,36 @@ void Player::initControls() {
 	// Up
 	e_player_up = new Event("player.set_direction");
 	e_player_up->set("direction", "up");
-	g_keymapper.bind(SDLK_w, *e_player_up);
+	g_keymapper.bind(SDLK_w, e_player_up);
 	// Down
 	e_player_down = new Event("player.set_direction");
 	e_player_down->set("direction", "down");
-	g_keymapper.bind(SDLK_s, *e_player_down);
+	g_keymapper.bind(SDLK_s, e_player_down);
 	// Left
 	e_player_left = new Event("player.set_direction");
 	e_player_left->set("direction", "left");
-	g_keymapper.bind(SDLK_a, *e_player_left);
+	g_keymapper.bind(SDLK_a, e_player_left);
 	// Right
 	e_player_right = new Event("player.set_direction");
 	e_player_right->set("direction", "right");
-	g_keymapper.bind(SDLK_d, *e_player_right);
+	g_keymapper.bind(SDLK_d, e_player_right);
 
 	// Fence Up
 	e_player_fence_up = new Event("player.place_fence");
 	e_player_fence_up->set("direction", "up");
-	g_keymapper.bind(SDLK_k, *e_player_fence_up);
+	g_keymapper.bind(SDLK_k, e_player_fence_up);
 	// Fence Down
 	e_player_fence_down = new Event("player.place_fence");
 	e_player_fence_down->set("direction", "down");
-	g_keymapper.bind(SDLK_j, *e_player_fence_down);
+	g_keymapper.bind(SDLK_j, e_player_fence_down);
 	// Fence Left
 	e_player_fence_left = new Event("player.place_fence");
 	e_player_fence_left->set("direction", "left");
-	g_keymapper.bind(SDLK_h, *e_player_fence_left);
+	g_keymapper.bind(SDLK_h, e_player_fence_left);
 	// Fence Right
 	e_player_fence_right = new Event("player.place_fence");
 	e_player_fence_right->set("direction", "right");
-	g_keymapper.bind(SDLK_l, *e_player_fence_right);
+	g_keymapper.bind(SDLK_l, e_player_fence_right);
 }
 
 void Player::handleEvents(Event* e){
@@ -344,6 +344,15 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 		playerCoordinates.x -= delta.x;
 	if (playerCoordinates.x > (SCREEN_WIDTH - 64))		
 		playerCoordinates.x -= delta.x;
+
+	e_player_fence_up->set("player.x",std::to_string(playerCoordinates.x));
+	e_player_fence_up->set("player.y",std::to_string(playerCoordinates.y));
+	e_player_fence_down->set("player.x",std::to_string(playerCoordinates.x));
+	e_player_fence_down->set("player.y",std::to_string(playerCoordinates.y));
+	e_player_fence_left->set("player.x",std::to_string(playerCoordinates.x));
+	e_player_fence_left->set("player.y",std::to_string(playerCoordinates.y));
+	e_player_fence_right->set("player.x",std::to_string(playerCoordinates.x));
+	e_player_fence_right->set("player.y",std::to_string(playerCoordinates.y));
 
 	/* Adjust player sprite transform*/
 	player->setTransform(Z_PlaneMeta{ .x = playerCoordinates.x, .y = playerCoordinates.y, .w = 64, .h = 64 });
