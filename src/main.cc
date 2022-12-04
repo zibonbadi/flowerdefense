@@ -147,13 +147,33 @@ int main(int argc, char* argv[]) {
 		};
 			
 		EBus_Fn f_place_obstacle = [&](Event* e) {
-			if (e->get("status_edge") == "up" && player.obstacles > 0) {
+			if (e->get("status_edge") == "up") {
 				auto target = obstacles.get_coordinate_from_offset(
-					std::stoi(e->get("player.y"))+32,
-					std::stoi(e->get("player.x"))+32
+					std::stoi(e->get("player.x"))+32,
+					std::stoi(e->get("player.y"))+32
 				);
-					obstacles.fill(target.first, target.second-1, 1, 1, 'x');
-					player.obstacles--;
+				DEBUG_MSG("Checking spot(" << target.first << ", " << target.second << ')');
+				auto spot = obstacles.get_spot(target.second, target.first);
+				switch(spot){
+				case 'x': {
+					DEBUG_MSG("Removing obstacle");
+					obstacles.fill(target.second, target.first, 1, 1, ' ');
+					player.obstacles++;
+					break;
+				}
+				case ' ': {
+					if( player.obstacles > 0 ){
+						DEBUG_MSG("Placing obstacle");
+						obstacles.fill(target.second, target.first, 1, 1, 'x');
+						player.obstacles--;
+					}
+					break;
+				}
+				default: {
+					DEBUG_MSG("Found tile \"" << spot << '\"');
+				break;
+				}
+				}
 				bfsFlower.execute(25, 25);
 			}
 		};

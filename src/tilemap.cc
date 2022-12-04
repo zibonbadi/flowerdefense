@@ -188,7 +188,11 @@ std::map<std::pair<unsigned int,unsigned int>, char> Tilemap::get_map(){
 };
 
 char Tilemap::get_spot(int x, int y){
-	return this->map[std::pair<int,int> (y,x)];
+	try{
+		return this->map.at(std::pair<int,int> (y,x));
+	}catch (...){
+		return ' ';
+	}
 };
 
 std::pair<int,int> Tilemap::get_coordinate_from_offset(float x, float y){
