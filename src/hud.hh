@@ -18,6 +18,7 @@ public:
 	int gaertner_akt_leben = 4;
 	int rose_akt_leben =4;
 	int xp_akt = 0;
+	int wave = 0;
 
 	Hud(Plane &board);
 	// Hud();
