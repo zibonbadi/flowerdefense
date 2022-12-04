@@ -384,8 +384,8 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 		playerCoordinates.x = (SCREEN_WIDTH - 64);
 
 	/* Adjust event values */
-	e_player_place_fence->set("player.x",std::to_string(attack->get_transform().x));
-	e_player_place_fence->set("player.y",std::to_string(attack->get_transform().y));
+	e_player_place_fence->set("player.x",std::to_string(playerCoordinates.x));
+	e_player_place_fence->set("player.y",std::to_string(playerCoordinates.y));
 
 	/* Adjust player sprite transform*/
 	player->setTransform(Z_PlaneMeta{ .x = playerCoordinates.x, .y = playerCoordinates.y, .w = 64, .h = 64 });

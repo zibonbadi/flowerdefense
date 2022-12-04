@@ -149,7 +149,7 @@ int main(int argc, char* argv[]) {
 			if (e->get("status_edge") == "up") {
 				auto target = obstacles.get_coordinate_from_offset(
 					std::stoi(e->get("player.x"))+32,
-					std::stoi(e->get("player.y"))+32
+					std::stoi(e->get("player.y"))+48
 				);
 				DEBUG_MSG("Checking spot(" << target.first << ", " << target.second << ')');
 				auto spot = obstacles.get_spot(target.second, target.first);

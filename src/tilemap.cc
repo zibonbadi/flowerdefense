@@ -197,8 +197,8 @@ char Tilemap::get_spot(int x, int y){
 
 std::pair<int,int> Tilemap::get_coordinate_from_offset(float x, float y){
 	return std::pair(
-			y / this->grit_h,
-			x / this->grit_w
+			(int)y / this->grit_h,
+			(int)x / this->grit_w
 			);
 };
 
