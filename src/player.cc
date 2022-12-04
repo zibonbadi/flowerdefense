@@ -205,30 +205,47 @@ void Player::handleEvents(Event* e){
 		auto dir = e->get("direction");
 		if (e->get("status_edge") == "down") {
 			if (dir == "right") {
-				delta.x = 1;
+				walk_right = true;
 				playerDir = EPlayerDirection::RIGHT;
 			};
 			if (dir == "up") {
-				delta.y = -1;
+				walk_up = true;
 				playerDir = EPlayerDirection::UP;
 			};
 			if (dir == "left") {
-				delta.x = -1;
+				walk_left = true;
 				playerDir = EPlayerDirection::LEFT;
 			};
 			if (dir == "down") {
-				delta.y = 1;
+				walk_down = true;
 				playerDir = EPlayerDirection::DOWN;
 			};
 		};
 		if (e->get("status_edge") == "up") {
-			if (dir == "left" || dir == "right") {
-				delta.x = 0;
-			}
-			if (dir == "up" || dir == "down") {
-				delta.y = 0;
-			}
+			if (dir == "right") {
+				walk_right = false;
+			};
+			if (dir == "up") {
+				walk_up = false;
+			};
+			if (dir == "left") {
+				walk_left = false;
+			};
+			if (dir == "down") {
+				walk_down = false;
+			};
 		}
+		// Non-XOR to reset delta
+		if (walk_up == walk_down) {
+			delta.y = 0;
+		}else{
+			delta.y = (walk_up)?-1:1;
+		}
+		if (walk_left == walk_right) {
+			delta.x = 0;
+		}else{
+			delta.x = (walk_left)?-1:1;
+		};
 	};
 	if(e->get("type") == "game.state.set"){
 		DEBUG_MSG("Player.handleEvents(e): Caught. game.state.set -> " << e->get("scene"));
@@ -331,6 +348,7 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 	if (playerCoordinates.x > (SCREEN_WIDTH - 64))		
 		playerCoordinates.x = (SCREEN_WIDTH - 64);
 
+	/* Adjust event values */
 	e_player_place_fence->set("player.x",std::to_string(attack->get_transform().x));
 	e_player_place_fence->set("player.y",std::to_string(attack->get_transform().y));
 

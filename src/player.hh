@@ -13,6 +13,7 @@ class Player {
 	private:
 		Sprite sprite;
 		Animation* animations[8];
+		bool walk_up = false, walk_down = false, walk_left = false, walk_right = false;
 		SDL_FPoint delta				= { .x = 0, .y = 0 };
 		EPlayerDirection playerDir = EPlayerDirection::LEFT;
 		EPlayerDirection pastPlayerDir;
