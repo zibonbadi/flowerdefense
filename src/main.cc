@@ -152,22 +152,8 @@ int main(int argc, char* argv[]) {
 					std::stoi(e->get("player.y"))+32,
 					std::stoi(e->get("player.x"))+32
 				);
-				if(e->get("direction") == "up") {
 					obstacles.fill(target.first, target.second-1, 1, 1, 'x');
 					player.obstacles--;
-				}else
-				if(e->get("direction") == "right") {
-					obstacles.fill(target.first+1, target.second, 1, 1, 'x');
-					player.obstacles--;
-				}else
-				if(e->get("direction") == "down") {
-					obstacles.fill(target.first, target.second+1, 1, 1, 'x');
-					player.obstacles--;
-				}else
-				if(e->get("direction") == "left") {
-					obstacles.fill(target.first-1, target.second, 1, 1, 'x');
-					player.obstacles--;
-				}
 				bfsFlower.execute(25, 25);
 			}
 		};

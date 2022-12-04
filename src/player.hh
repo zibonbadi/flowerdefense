@@ -23,14 +23,14 @@ class Player {
 		EBus_Fn *f_eHandler;
 		Event
 			*e_player_up, *e_player_down, *e_player_left, *e_player_right,
-			*e_player_fence_up, *e_player_fence_down, *e_player_fence_left, *e_player_fence_right
+			*e_player_place_fence
 			;
 		float damageAnimCooldown = 0;
 	public:
 		Sprite *attack;
 		float playerSpeed = 200.f;
 		SDL_FPoint playerCoordinates	= { .x = 0, .y = 0 };
-		unsigned int health = 4, obstacles = 0;
+		unsigned int health = 4, obstacles = 4;
 		int xp_bar = 200;
 		int xp_bekommt = 100;
 		int akt_LV = 0;

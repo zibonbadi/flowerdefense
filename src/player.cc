@@ -189,22 +189,10 @@ void Player::initControls() {
 	e_player_right->set("direction", "right");
 	g_keymapper.bind(SDLK_d, e_player_right);
 
-	// Fence Up
-	e_player_fence_up = new Event("player.place_fence");
-	e_player_fence_up->set("direction", "up");
-	g_keymapper.bind(SDLK_k, e_player_fence_up);
-	// Fence Down
-	e_player_fence_down = new Event("player.place_fence");
-	e_player_fence_down->set("direction", "down");
-	g_keymapper.bind(SDLK_j, e_player_fence_down);
-	// Fence Left
-	e_player_fence_left = new Event("player.place_fence");
-	e_player_fence_left->set("direction", "left");
-	g_keymapper.bind(SDLK_h, e_player_fence_left);
-	// Fence Right
-	e_player_fence_right = new Event("player.place_fence");
-	e_player_fence_right->set("direction", "right");
-	g_keymapper.bind(SDLK_l, e_player_fence_right);
+	// Place Fence
+	e_player_place_fence = new Event("player.place_fence");
+	e_player_place_fence->set("direction", "up");
+	g_keymapper.bind(SDLK_SPACE, e_player_place_fence);
 }
 
 void Player::handleEvents(Event* e){
@@ -343,14 +331,8 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 	if (playerCoordinates.x > (SCREEN_WIDTH - 64))		
 		playerCoordinates.x -= delta.x;
 
-	e_player_fence_up->set("player.x",std::to_string(playerCoordinates.x));
-	e_player_fence_up->set("player.y",std::to_string(playerCoordinates.y));
-	e_player_fence_down->set("player.x",std::to_string(playerCoordinates.x));
-	e_player_fence_down->set("player.y",std::to_string(playerCoordinates.y));
-	e_player_fence_left->set("player.x",std::to_string(playerCoordinates.x));
-	e_player_fence_left->set("player.y",std::to_string(playerCoordinates.y));
-	e_player_fence_right->set("player.x",std::to_string(playerCoordinates.x));
-	e_player_fence_right->set("player.y",std::to_string(playerCoordinates.y));
+	e_player_place_fence->set("player.x",std::to_string(attack->get_transform().x));
+	e_player_place_fence->set("player.y",std::to_string(attack->get_transform().y));
 
 	/* Adjust player sprite transform*/
 	player->setTransform(Z_PlaneMeta{ .x = playerCoordinates.x, .y = playerCoordinates.y, .w = 64, .h = 64 });
