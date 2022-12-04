@@ -336,25 +336,25 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 
 	/* Adjust player sprite transform*/
 	player->setTransform(Z_PlaneMeta{ .x = playerCoordinates.x, .y = playerCoordinates.y, .w = 64, .h = 64 });
-	Z_PlaneMeta tmp_transform = {.w = 32, .h =32};
+	Z_PlaneMeta tmp_transform = {.w = 64, .h = 64};
 	switch(playerDir){
 	case EPlayerDirection::LEFT:{
-		tmp_transform.x = playerCoordinates.x-32;
-		tmp_transform.y = playerCoordinates.y+16;
+		tmp_transform.x = playerCoordinates.x-64;
+		tmp_transform.y = playerCoordinates.y;
 		break;
 	}
 	case EPlayerDirection::RIGHT:{
 		tmp_transform.x = playerCoordinates.x+64;
-		tmp_transform.y = playerCoordinates.y+16;
+		tmp_transform.y = playerCoordinates.y;
 		break;
 	}
 	case EPlayerDirection::UP:{
-		tmp_transform.x = playerCoordinates.x+16;
-		tmp_transform.y = playerCoordinates.y-32;
+		tmp_transform.x = playerCoordinates.x;
+		tmp_transform.y = playerCoordinates.y-64;
 		break;
 	}
 	case EPlayerDirection::DOWN:{
-		tmp_transform.x = playerCoordinates.x+16;
+		tmp_transform.x = playerCoordinates.x;
 		tmp_transform.y = playerCoordinates.y+64;
 		break;
 	}
