@@ -183,6 +183,7 @@ void Hud::gaertner_leben_create(){
 	auto a_heart = g_rc.add_anim("player.health.4_4", gaertner_leben_1);
 	auto t_heart = g_rc.make_sprite_from_anim("player.health.4_4", "player.health.4_4", Z_PlaneMeta { .x = 0, .y = 32, .w = 32, .h = 32 });
 	auto t_obstacle = g_rc.get_sprite("tiles.obstacle");
+	auto t_xp = g_rc.make_sprite_from_anim("player.health.4_4", "player.health.4_4", Z_PlaneMeta { .x = 0, .y = 32, .w = 32, .h = 32 });
 	tm_inventory =  new Tilemap(32,32);
 
 	tm_inventory->add_tile('+', t_heart.second);
@@ -386,9 +387,11 @@ void Hud::handleEvents(Event* e){
 
 void Hud::Update(Player &player){
 	// Update gaertner health display
-	tm_inventory->fill(0, 1, 15, 2, ' ');
+	//tm_inventory->fill(0, 1, 15, 3, ' ');
+	tm_inventory->clear_map();
 	tm_inventory->fill(0, 1, player.health, 1, '+');
 	tm_inventory->write(std::pair(0,2), "^"+std::to_string(player.obstacles));
+	tm_inventory->write(std::pair(0,24), "Lv:"+std::to_string(player.akt_LV));
 
 	ex_bar_steuern(player.xp_bar);
 	if(player.xp_bar>= 1000){
