@@ -283,10 +283,9 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 			if(!enemy->isdead && enemy->visible){
 				enemy->dying();
 			}
-			break;
 		}
 		if (this->player->collision(enemy->GetSprite())) {
-			if(enemy->isdead && enemy->visible){
+			if(enemy->isdead && enemy->visible){ // falls enemy ein xp pickup
 			enemy->disappear();
 			xp_bar += xp_bekommt;
 
@@ -296,7 +295,6 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 			enemy->disappear();
 			xp_bar += xp_bekommt;
 			}
-			break;
 		}
 	}
 	if (collide_player) {
