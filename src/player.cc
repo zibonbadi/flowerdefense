@@ -19,7 +19,8 @@ Player::Player(float x, float y) {
 	// Specify event subscriptions
 	//g_eventbus.subscribe("game.state.set", f_eHandler);
 	g_eventbus.subscribe("player.die", f_eHandler);
-	g_eventbus.subscribe("player.set_direction", f_eHandler);
+	g_eventbus.subscribe("player.set_move_direction", f_eHandler);
+	g_eventbus.subscribe("player.set_attack_direction", f_eHandler);
 }
 
 void Player::initAnimations() {
@@ -172,22 +173,39 @@ void Player::initAnimations() {
 }
 
 void Player::initControls() {
-	// Up
-	e_player_up = new Event("player.set_direction");
-	e_player_up->set("direction", "up");
-	g_keymapper.bind(SDLK_w, e_player_up);
-	// Down
-	e_player_down = new Event("player.set_direction");
-	e_player_down->set("direction", "down");
-	g_keymapper.bind(SDLK_s, e_player_down);
-	// Left
-	e_player_left = new Event("player.set_direction");
-	e_player_left->set("direction", "left");
-	g_keymapper.bind(SDLK_a, e_player_left);
-	// Right
-	e_player_right = new Event("player.set_direction");
-	e_player_right->set("direction", "right");
-	g_keymapper.bind(SDLK_d, e_player_right);
+	// Move Up
+	e_player_move_up = new Event("player.set_move_direction");
+	e_player_move_up->set("direction", "up");
+	g_keymapper.bind(SDLK_w, e_player_move_up);
+	// Move Down
+	e_player_move_down = new Event("player.set_move_direction");
+	e_player_move_down->set("direction", "down");
+	g_keymapper.bind(SDLK_s, e_player_move_down);
+	// Move Left
+	e_player_move_left = new Event("player.set_move_direction");
+	e_player_move_left->set("direction", "left");
+	g_keymapper.bind(SDLK_a, e_player_move_left);
+	// Move Right
+	e_player_move_right = new Event("player.set_move_direction");
+	e_player_move_right->set("direction", "right");
+	g_keymapper.bind(SDLK_d, e_player_move_right);
+
+	// Attack Up
+	e_player_attack_up = new Event("player.set_attack_direction");
+	e_player_attack_up->set("direction", "up");
+	g_keymapper.bind(SDLK_UP, e_player_attack_up);
+	// Attack Down
+	e_player_attack_down = new Event("player.set_attack_direction");
+	e_player_attack_down->set("direction", "down");
+	g_keymapper.bind(SDLK_DOWN, e_player_attack_down);
+	// Attack Left
+	e_player_attack_left = new Event("player.set_attack_direction");
+	e_player_attack_left->set("direction", "left");
+	g_keymapper.bind(SDLK_LEFT, e_player_attack_left);
+	// Attack Right
+	e_player_attack_right = new Event("player.set_attack_direction");
+	e_player_attack_right->set("direction", "right");
+	g_keymapper.bind(SDLK_RIGHT, e_player_attack_right);
 
 	// Place Fence
 	e_player_place_fence = new Event("player.place_fence");
@@ -201,24 +219,41 @@ void Player::handleEvents(Event* e){
 		e_gameover.set("scene", "gameover");
 		g_eventbus.send(&e_gameover);
 	}
-	if(e->get("type") == "player.set_direction"){
+	if (e->get("type") == "player.set_attack_direction") {
+		auto dir = e->get("direction");
+		if (e->get("status_edge") == "down") {
+			if (dir == "right") {
+				attackDir = EPlayerAttackDirection::RIGHT;
+			};
+			if (dir == "up") {
+				attackDir = EPlayerAttackDirection::UP;
+			};
+			if (dir == "left") {
+				attackDir = EPlayerAttackDirection::LEFT;
+			};
+			if (dir == "down") {
+				attackDir = EPlayerAttackDirection::DOWN;
+			};
+		};
+	}
+	if (e->get("type") == "player.set_move_direction") {
 		auto dir = e->get("direction");
 		if (e->get("status_edge") == "down") {
 			if (dir == "right") {
 				walk_right = true;
-				playerDir = EPlayerDirection::RIGHT;
+				playerDir = EPlayerMoveDirection::RIGHT;
 			};
 			if (dir == "up") {
 				walk_up = true;
-				playerDir = EPlayerDirection::UP;
+				playerDir = EPlayerMoveDirection::UP;
 			};
 			if (dir == "left") {
 				walk_left = true;
-				playerDir = EPlayerDirection::LEFT;
+				playerDir = EPlayerMoveDirection::LEFT;
 			};
 			if (dir == "down") {
 				walk_down = true;
-				playerDir = EPlayerDirection::DOWN;
+				playerDir = EPlayerMoveDirection::DOWN;
 			};
 		};
 		if (e->get("status_edge") == "up") {
@@ -246,7 +281,7 @@ void Player::handleEvents(Event* e){
 		}else{
 			delta.x = (walk_left)?-1:1;
 		};
-	};
+	}
 	if(e->get("type") == "game.state.set"){
 		DEBUG_MSG("Player.handleEvents(e): Caught. game.state.set -> " << e->get("scene"));
 		if(e->get("scene") == "gameover"){
@@ -261,17 +296,17 @@ void Player::handleEvents(Event* e){
 void Player::ChangePlayerAnimation(const std::string animIDadditional = "")
 {
 	std::string animID;
-	switch (playerDir) {
-	case EPlayerDirection::UP:
+	switch (attackDir) {
+	case EPlayerAttackDirection::UP:
 		animID = "up";
 		break;
-	case EPlayerDirection::DOWN:
+	case EPlayerAttackDirection::DOWN:
 		animID = "down";
 		break;
-	case EPlayerDirection::LEFT:
+	case EPlayerAttackDirection::LEFT:
 		animID = "left";
 		break;
-	case EPlayerDirection::RIGHT:
+	case EPlayerAttackDirection::RIGHT:
 		animID = "right";
 		break;
 	}
@@ -323,7 +358,7 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 	}
 
 	/* Change player sprite animation*/
-	if (pastPlayerDir != playerDir) {
+	if (pastAttackDir != attackDir) {
 		ChangePlayerAnimation();
 	}
 
@@ -355,23 +390,23 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 	/* Adjust player sprite transform*/
 	player->setTransform(Z_PlaneMeta{ .x = playerCoordinates.x, .y = playerCoordinates.y, .w = 64, .h = 64 });
 	Z_PlaneMeta tmp_transform = {.w = 64, .h = 64};
-	switch(playerDir){
-	case EPlayerDirection::LEFT:{
+	switch(attackDir){
+	case EPlayerAttackDirection::LEFT:{
 		tmp_transform.x = playerCoordinates.x-64;
 		tmp_transform.y = playerCoordinates.y;
 		break;
 	}
-	case EPlayerDirection::RIGHT:{
+	case EPlayerAttackDirection::RIGHT:{
 		tmp_transform.x = playerCoordinates.x+64;
 		tmp_transform.y = playerCoordinates.y;
 		break;
 	}
-	case EPlayerDirection::UP:{
+	case EPlayerAttackDirection::UP:{
 		tmp_transform.x = playerCoordinates.x;
 		tmp_transform.y = playerCoordinates.y-64;
 		break;
 	}
-	case EPlayerDirection::DOWN:{
+	case EPlayerAttackDirection::DOWN:{
 		tmp_transform.x = playerCoordinates.x;
 		tmp_transform.y = playerCoordinates.y+64;
 		break;
@@ -383,7 +418,7 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 	attack->setTransform(tmp_transform);
 
 
-	pastPlayerDir = playerDir;
+	pastAttackDir = attackDir;
 }
 
 void Player::reset(float x, float y){
@@ -405,8 +440,8 @@ Player::~Player() {
 	delete attack;
 	delete atk_collide;
 	delete f_eHandler;
-	delete e_player_up;
-	delete e_player_down;
-	delete e_player_left;
-	delete e_player_right;
+	delete e_player_move_up;
+	delete e_player_move_down;
+	delete e_player_move_left;
+	delete e_player_move_right;
 }

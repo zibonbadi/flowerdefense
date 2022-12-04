@@ -2,7 +2,14 @@
 #include "headers.hh"
 
 
-enum class EPlayerDirection {
+enum class EPlayerMoveDirection {
+	LEFT,
+	RIGHT,
+	UP,
+	DOWN
+};
+
+enum class EPlayerAttackDirection {
 	LEFT,
 	RIGHT,
 	UP,
@@ -15,15 +22,17 @@ class Player {
 		Animation* animations[8];
 		bool walk_up = false, walk_down = false, walk_left = false, walk_right = false;
 		SDL_FPoint delta				= { .x = 0, .y = 0 };
-		EPlayerDirection playerDir = EPlayerDirection::LEFT;
-		EPlayerDirection pastPlayerDir;
+		EPlayerMoveDirection playerDir = EPlayerMoveDirection::LEFT;
+		EPlayerAttackDirection attackDir = EPlayerAttackDirection::LEFT;
+		EPlayerAttackDirection pastAttackDir;
 		//Sprite* player, *attack;
 		Sprite* player;
 
 		Z_PlaneMeta* atk_collide = new Z_PlaneMeta{.w = 64.0f, .h = 64.0f};
 		EBus_Fn *f_eHandler;
 		Event
-			*e_player_up, *e_player_down, *e_player_left, *e_player_right,
+			*e_player_move_up, *e_player_move_down, *e_player_move_left, *e_player_move_right,
+			*e_player_attack_up, * e_player_attack_down, * e_player_attack_left, * e_player_attack_right,
 			*e_player_place_fence
 			;
 		float damageAnimCooldown = 0;
