@@ -395,13 +395,17 @@ void Hud::Update(Player &player){
 		std::cout<<"############## XP voll"<<std::endl;
 		player.xp_bar = 200;
 		player.xp_bekommt = player.xp_bekommt/ 1.75;
+
+		if(player.xp_bekommt <= 0){
+			player.xp_bekommt = 10;
+		}
 		player.akt_LV++;
 
 		//LV1
 		if(player.akt_LV%2){
 			player.playerSpeed = player.playerSpeed* 1.2;
 		}else{
-			//andern Lv
+			player.obstacles++;
 		}
 	}
 }
