@@ -13,7 +13,6 @@ class Player {
 	private:
 		Sprite sprite;
 		Animation* animations[8];
-		float playerSpeed = 200.f;
 		SDL_FPoint delta				= { .x = 0, .y = 0 };
 		EPlayerDirection playerDir = EPlayerDirection::LEFT;
 		EPlayerDirection pastPlayerDir;
@@ -29,10 +28,13 @@ class Player {
 		float damageAnimCooldown = 0;
 	public:
 		Sprite *attack;
+		float playerSpeed = 200.f;
 		SDL_FPoint playerCoordinates	= { .x = 0, .y = 0 };
 		unsigned int health = 4, obstacles = 0;
 		int xp_bar = 200;
 		int xp_bekommt = 100;
+		int akt_LV = 0;
+
 
 		Player(float x, float y);
 		void initAnimations();
