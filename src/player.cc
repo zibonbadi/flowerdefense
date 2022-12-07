@@ -453,6 +453,7 @@ void Player::reset(float x, float y){
 	akt_LV=0;
 	playerCoordinates.x = x;
 	playerCoordinates.y = y;
+	xp_bar = 200;
 }
 
 Sprite* Player::GetSprite() {

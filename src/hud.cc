@@ -246,6 +246,11 @@ void Hud::rose_leben_create(){
 void Hud::rose_leben_runter(){
 	switch (rose_akt_leben)
 	{
+	case 5:
+		rose_leben[3]->setTransform(Z_PlaneMeta{});
+		rose_leben[4]->setTransform(Z_PlaneMeta{ .x = 32 * 23, .y = 32, .w = 64, .h = 64 });
+		rose_akt_leben--;
+		return;
 	case 4:
 		rose_leben[4]->setTransform(Z_PlaneMeta{});	
 		rose_leben[3]->setTransform(Z_PlaneMeta{.x = 32*23, .y = 32, .w = 64, .h = 64});
@@ -290,6 +295,7 @@ void Hud::rose_leben_hoch(){
 		rose_leben[3]->setTransform(Z_PlaneMeta{.x = 32*23, .y = 32, .w = 64, .h = 64});
 		rose_akt_leben++;
 		return;
+
 	
 	default:
 		break;

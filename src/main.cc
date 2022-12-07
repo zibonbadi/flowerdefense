@@ -128,6 +128,8 @@ int main(int argc, char* argv[]) {
 				bfsPlayer.execute(10, 10);
 				bfsFlower.execute(25, 25);
 
+				hud.rose_akt_leben = 5;
+				hud.rose_leben_runter();
 				player.reset((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200);
 				enemyPool.reset();
 			};
