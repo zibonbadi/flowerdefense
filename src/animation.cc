@@ -68,7 +68,7 @@ int Animation::restart(){
 
 
 int Animation::add_frame(int u, int v, int uw, int vw){
-	this->add_frame(Z_PlaneMeta{.u = u, . v = v, .uw = uw, .vw = vw, });
+	this->add_frame(Z_PlaneMeta{.u = (float)u, .v = (float)v, .uw = (float)uw, .vw = (float)vw, });
 };
 int Animation::add_frame(Z_PlaneMeta crop){
 	try{
@@ -163,8 +163,8 @@ void Animation::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 				.h = (int)currentframe.vw+(int)transform.vw,
 		};
 		SDL_Point pivot = {
-			.x = (int)transform.pivot_x+(currentframe.pivot_x),
-			.y = (int)transform.pivot_y+(currentframe.pivot_y)
+			.x = (int)(transform.pivot_x+(currentframe.pivot_x)),
+			.y = (int)(transform.pivot_y+(currentframe.pivot_y))
 		};
 
 		/*
