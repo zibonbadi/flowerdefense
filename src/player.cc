@@ -327,7 +327,7 @@ void Player::ChangePlayerAnimation(const std::string animIDadditional = "")
 	attack->switch_to_anim(animID);
 }
 
-void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) {
+void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, Sprite* rose, Event& e_restart) {
 
 	bool collide_player = false;
 	bool collide_attack = false;
@@ -348,6 +348,10 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 			enemy->disappear();
 			xp_bar += xp_bekommt;
 			}
+		}
+		if(rose->collision(enemy->GetSprite())) {
+			g_eventbus.send(&e_restart);
+			enemy->disappear();
 		}
 	}
 	if (collide_player) {
@@ -389,19 +393,19 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 	/* Handle Offscreen Movement */
 	if (playerCoordinates.y < 0)				
 		playerCoordinates.y = 0;
-	if (playerCoordinates.y > (SCREEN_HEIGHT - 64))
-		playerCoordinates.y = (SCREEN_HEIGHT - 64);
+	if (playerCoordinates.y >= (SCREEN_HEIGHT - 64))
+		playerCoordinates.y = (SCREEN_HEIGHT - 64) - 1;
 	if (playerCoordinates.x < 0)				
 		playerCoordinates.x = 0;
-	if (playerCoordinates.x > (SCREEN_WIDTH - 64))		
-		playerCoordinates.x = (SCREEN_WIDTH - 64);
+	if (playerCoordinates.x >= (SCREEN_WIDTH - 32))		
+		playerCoordinates.x = (SCREEN_WIDTH - 32) - 1;
 
 	/* Adjust event values */
 	e_player_place_fence->set("player.x",std::to_string(playerCoordinates.x));
 	e_player_place_fence->set("player.y",std::to_string(playerCoordinates.y));
 
 	/* Adjust player sprite transform*/
-	player->setTransform(Z_PlaneMeta{ .x = playerCoordinates.x, .y = playerCoordinates.y, .w = 64, .h = 64 });
+	player->setTransform(Z_PlaneMeta{ .x = playerCoordinates.x, .y = playerCoordinates.y, .w = 32, .h = 64 });
 	Z_PlaneMeta tmp_transform = {.w = 64, .h = 64};
 	switch(attackDir){
 	case EPlayerAttackDirection::LEFT:{
@@ -410,17 +414,17 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies) 
 		break;
 	}
 	case EPlayerAttackDirection::RIGHT:{
-		tmp_transform.x = playerCoordinates.x+64;
+		tmp_transform.x = playerCoordinates.x+32;
 		tmp_transform.y = playerCoordinates.y;
 		break;
 	}
 	case EPlayerAttackDirection::UP:{
-		tmp_transform.x = playerCoordinates.x;
+		tmp_transform.x = playerCoordinates.x-16;
 		tmp_transform.y = playerCoordinates.y-64;
 		break;
 	}
 	case EPlayerAttackDirection::DOWN:{
-		tmp_transform.x = playerCoordinates.x;
+		tmp_transform.x = playerCoordinates.x-16;
 		tmp_transform.y = playerCoordinates.y+64;
 		break;
 	}

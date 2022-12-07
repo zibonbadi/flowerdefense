@@ -68,7 +68,7 @@ int Animation::restart(){
 
 
 int Animation::add_frame(int u, int v, int uw, int vw){
-	this->add_frame(Z_PlaneMeta{.u = (float)u, .v = (float)v, .uw = (float)uw, .vw = (float)vw, });
+	return this->add_frame(Z_PlaneMeta{.u = (float)u, .v = (float)v, .uw = (float)uw, .vw = (float)vw, });
 };
 int Animation::add_frame(Z_PlaneMeta crop){
 	try{

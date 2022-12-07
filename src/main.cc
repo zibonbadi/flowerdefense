@@ -22,14 +22,14 @@ int main(int argc, char* argv[]) {
 		auto obstacle = g_rc.make_static_sprite_from_texture("tiles.obstacle", "spritesheet", Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 
 
-		Player player((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200);
-		Tilemap ground(32, 32), plants(32, 32), obstacles;
+		Player player((SCREEN_WIDTH / 2) - 16, (SCREEN_HEIGHT / 2) - 32 - 200);
+		Tilemap ground(32, 32)/*, plants(32, 32)*/, obstacles;
 
 		// Set backup color for rose tile
 		rose->set_color(Z_RGBA{ .r = 0xff, .g = 0x7f, .b = 0xcf, .a = 0xff });
-
+		rose->setTransform(Z_PlaneMeta({ .x = (SCREEN_WIDTH / 2) - 32 , .y = (SCREEN_HEIGHT / 2) - 32, .w = 64, .h = 64 }));
 		ground.add_tile('.', grass);
-		plants.add_tile('%', rose);
+		//plants.add_tile('%', rose);
 		obstacles.add_tile('x', obstacle);
 
 		ground.fill(0, 0, 25, 25, '.');
@@ -48,8 +48,9 @@ int main(int argc, char* argv[]) {
 
 		// Construct scene planes
 		board.attach(&ground);
-		board.attach(&plants);
+		//board.attach(&plants);
 		board.attach(&obstacles);
+		board.attach(rose);
 		board.attach(player.GetSprite());
 		board.attach(player.attack);
 
@@ -63,16 +64,23 @@ int main(int argc, char* argv[]) {
 		Z_PlaneMeta collide_player{
 			.x = 0,
 			.y = 0,
-			.w = 64,
+			.w = 32,
 			.h = 64
 		},
 		collide_enemy{
+			.x = 0,
+			.y = 0,
+			.w = 64,
+			.h = 64
+		},
+		collide_rose{
 			.x = 0,
 			.y = 0,
 			.w = 32,
 			.h = 32
 		};
 
+		rose->setCollider(&collide_rose);
 		player.GetSprite()->setCollider(&collide_player);
 
 		
@@ -113,10 +121,8 @@ int main(int argc, char* argv[]) {
 			if (e->get("status_edge") == "up" && e->get("type") == "game.state.set"){
 				// Reset everything
 				DEBUG_MSG("f_restart(e): Caught." << e->get("scene"));
-				plants.clear_map();
 				obstacles.clear_map();
 
-				plants.fill(12, 12, 1, 1, '%');
 				obstacles.fill(4, 9, 4, 1, 'x');
 
 				bfsPlayer.execute(10, 10);
@@ -264,7 +270,7 @@ int main(int argc, char* argv[]) {
 			}
 
 
-			player.Update(deltaTime, enemyPool.enemies);
+			player.Update(deltaTime, enemyPool.enemies, rose, e_restart);
 
 			waveTimer -= deltaTime;
 			if (waveTimer < 0)
