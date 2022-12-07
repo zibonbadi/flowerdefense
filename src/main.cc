@@ -70,8 +70,8 @@ int main(int argc, char* argv[]) {
 		collide_enemy{
 			.x = 0,
 			.y = 0,
-			.w = 64,
-			.h = 64
+			.w = 32,
+			.h = 32
 		},
 		collide_rose{
 			.x = 0,
