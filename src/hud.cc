@@ -409,8 +409,13 @@ void Hud::Update(Player &player){
 		//LV1
 		if(player.akt_LV%2){
 			player.playerSpeed = player.playerSpeed* 1.2;
-		}else{
 			player.obstacles++;
+
+		}else{
+			//player.obstacles++;
+			player.obstacles = player.obstacles +3;
+
+
 		}
 	}
 }
