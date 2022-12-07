@@ -327,7 +327,7 @@ void Player::ChangePlayerAnimation(const std::string animIDadditional = "")
 	attack->switch_to_anim(animID);
 }
 
-void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, Sprite* rose, Event& e_restart) {
+void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, Sprite* rose, Hud& hud) {
 
 	bool collide_player = false;
 	bool collide_attack = false;
@@ -350,8 +350,16 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, 
 			}
 		}
 		if(rose->collision(enemy->GetSprite())) {
-			g_eventbus.send(&e_restart);
-			enemy->disappear();
+			if (!enemy->isdead && enemy->visible) {
+				hud.rose_leben_runter();
+
+				if(hud.rose_akt_leben == 0) {
+					Event e_gameover("game.state.set");
+					e_gameover.set("scene", "gameover");
+					g_eventbus.send(&e_gameover);
+				}
+				enemy->disappear();
+			}
 		}
 	}
 	if (collide_player) {

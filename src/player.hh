@@ -50,7 +50,7 @@ class Player {
 		void initAnimations();
 		void initControls();
 		void ChangePlayerAnimation(const std::string animIDadditional);
-		void Update(const float& deltaTime, const std::vector<Enemy*> &enemies, Sprite* rose, Event& e_restart);
+		void Update(const float& deltaTime, const std::vector<Enemy*> &enemies, Sprite* rose, Hud& hud);
 		void reset(float x, float y);
 		Sprite* GetSprite();
 		void handleEvents(Event* e);

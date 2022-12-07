@@ -76,8 +76,8 @@ int main(int argc, char* argv[]) {
 		collide_rose{
 			.x = 0,
 			.y = 0,
-			.w = 32,
-			.h = 32
+			.w = 64,
+			.h = 64
 		};
 
 		rose->setCollider(&collide_rose);
@@ -270,7 +270,7 @@ int main(int argc, char* argv[]) {
 			}
 
 
-			player.Update(deltaTime, enemyPool.enemies, rose, e_restart);
+			player.Update(deltaTime, enemyPool.enemies, rose, hud);
 
 			waveTimer -= deltaTime;
 			if (waveTimer < 0)
