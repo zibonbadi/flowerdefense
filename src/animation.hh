@@ -9,7 +9,8 @@ class Animation {
 		unsigned int xsheet_i = 0; // x-sheet index
 		unsigned int time_acc = 0; // Frame tick accumulation (correct misaligned drawcalls)
 		float ticktime = 1000.0f/25; // Tick time (1000ms/Ticks per second)
-		std::vector<SDL_Rect> frames;
+		//std::vector<SDL_Rect> frames;
+		std::vector<Z_PlaneMeta> frames;
 		// Animation exposure sheet. 1st int = frame number; 2nd int = duration (in frameticks; <1 for infinite)
 		std::vector<std::pair<int, int>> xsheet;
 		// Base texture. Can be cropped into frames

@@ -68,30 +68,19 @@ int Animation::restart(){
 
 
 int Animation::add_frame(int u, int v, int uw, int vw){
-	try{
-		SDL_Rect insert = {
-			.x = u,
-			.y = v,
-			.w = uw,
-			.h = vw
-		};
-		this->frames.push_back(insert);
-		ENGINE_DEBUG_MSG("Added frame to animation " << this << ": [" << this->frames.size()-1 << "](" <<
-			insert.x << ',' << insert.y << ':' << insert.w << 'x' << insert.h << ')');
-		return this->frames.size()-1;
-	}catch(std::exception &e){
-		std::cerr << "Animation.add_frame() error: " << e.what() << std::endl;
-		return -1;
-	}
+	this->add_frame(Z_PlaneMeta{.u = u, . v = v, .uw = uw, .vw = vw, });
 };
 int Animation::add_frame(Z_PlaneMeta crop){
 	try{
+		auto insert = crop;
+		/*
 		SDL_Rect insert = {
 			.x = (int)crop.u,
 			.y = (int)crop.v,
 			.w = (int)crop.uw,
 			.h = (int)crop.vw
 		};
+		*/
 		this->frames.push_back(insert);
 		ENGINE_DEBUG_MSG("Added frame to animation " << this << ": [" << this->frames.size()-1 << "](" <<
 			insert.x << ',' << insert.y << ':' << insert.y << 'x' << insert.h << ')');
@@ -160,7 +149,7 @@ void Animation::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 			<< " - " << step_n << ':' << this->xsheet[this->xsheet_i].second-1 << ']');
 		*/
 
-		SDL_Rect currentframe = this->frames[this->xsheet[this->xsheet_i].first];
+		auto currentframe = this->frames[this->xsheet[this->xsheet_i].first];
 
 		SDL_Rect pos {
 				.x = (int)transform.x,
@@ -168,14 +157,14 @@ void Animation::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 				.w = (int)transform.w,
 				.h = (int)transform.h,
 		}, crop {
-				.x = (int)currentframe.x+(int)transform.u,
-				.y = (int)currentframe.y+(int)transform.v,
-				.w = (int)currentframe.w+(int)transform.uw,
-				.h = (int)currentframe.h+(int)transform.vw,
+				.x = (int)currentframe.u+(int)transform.u,
+				.y = (int)currentframe.v+(int)transform.v,
+				.w = (int)currentframe.uw+(int)transform.uw,
+				.h = (int)currentframe.vw+(int)transform.vw,
 		};
 		SDL_Point pivot = {
-			.x = (int)transform.pivot_x,
-			.y = (int)transform.pivot_y
+			.x = (int)transform.pivot_x+(currentframe.pivot_x),
+			.y = (int)transform.pivot_y+(currentframe.pivot_y)
 		};
 
 		/*
@@ -188,7 +177,7 @@ void Animation::render(SDL_Renderer* renderer, Z_PlaneMeta transform){
 		if(
 				SDL_RenderCopyEx(renderer, this->base,
 					&crop, &pos,
-					transform.deg, &pivot,
+					transform.deg+currentframe.deg, &pivot,
 					SDL_FLIP_NONE 
 					) != 0){
 			throw std::runtime_error("Render error");
