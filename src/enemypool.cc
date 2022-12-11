@@ -183,6 +183,10 @@ void Enemypool::handleEvents(Event* e){
 		}
 		if(e->get("scene") == "game"){
 			// Reset everything
+			_poolSize = 1000;
+			_spawnTime = 5.f;
+			_spawnCount = 3;
+			_spawnTimer = 0;//_spawnTime;
 		}
 	}
 };
