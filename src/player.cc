@@ -73,6 +73,8 @@ void Player::initAnimations() {
 
 	/* Attack animation definition */
 	attack = new Sprite(Z_PlaneMeta{
+		.x = -INFINITY,
+		.y = -INFINITY,
 		.w = 64.0f,
 		.h = 64.0f
 	});

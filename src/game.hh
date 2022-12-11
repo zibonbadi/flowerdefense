@@ -1,6 +1,12 @@
 #pragma once
 #include "headers.hh"
 
+enum class EnumGameState {
+	INTRO,
+	PLAY,
+	GAMEOVER
+};
+
 class Game {
 	// Generic canvas; basically a video output
 	private:
@@ -36,4 +42,5 @@ class Game {
 		/* Audio */
 		int load_mod(std::string path, int32_t subsong = -1, int32_t repeats = 0);
 		int load_mod(openmpt::module* mod, int32_t subsong = -1, int32_t repeats = 0);
+		EnumGameState state = EnumGameState::INTRO;
 };

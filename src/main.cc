@@ -3,8 +3,8 @@
 int uninit();
 
 Z_RGBA bgcolor = { .r =0x00, .g = 0x00, .b = 0x00 };
-Game game((int)SCREEN_WIDTH, (int)SCREEN_HEIGHT, bgcolor);
-ResourceManager g_rc(game.getRenderer());
+Game g_game((int)SCREEN_WIDTH, (int)SCREEN_HEIGHT, bgcolor);
+ResourceManager g_rc(g_game.getRenderer());
 bool g_isPrintEngineDEBUG = false;
 bool running = true;
 
@@ -58,8 +58,8 @@ int main(int argc, char* argv[]) {
 		//hud.exp_create(5,8);
 
 		// Hook plane into scene
-		game.attach(&board);
-		game.attach(&hud_plane);
+		g_game.attach(&board);
+		g_game.attach(&hud_plane);
 
 		Z_PlaneMeta collide_player{
 			.x = 0,
@@ -98,7 +98,7 @@ int main(int argc, char* argv[]) {
 
 		// Gloptastic tracker beats
 		if(g_rc.import_mod("bgm", "./assets/cycle.stm") != nullptr){
-			game.load_mod(g_rc.get_mod("bgm"), -1, -1);
+			g_game.load_mod(g_rc.get_mod("bgm"), -1, -1);
 		}
 
 
@@ -117,8 +117,20 @@ int main(int argc, char* argv[]) {
 			}
 		};
 
-		EBus_Fn f_restart = [&](Event* e) {
-			if (e->get("status_edge") == "up" && e->get("type") == "game.state.set"){
+		EBus_Fn f_game_state_set = [&](Event* e) {
+			if (e->get("type") == "game.state.set" && e->get("scene") == "gameintro") {
+				hud.ex_rahmen->visible = false;
+				hud.tm_inventory->visible = false;
+				hud.dettach_rose_leben();
+				g_game.state = EnumGameState::INTRO;
+			}
+			else if (e->get("type") == "game.state.set" && e->get("scene") == "gameover") {
+				hud.ex_rahmen->visible = false;
+				hud.tm_inventory->visible = false;
+				hud.dettach_rose_leben();
+				g_game.state = EnumGameState::GAMEOVER;
+			}
+			else if (e->get("status_edge") == "up" && e->get("type") == "game.state.set"){
 				// Reset everything
 				DEBUG_MSG("f_restart(e): Caught." << e->get("scene"));
 				obstacles.clear_map();
@@ -137,6 +149,10 @@ int main(int argc, char* argv[]) {
 				enemyPool._spawnTime = spawnTime;
 				enemyPool._spawnCount = spawnCount;
 				enemyPool._poolSize = poolSize;
+				hud.ex_rahmen->visible = true;
+				hud.tm_inventory->visible = true;
+				hud.attach_rose_leben();
+				g_game.state = EnumGameState::PLAY;
 			};
 		};
 
@@ -221,26 +237,24 @@ int main(int argc, char* argv[]) {
 
 		// Create Keymap Quit event
 		Event e_quit("engine.quit");
-		Event e_restart("game.state.set");
-		e_restart.set("scene", "game");
-		e_restart.set("status_edge", "up");
+		Event e_game_state_set("game.state.set");
+		e_game_state_set.set("scene", "game");
+		e_game_state_set.set("status_edge", "up");
 		Event e_debug_spritebox_toggle("debug.spritebox.toggle");
 		Event e_debug_colliders_toggle("debug.colliders.toggle");
 		Event e_print_debug("print.debug");
-		Event e_debug_playerdie("player.die");
 
 		g_keymapper.bind(SDLK_q, &e_quit);
-		g_keymapper.bind(SDLK_r, &e_restart);
+		g_keymapper.bind(SDLK_r, &e_game_state_set);
 		g_keymapper.bind(SDLK_F1, &e_debug_spritebox_toggle);
 		g_keymapper.bind(SDLK_F2, &e_debug_colliders_toggle);
 		g_keymapper.bind(SDLK_F3, &e_bfs_player_visibility);
 		g_keymapper.bind(SDLK_F4, &e_bfs_flower_visibility);
 		g_keymapper.bind(SDLK_F9, &e_print_debug);
-		g_keymapper.bind(SDLK_F12, &e_debug_playerdie);
 
 		// Register events
 		g_eventbus.subscribe("engine.quit", &f_quit);
-		g_eventbus.subscribe("game.state.set", &f_restart);
+		g_eventbus.subscribe("game.state.set", &f_game_state_set);
 		g_eventbus.subscribe("player.place_fence", &f_place_obstacle);
 		g_eventbus.subscribe("debug.spritebox.toggle", &f_toggle_spritebox);
 		g_eventbus.subscribe("debug.colliders.toggle", &f_toggle_colliders);
@@ -248,8 +262,12 @@ int main(int argc, char* argv[]) {
 		g_eventbus.subscribe("bfs.player_visibility", &f_bfs_player_visibility);
 		g_eventbus.subscribe("bfs.flower_visibility", &f_bfs_flower_visibility);
 
-		// Launch game into play state
-		g_eventbus.send(&e_restart);
+
+		// Launch game into intro state
+		Event e_start("game.state.set");
+		e_start.set("scene", "gameintro");
+		e_start.set("status_edge", "up");
+		g_eventbus.send(&e_start);
 
 		uint32_t past = 0;
 		while (running) {
@@ -276,8 +294,9 @@ int main(int argc, char* argv[]) {
 				}
 			}
 
-
-			player.Update(deltaTime, enemyPool.enemies, rose, hud);
+			if (g_game.state == EnumGameState::PLAY) {
+				player.Update(deltaTime, enemyPool.enemies, rose, hud);
+			}
 
 			waveTimer -= deltaTime;
 			if (waveTimer < 0)
@@ -290,6 +309,7 @@ int main(int argc, char* argv[]) {
 				hud.wave++;
 				waveTimer = waveTime;
 			}
+
 			hud.Update(player);
 
 
@@ -307,7 +327,7 @@ int main(int argc, char* argv[]) {
 
 			/* Advance the player animation */
 			g_rc.advance_all_anim(now);
-			game.render();
+			g_game.render();
 			past = now;
 		}
 	}

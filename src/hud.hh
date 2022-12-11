@@ -13,7 +13,7 @@ public:
 	Sprite *ex;
 	Sprite *gaertner_leben[4];
 	Sprite *rose_leben[5];
-	Tilemap *ex_rahmen, *tm_inventory , *text;
+	Tilemap *ex_rahmen, *tm_inventory , *gameOverText, *gameIntroText;
 
 	int gaertner_akt_leben = 4;
 	int rose_akt_leben =4;
@@ -30,13 +30,15 @@ public:
 	void ex_bar_create();
 	void gaertner_leben_create();
 	void rose_leben_create();
+	void attach_rose_leben();
+	void dettach_rose_leben();
 	void gaertner_leben_runter();
 	void gaertner_leben_hoch();
 	void rose_leben_runter();
 	void rose_leben_hoch();
 	void ex_bar_steuern(float w);
 	void exp_create(float x, float y);
-	void text_layer_create();
+	void text_layers_create();
 	void font_create();
 	void Update(Player &player);
 
