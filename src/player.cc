@@ -28,7 +28,7 @@ void Player::initAnimations() {
 	animations[0]->add_xsheet_phase(0, 1);
 	g_rc.add_anim("player.up", animations[0]);
 
-	animations[4] = new Animation(g_rc.get_texture("spritesheet"), 5);
+	animations[4] = new Animation(g_rc.get_texture("spritesheet"), 10);
 	animations[4]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 64 * 1, .uw = 32, .vw = 64 });
 	animations[4]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 64 * 0, .uw = 32, .vw = 64 });
 	animations[4]->add_xsheet_phase(0, 1);
@@ -40,7 +40,7 @@ void Player::initAnimations() {
 	animations[1]->add_xsheet_phase(0, 1);
 	g_rc.add_anim("player.down", animations[1]);
 
-	animations[5] = new Animation(g_rc.get_texture("spritesheet"), 5);
+	animations[5] = new Animation(g_rc.get_texture("spritesheet"), 10);
 	animations[5]->add_frame(Z_PlaneMeta{ .u = 32 * 0, .v = 64 * 1, .uw = 32, .vw = 64 });
 	animations[5]->add_frame(Z_PlaneMeta{ .u = 32 * 0, .v = 64 * 0, .uw = 32, .vw = 64 });
 	animations[5]->add_xsheet_phase(0, 1);
@@ -52,7 +52,7 @@ void Player::initAnimations() {
 	animations[2]->add_xsheet_phase(0, 1);
 	g_rc.add_anim("player.left", animations[2]);
 
-	animations[6] = new Animation(g_rc.get_texture("spritesheet"), 5);
+	animations[6] = new Animation(g_rc.get_texture("spritesheet"), 10);
 	animations[6]->add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 64 * 1, .uw = 32, .vw = 64 });
 	animations[6]->add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 64 * 0, .uw = 32, .vw = 64 });
 	animations[6]->add_xsheet_phase(0, 1);
@@ -64,7 +64,7 @@ void Player::initAnimations() {
 	animations[3]->add_xsheet_phase(0, 1);
 	g_rc.add_anim("player.right", animations[3]);
 
-	animations[7] = new Animation(g_rc.get_texture("spritesheet"), 5);
+	animations[7] = new Animation(g_rc.get_texture("spritesheet"), 10);
 	animations[7]->add_frame(Z_PlaneMeta{ .u = 32*3, .v = 64 * 1, .uw = 32, .vw = 64 });
 	animations[7]->add_frame(Z_PlaneMeta{ .u = 32*3, .v = 64 * 0, .uw = 32, .vw = 64 });
 	animations[7]->add_xsheet_phase(0, 1);
@@ -253,19 +253,19 @@ void Player::handleEvents(Event* e){
 		if (e->get("status_edge") == "down") {
 			if (dir == "right") {
 				walk_right = true;
-				playerDir = EPlayerMoveDirection::RIGHT;
+				moveDir = EPlayerMoveDirection::RIGHT;
 			};
 			if (dir == "up") {
 				walk_up = true;
-				playerDir = EPlayerMoveDirection::UP;
+				moveDir = EPlayerMoveDirection::UP;
 			};
 			if (dir == "left") {
 				walk_left = true;
-				playerDir = EPlayerMoveDirection::LEFT;
+				moveDir = EPlayerMoveDirection::LEFT;
 			};
 			if (dir == "down") {
 				walk_down = true;
-				playerDir = EPlayerMoveDirection::DOWN;
+				moveDir = EPlayerMoveDirection::DOWN;
 			};
 		};
 		if (e->get("status_edge") == "up") {
@@ -384,7 +384,14 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, 
 
 	/* Change player sprite animation*/
 	if (pastAttackDir != attackDir) {
-		ChangePlayerAnimation();
+		if (this->invulnerableCooldown > 0)
+		{
+			ChangePlayerAnimation(".damage");
+		}
+		else
+		{
+			ChangePlayerAnimation();
+		}
 	}
 
 	/* Normalize delta length */

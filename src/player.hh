@@ -22,7 +22,7 @@ class Player {
 		Animation* animations[12];
 		bool walk_up = false, walk_down = false, walk_left = false, walk_right = false;
 		SDL_FPoint delta				= { .x = 0, .y = 0 };
-		EPlayerMoveDirection playerDir = EPlayerMoveDirection::LEFT;
+		EPlayerMoveDirection moveDir = EPlayerMoveDirection::LEFT;
 		EPlayerAttackDirection attackDir = EPlayerAttackDirection::LEFT;
 		EPlayerAttackDirection pastAttackDir;
 		//Sprite* player, *attack;
