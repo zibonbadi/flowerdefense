@@ -118,7 +118,7 @@ int main(int argc, char* argv[]) {
 		};
 
 		EBus_Fn f_restart = [&](Event* e) {
-			if (e->get("status_edge") == "up" && e->get("type") == "game.state.set"){
+			if (e->get("type") == "game.state.set" && e->get("scene") == "game"){
 				// Reset everything
 				DEBUG_MSG("f_restart(e): Caught." << e->get("scene"));
 				obstacles.clear_map();
@@ -128,8 +128,9 @@ int main(int argc, char* argv[]) {
 				bfsPlayer.execute(10, 10);
 				bfsFlower.execute(25, 25);
 
-				hud.rose_akt_leben = 5;
-				hud.rose_leben_runter();
+				hud.rose_akt_leben = 50;
+				hud.rose_max_leben = 50;
+				hud.rose_update_health();
 				player.reset((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200);
 				enemyPool.reset();
 
