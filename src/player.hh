@@ -35,7 +35,7 @@ class Player {
 			*e_player_attack_up, * e_player_attack_down, * e_player_attack_left, * e_player_attack_right,
 			*e_player_place_fence
 			;
-		float damageAnimCooldown = 0;
+		float invulnerableCooldown = 0;
 	public:
 		Sprite *attack;
 		float playerSpeed = 200.f;
@@ -44,9 +44,10 @@ class Player {
 		int xp_bar = 200;
 		int xp_bekommt = 100;
 		int akt_LV = 0;
+		float invulnerableTimeFrame;
 
 
-		Player(float x, float y);
+		Player(float x, float y, float invulnerableTimeFrame);
 		void initAnimations();
 		void initControls();
 		void ChangePlayerAnimation(const std::string animIDadditional);

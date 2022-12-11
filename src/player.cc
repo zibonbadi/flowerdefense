@@ -1,8 +1,9 @@
 #include "player.hh"
 
-Player::Player(float x, float y) {
+Player::Player(float x, float y, float invulnerableTimeFrame) {
 	playerCoordinates.x = x;
 	playerCoordinates.y = y;
+	this->invulnerableTimeFrame = invulnerableTimeFrame;
 	initAnimations();
 	attack->set_color(Z_RGBA{.r = 0xff,.g = 0,.b = 0,.a = 0xff});
 	attack->setCollider(atk_collide);
@@ -362,18 +363,17 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, 
 			}
 		}
 	}
-	if (collide_player) {
+	if (collide_player && this->invulnerableCooldown <= 0) {
 		if (_animID.find(".damage") == std::string::npos) {
 			ChangePlayerAnimation(".damage");
 			health--;
 		}
-		this->damageAnimCooldown = 0.3;
+		this->invulnerableCooldown = this->invulnerableTimeFrame;
 	}
-	else if (this->damageAnimCooldown > 0) {
-		this->damageAnimCooldown -= deltaTime;
-		if (this->damageAnimCooldown <= 0) {
+	else if (this->invulnerableCooldown > 0) {
+		this->invulnerableCooldown -= deltaTime;
+		if (this->invulnerableCooldown <= 0) {
 			ChangePlayerAnimation();
-
 		}
 	}
 
