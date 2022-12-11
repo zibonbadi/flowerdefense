@@ -63,9 +63,9 @@ int main(int argc, char* argv[]) {
 
 		Z_PlaneMeta collide_player{
 			.x = 0,
-			.y = 0,
+			.y = 32,
 			.w = 32,
-			.h = 64
+			.h = 32
 		},
 		collide_enemy{
 			.x = 0,
