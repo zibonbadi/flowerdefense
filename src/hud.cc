@@ -213,10 +213,15 @@ void Hud::rose_leben_create(){
 		
 
 			rose_leben_a[4]->add_frame(Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 4, .uw = 32, .vw = 32 });
+			//rose_leben_a[4]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 30, .u = 32 * 0, .v = 32 * 4, .uw = 32, .vw = 32 });
 			rose_leben_a[3]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 4, .uw = 32, .vw = 32 });
+			//rose_leben_a[3]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 30, .u = 32 * 1, .v = 32 * 4, .uw = 32, .vw = 32 });
 			rose_leben_a[2]->add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 4, .uw = 32, .vw = 32 });
+			//rose_leben_a[2]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 30, .u = 32 * 2, .v = 32 * 4, .uw = 32, .vw = 32 });
 			rose_leben_a[1]->add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 4, .uw = 32, .vw = 32 });
+			//rose_leben_a[1]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 30, .u = 32 * 3, .v = 32 * 4, .uw = 32, .vw = 32 });
 			rose_leben_a[0]->add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 4, .uw = 32, .vw = 32 });
+			//rose_leben_a[0]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 30, .u = 32 * 4, .v = 32 * 4, .uw = 32, .vw = 32 });
 
 
 
@@ -234,34 +239,59 @@ void Hud::rose_leben_create(){
 			g_rc.add_anim("rose_leben.rose_leben_2", rose_leben_a[1]);
 			g_rc.add_anim("rose_leben.rose_leben_1", rose_leben_a[0]);
 
-			 rose_leben[4] = g_rc.make_sprite_from_anim("rose_leben", "rose_leben.rose_leben_5", Z_PlaneMeta { .x = 32*23, .y = 32, .w = 64, .h = 64}).second;
-			 rose_leben[3] = g_rc.make_sprite_from_anim("rose_leben", "rose_leben.rose_leben_4", Z_PlaneMeta { }).second;
-			 rose_leben[2] = g_rc.make_sprite_from_anim("rose_leben", "rose_leben.rose_leben_3", Z_PlaneMeta { }).second;
-			 rose_leben[1] = g_rc.make_sprite_from_anim("rose_leben", "rose_leben.rose_leben_2", Z_PlaneMeta {  }).second;
-			 rose_leben[0] = g_rc.make_sprite_from_anim("rose_leben", "rose_leben.rose_leben_1", Z_PlaneMeta { }).second;
+			 spr_rose_leben = g_rc.make_sprite("rose_leben", Z_PlaneMeta { .x = 32*23, .y = 32, .w = 64, .h = 64}).second;
+			 spr_rose_leben->add_animation("rose_leben_1", rose_leben_a[0]);
+			 spr_rose_leben->add_animation("rose_leben_2", rose_leben_a[1]);
+			 spr_rose_leben->add_animation("rose_leben_3", rose_leben_a[2]);
+			 spr_rose_leben->add_animation("rose_leben_4", rose_leben_a[3]);
+			 spr_rose_leben->add_animation("rose_leben_5", rose_leben_a[4]);
+			 //rose_leben[4] = g_rc.make_sprite_from_anim("rose_leben", "rose_leben.rose_leben_5", Z_PlaneMeta { .x = 32*23, .y = 32, .w = 64, .h = 64}).second;
+			 //rose_leben[3] = g_rc.make_sprite_from_anim("rose_leben", "rose_leben.rose_leben_4", Z_PlaneMeta { }).second;
+			 //rose_leben[2] = g_rc.make_sprite_from_anim("rose_leben", "rose_leben.rose_leben_3", Z_PlaneMeta { }).second;
+			 //rose_leben[1] = g_rc.make_sprite_from_anim("rose_leben", "rose_leben.rose_leben_2", Z_PlaneMeta {  }).second;
+			 //rose_leben[0] = g_rc.make_sprite_from_anim("rose_leben", "rose_leben.rose_leben_1", Z_PlaneMeta { }).second;
 			
 			 this->attach_rose_leben();
-
-
+			
+			//_board.attach(rose_leben[0]);
+			//_board.attach(rose_leben[1]);
+			//_board.attach(rose_leben[2]);
+			//_board.attach(rose_leben[3]);
+			//_board.attach(rose_leben[4]);
 }
 
 void Hud::attach_rose_leben()
 {
-	_board.attach(rose_leben[0]);
-	_board.attach(rose_leben[1]);
-	_board.attach(rose_leben[2]);
-	_board.attach(rose_leben[3]);
-	_board.attach(rose_leben[4]);
+	_board.attach(spr_rose_leben);
 }
 
 void Hud::dettach_rose_leben()
 {
-	_board.detach(rose_leben[0]);
-	_board.detach(rose_leben[1]);
-	_board.detach(rose_leben[2]);
-	_board.detach(rose_leben[3]);
-	_board.detach(rose_leben[4]);
+	_board.detach(spr_rose_leben);
 }
+
+void Hud::rose_update_health(){
+	float frac_rose_leben = (float) rose_akt_leben / (float) rose_max_leben;
+	if(frac_rose_leben >= 0.75f){
+		spr_rose_leben->switch_to_anim("rose_leben_5");
+		return;
+	}
+	if(frac_rose_leben >= 0.5f){
+		spr_rose_leben->switch_to_anim("rose_leben_4");
+		return;
+	}
+	if(frac_rose_leben >= 0.25f){
+		spr_rose_leben->switch_to_anim("rose_leben_3");
+		return;
+	}
+	if(frac_rose_leben >= 0.0f){
+		spr_rose_leben->switch_to_anim("rose_leben_2");
+		return;
+	}
+	spr_rose_leben->switch_to_anim("rose_leben_1");
+	return;
+}
+
 
 void Hud::rose_leben_runter(){
 	switch (rose_akt_leben)
@@ -419,8 +449,15 @@ void Hud::handleEvents(Event* e){
 void Hud::Update(Player &player){
 	// Update gaertner health display
 	//tm_inventory->fill(0, 1, 15, 3, ' ');
+
+	// Right pad life counterer
+	std::string str_rose_leben = std::to_string(rose_akt_leben);
+	if(str_rose_leben.length() < 5)
+		str_rose_leben.insert(0, 5 - str_rose_leben.length(), ' ');
+
 	tm_inventory->clear_map();
 	tm_inventory->fill(0, 1, player.health, 1, '+');
+	tm_inventory->write(std::pair(28,4), str_rose_leben);
 	tm_inventory->write(std::pair(0,2), "^"+std::to_string(player.obstacles));
 	tm_inventory->write(std::pair(0,30), "Wave:"+std::to_string(wave));
 	tm_inventory->write(std::pair(0,31), "Lv:"+std::to_string(player.akt_LV));

@@ -508,7 +508,10 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, 
 		}
 		if(rose->collision(enemy->GetSprite())) {
 			if (!enemy->isdead && enemy->visible) {
-				hud.rose_leben_runter();
+				//hud.rose_leben_runter();
+				if(hud.rose_akt_leben > 0)
+					hud.rose_akt_leben--;
+				hud.rose_update_health();
 
 				if(hud.rose_akt_leben == 0) {
 					Event e_gameover("game.state.set");

@@ -13,10 +13,12 @@ public:
 	Sprite *ex;
 	Sprite *gaertner_leben[4];
 	Sprite *rose_leben[5];
+	Sprite *spr_rose_leben;
 	Tilemap *ex_rahmen, *tm_inventory , *gameOverText, *gameIntroText;
 
 	int gaertner_akt_leben = 4;
-	int rose_akt_leben =4;
+	int rose_max_leben =50;
+	int rose_akt_leben =50;
 	int xp_akt = 0;
 	int wave = 0;
 
@@ -34,6 +36,7 @@ public:
 	void dettach_rose_leben();
 	void gaertner_leben_runter();
 	void gaertner_leben_hoch();
+	void rose_update_health();
 	void rose_leben_runter();
 	void rose_leben_hoch();
 	void ex_bar_steuern(float w);
