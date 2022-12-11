@@ -144,7 +144,7 @@ void Hud::text_layers_create(){
 	_board.attach(gameOverText);
 
 	this->gameIntroText = new Tilemap(16, 24);
-	gameIntroText->write(std::pair(18, 5), "FLOWERDEFENSE\r\n\r\nR        Start\r\nQ        Quit\r\n\r\nW        Move UP\r\nA        Move LEFT\r\nS        Move DOWN\r\nD        Move RIGHT\r\n\r\nUP       Attack Up\r\nLEFT     Attack Left\r\nDOWN     Attack Down\r\nRIGHT    Attack Right\r\n\r\nSPACE    Place Fence\r\n\r\n\r\n\r\nDebug\r\n\r\nF1       Spritebox\r\nF2       Hitbox\r\nF3       BFS Player\r\nF4       BFS Flower");
+	gameIntroText->write(std::pair(18, 5), "FLOWERDEFENSE\r\n\r\nR        Start\r\nQ        Quit\r\n\r\nW        Move UP\r\nA        Move LEFT\r\nS        Move DOWN\r\nD        Move RIGHT\r\n\r\nUP       Attack Up\r\nLEFT     Attack Left\r\nDOWN     Attack Down\r\nRIGHT    Attack Right\r\n\r\nSPACE    Place Fence\r\n\r\n\r\n\r\nDebug\r\n\r\nF1       Spritebox\r\nF2       Hitbox\r\nF3       BFS Player\r\nF4       BFS Flower\r\nF9       SHOW ENGINE LOG");
 	this->gameIntroText->visible = true;
 	_board.attach(gameIntroText);
 }
