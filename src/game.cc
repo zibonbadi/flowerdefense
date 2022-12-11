@@ -29,7 +29,7 @@ void Game::_init(uint16_t w, uint16_t h){
 	this->w = w;
 	this->h = h;
 	
-	uint8_t rflags, wflags, imgflags;
+	uint8_t rflags, wflags, imgflags, mixflags;
 
 	rflags =
 		SDL_RENDERER_ACCELERATED |
@@ -42,6 +42,11 @@ void Game::_init(uint16_t w, uint16_t h){
 		;
 	imgflags =
 		IMG_INIT_PNG
+		;
+	mixflags =
+		MIX_INIT_FLAC |
+		MIX_INIT_MP3 |
+		MIX_INIT_OGG
 		;
 
 	ENGINE_DEBUG_MSG("Initializing canvas (SDL)..." << SDL_GetError());
@@ -59,6 +64,11 @@ void Game::_init(uint16_t w, uint16_t h){
 		throw std::runtime_error("Runtime error in Game constructor");
 	}
 	*/
+
+	if(Mix_Init(mixflags) < 0){
+		ENGINE_DEBUG_MSG("SDL2_Mixer failed! Why? " << SDL_GetError());
+		throw std::runtime_error("Unable to initialize SDL2_Mixer");
+	}
 
 	SDL_AudioSpec aspec_want = {
 		.freq = 48000,

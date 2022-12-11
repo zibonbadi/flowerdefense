@@ -151,6 +151,6 @@ void Enemy::disappear(){
 
 void Enemy::reborn(float x, float y){
 	isdead = false;
-	visible = true;
+	//visible = true;
 	init(x, y);
 }
