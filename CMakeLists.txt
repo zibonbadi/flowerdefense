@@ -26,9 +26,12 @@ if (MSVC)
 	find_package(SDL2_ttf CONFIG REQUIRED)
 	find_package(SDL2_net CONFIG REQUIRED)
 	find_package(sdl2-gfx CONFIG REQUIRED)
+	#find_package(sdl2_mixer CONFIG REQUIRED)
 	find_package(SDL2_mixer CONFIG REQUIRED)
 	find_package(sdl2-image CONFIG REQUIRED)
 	find_package(libopenmpt CONFIG REQUIRED)
+	# Set the path to SDL2_mixer.lib
+	#set(SDL2_MIXER_LIBRARY "C:/Dev/vcpkg/packages/sdl2-mixer_x64-windows/lib/SDL2_mixer.lib")
 elseif(APPLE)
 	find_package(SDL2 CONFIG REQUIRED)
 	#pkg_search_module(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
@@ -73,6 +76,7 @@ if (MSVC)
 		${PROJECT_NAME}
 		SDL2::SDL2_image
 		libopenmpt::libopenmpt
+		$<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>
 	)
 else()
 	target_link_libraries(
