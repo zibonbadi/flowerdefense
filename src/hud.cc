@@ -139,16 +139,42 @@ void Hud::font_create(){
 
 void Hud::text_layers_create(){
 	this->gameOverText = new Tilemap(16,24);
-	gameOverText->write(std::pair(18, 5), "GAME OVER\r\n\r\nR     Start\r\nF1    Spritebox\r\nF2    Hitbox\r\nF3    BFS Player\r\nF4    BFS Flower\r\nQ     Quit");
+	gameOverText->write(std::pair(18, 10), "GAME OVER\r\n\r\nR        Start\r\nQ        Quit\r\n\r\nW        Move UP\r\nA        Move LEFT\r\nS        Move DOWN\r\nD        Move RIGHT\r\n\r\nUP       Attack Up\r\nLEFT     Attack Left\r\nDOWN     Attack Down\r\nRIGHT    Attack Right\r\n\r\nSPACE    Place Fence");
 	this->gameOverText->visible = false;
 	_board.attach(gameOverText);
 
 	this->gameIntroText = new Tilemap(16, 24);
-	gameIntroText->write(std::pair(18, 5), "FLOWERDEFENSE\r\n\r\nR     Start\r\nF1    Spritebox\r\nF2    Hitbox\r\nF3    BFS Player\r\nF4    BFS Flower\r\nQ     Quit");
+	gameIntroText->write(std::pair(18, 5), "FLOWERDEFENSE\r\n\r\nR        Start\r\nQ        Quit\r\n\r\nW        Move UP\r\nA        Move LEFT\r\nS        Move DOWN\r\nD        Move RIGHT\r\n\r\nUP       Attack Up\r\nLEFT     Attack Left\r\nDOWN     Attack Down\r\nRIGHT    Attack Right\r\n\r\nSPACE    Place Fence\r\n\r\n\r\n\r\nDebug\r\n\r\nF1       Spritebox\r\nF2       Hitbox\r\nF3       BFS Player\r\nF4       BFS Flower");
 	this->gameIntroText->visible = true;
 	_board.attach(gameIntroText);
 }
+/*
 
+
+
+	// Attack Up
+	e_player_attack_up = new Event("player.set_attack_direction");
+	e_player_attack_up->set("direction", "up");
+	g_keymapper.bind(SDLK_UP, e_player_attack_up);
+	// Attack Down
+	e_player_attack_down = new Event("player.set_attack_direction");
+	e_player_attack_down->set("direction", "down");
+	g_keymapper.bind(SDLK_DOWN, e_player_attack_down);
+	// Attack Left
+	e_player_attack_left = new Event("player.set_attack_direction");
+	e_player_attack_left->set("direction", "left");
+	g_keymapper.bind(SDLK_LEFT, e_player_attack_left);
+	// Attack Right
+	e_player_attack_right = new Event("player.set_attack_direction");
+	e_player_attack_right->set("direction", "right");
+	g_keymapper.bind(SDLK_RIGHT, e_player_attack_right);
+
+	// Place Fence
+	e_player_place_fence = new Event("player.place_fence");
+	e_player_place_fence->set("direction", "up");
+	g_keymapper.bind(SDLK_SPACE, e_player_place_fence);
+
+*/
 
 void Hud::ex_rahmen_create(){
 			
