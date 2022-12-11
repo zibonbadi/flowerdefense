@@ -4,14 +4,14 @@
 
 Enemypool::Enemypool(Plane& board, Player& player, Z_PlaneMeta& collide_enemy, float spawnTime, int spawnCount, int poolSize) : _board(board), _player(player), _collide_enemy(collide_enemy), _spawnTime(spawnTime), _spawnCount(spawnCount), _poolSize(poolSize)
 {
-	availableEnemies.resize(poolSize);
-	_availableEnemiesSize = poolSize;
+	//enemies.resize(poolSize);
+	//enemies = poolSize;
 
 	initAnimations();
 
 	for (int i = 0; i < poolSize; i++)
 	{
-		availableEnemies.push_back(new Enemy(-100.0f, -100.0f, _player));
+		enemies.push_back(new Enemy(-100.0f, -100.0f, _player));
 	}
 	
 	// Hook handleEvents into event handler
@@ -31,25 +31,45 @@ void Enemypool::Update(const float& deltaTime)
 	}
 }
 
+int Enemypool::getAvailableCount(){
+	auto rVal = 0;
+	for (auto & e : enemies){
+		if (!e->visible){
+			rVal++;
+		}
+	}
+	return rVal;
+}
+
+Enemy* Enemypool::getFirstAvailable(){
+	for (auto & e : enemies){
+		if (!e->visible)
+			return e;
+	}
+	return nullptr;
+}
+
 void Enemypool::Recollect()
 {
-	for (int i = 0; i < enemies.size(); i++)
+	for (auto & e : enemies)
 	{
-		if (!enemies[i]->visible) {
-
-			enemies[i]->reborn(-100.0f, -100.0f);
-			availableEnemies.push_back(enemies[i]);
-			_availableEnemiesSize++;
-			enemies.erase(enemies.begin() + i);
+		if (!e->visible) {
+			e->reborn(-100.0f, -100.0f);
+			//availableEnemies.push_back(e);
+			//_availableEnemiesSize++;
+			//enemies.erase(e);
 		}
 	}
 }
 
 void Enemypool::Spawn(int count)
 {
-	if ((_availableEnemiesSize - count) < 0)
+	auto available = getAvailableCount();
+	if ((available  - count) < 0)
 	{
-		std::cerr << "Error in Enemypool: Not enough availableEnemies left to spawn" << std::endl;
+		std::cerr << "Error in Enemypool: Not enough availableEnemies left to spawn ("
+			<< available << '/' << enemies.size() << " left; "
+			<< count << " required)" << std::endl;
 		return;
 	}
 
@@ -73,27 +93,34 @@ void Enemypool::Spawn(int count)
 			tileIndex = ((rand() % TileCountY));  // Werte 0-24
 		}
 
+		/*
 		Enemy* enemy = availableEnemies.back();
 		availableEnemies.pop_back();
 		_availableEnemiesSize--;
-		switch (border)
-		{
-		case 0:
-			enemy->init(0, BFS_TILE_HEIGHT * tileIndex);
-			break;
-		case 1:
-			enemy->init(BFS_TILE_WIDTH * tileIndex, 0);
-			break;
-		case 2:
-			enemy->init(BFS_TILE_WIDTH * (TileCountX - 1), BFS_TILE_HEIGHT * tileIndex);
-			break;
-		case 3:
-			enemy->init(BFS_TILE_WIDTH * tileIndex, BFS_TILE_HEIGHT * (TileCountY - 1));
-			break;
+		*/
+		Enemy* enemy = getFirstAvailable();
+		enemy->visible = true;
+
+		if(enemy){
+			switch (border)
+			{
+			case 0:
+				enemy->init(0, BFS_TILE_HEIGHT * tileIndex);
+				break;
+			case 1:
+				enemy->init(BFS_TILE_WIDTH * tileIndex, 0);
+				break;
+			case 2:
+				enemy->init(BFS_TILE_WIDTH * (TileCountX - 1), BFS_TILE_HEIGHT * tileIndex);
+				break;
+			case 3:
+				enemy->init(BFS_TILE_WIDTH * tileIndex, BFS_TILE_HEIGHT * (TileCountY - 1));
+				break;
+			}
+			enemy->GetSprite()->setCollider(&_collide_enemy);
+			_board.attach(enemy->GetSprite());
+			//enemies.push_back(enemy);
 		}
-		enemy->GetSprite()->setCollider(&_collide_enemy);
-		_board.attach(enemy->GetSprite());
-		enemies.push_back(enemy);
 	}
 }
 
@@ -101,27 +128,26 @@ void Enemypool::reset(){
 	bool done = false;
 	//enemies.clear();
 	//availableEnemies.clear();
-	for(; enemies.size() > 0; _availableEnemiesSize++)
+	for(auto & e : enemies)
 	{
 		done = true;
-		auto en = enemies.back();
-		enemies.pop_back();
-		availableEnemies.push_back(en);
-		//en->init(-100.0f, -100.0f);
-		en->disappear();
+		e->disappear();
 	}
 
+	_spawnCount = 3;
+	_spawnTimer = 0;//_spawnTime;
+		
 	DEBUG_MSG("Enemypool.reset(): Caught." << done);
 }
 
 Enemypool::~Enemypool()
 {
-	for (int i = 0; i < enemies.size(); i++)
+	for (auto & e : enemies)
 	{
-		delete enemies[i];
+		delete e;
 	}
-	for (int i = 0; i < 9; i++) {
-		delete animations[i];
+	for (auto & a : animations) {
+		delete a;
 	}
 }
 
@@ -183,10 +209,6 @@ void Enemypool::handleEvents(Event* e){
 		}
 		if(e->get("scene") == "game"){
 			// Reset everything
-			_poolSize = 1000;
-			_spawnTime = 5.f;
-			_spawnCount = 3;
-			_spawnTimer = 0;//_spawnTime;
 		}
 	}
 };
