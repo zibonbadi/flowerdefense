@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
 		auto obstacle = g_rc.make_static_sprite_from_texture("tiles.obstacle", "spritesheet", Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 
 
-		Player player((SCREEN_WIDTH / 2) - 16, (SCREEN_HEIGHT / 2) - 32 - 200);
+		Player player((SCREEN_WIDTH / 2) - 16, (SCREEN_HEIGHT / 2) - 32 - 200, 2.0f);
 		Tilemap ground(32, 32)/*, plants(32, 32)*/, obstacles;
 
 		// Set backup color for rose tile
