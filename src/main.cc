@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
 
 		// Set backup color for rose tile
 		rose->set_color(Z_RGBA{ .r = 0xff, .g = 0x7f, .b = 0xcf, .a = 0xff });
-		rose->setTransform(Z_PlaneMeta({ .x = (SCREEN_WIDTH / 2) - 32 , .y = (SCREEN_HEIGHT / 2) - 32, .w = 64, .h = 64 }));
+		rose->setTransform(Z_PlaneMeta({ .x = (SCREEN_WIDTH / 2) - 16 , .y = (SCREEN_HEIGHT / 2) - 16, .w = 32, .h = 32 }));
 		ground.add_tile('.', grass);
 		//plants.add_tile('%', rose);
 		obstacles.add_tile('x', obstacle);
@@ -76,8 +76,8 @@ int main(int argc, char* argv[]) {
 		collide_rose{
 			.x = 0,
 			.y = 0,
-			.w = 64,
-			.h = 64
+			.w = 32,
+			.h = 32
 		};
 
 		rose->setCollider(&collide_rose);
