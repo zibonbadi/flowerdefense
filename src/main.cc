@@ -159,8 +159,11 @@ int main(int argc, char* argv[]) {
 		EBus_Fn f_toggle_spritebox = [&](Event* e) {
 			if (e->get("status_edge") == "up") {
 				player.GetSprite()->debug_sprite = !player.GetSprite()->debug_sprite;
+				bool debugSpriteState = player.GetSprite()->debug_sprite;
+				player.attack->debug_sprite = debugSpriteState;
+				rose->debug_sprite = debugSpriteState;
 				for (auto& enemy : enemyPool.enemies) {
-					enemy->GetSprite()->debug_sprite = player.GetSprite()->debug_sprite;
+					enemy->GetSprite()->debug_sprite = debugSpriteState;
 				}
 			}
 		};
@@ -168,8 +171,11 @@ int main(int argc, char* argv[]) {
 		EBus_Fn f_toggle_colliders = [&](Event* e) {
 			if (e->get("status_edge") == "up") {
 				player.GetSprite()->debug_collide = !player.GetSprite()->debug_collide;
+				bool debugColliderState = player.GetSprite()->debug_collide;
+				player.attack->debug_collide = debugColliderState;
+				rose->debug_collide = debugColliderState;
 				for (auto& enemy : enemyPool.enemies) {
-					enemy->GetSprite()->debug_collide = player.GetSprite()->debug_collide;
+					enemy->GetSprite()->debug_collide = debugColliderState;
 				}
 			}
 		};
