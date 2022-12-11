@@ -395,8 +395,15 @@ void Hud::handleEvents(Event* e){
 void Hud::Update(Player &player){
 	// Update gaertner health display
 	//tm_inventory->fill(0, 1, 15, 3, ' ');
+
+	// Right pad life counterer
+	std::string str_rose_leben = std::to_string(rose_akt_leben);
+	if(str_rose_leben.length() < 5)
+		str_rose_leben.insert(0, 5 - str_rose_leben.length(), ' ');
+
 	tm_inventory->clear_map();
 	tm_inventory->fill(0, 1, player.health, 1, '+');
+	tm_inventory->write(std::pair(28,4), str_rose_leben);
 	tm_inventory->write(std::pair(0,2), "^"+std::to_string(player.obstacles));
 	tm_inventory->write(std::pair(0,30), "Wave:"+std::to_string(wave));
 	tm_inventory->write(std::pair(0,31), "Lv:"+std::to_string(player.akt_LV));
