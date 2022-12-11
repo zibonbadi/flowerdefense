@@ -161,8 +161,8 @@ int main(int argc, char* argv[]) {
 		EBus_Fn f_place_obstacle = [&](Event* e) {
 			if (e->get("status_edge") == "up") {
 				auto target = obstacles.get_coordinate_from_offset(
-					std::stoi(e->get("player.x"))+32,
-					std::stoi(e->get("player.y"))+48
+					std::stoi(e->get("player.x"))+32 - 16,
+					std::stoi(e->get("player.y"))+32 + 20
 				);
 				DEBUG_MSG("Checking spot(" << target.first << ", " << target.second << ')');
 				auto spot = obstacles.get_spot(target.second, target.first);
@@ -295,8 +295,8 @@ int main(int argc, char* argv[]) {
 
 			enemyPool.Update(deltaTime);
 
-			int x_tile = ((int)player.playerCoordinates.x + 32) / BFS_TILE_WIDTH;
-			int y_tile = ((int)player.playerCoordinates.y + 32) / BFS_TILE_HEIGHT;
+			int x_tile = ((int)player.playerCoordinates.x + 32 - 16) / BFS_TILE_WIDTH;
+			int y_tile = ((int)player.playerCoordinates.y + 32 + 24) / BFS_TILE_HEIGHT;
 			
 			bfsPlayer.execute(x_tile, y_tile);
 
