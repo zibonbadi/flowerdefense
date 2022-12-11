@@ -486,4 +486,8 @@ void Hud::Update(Player &player){
 		}
 
 	}
+
+	if (g_game.state != EnumGameState::PLAY) {
+		ex_bar->setTransform(Z_PlaneMeta{ .x = -INFINITY, .y = -INFINITY });
+	}
 }

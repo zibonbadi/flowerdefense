@@ -301,9 +301,7 @@ int main(int argc, char* argv[]) {
 				}
 			}
 
-			if (g_game.state == EnumGameState::PLAY) {
-				player.Update(deltaTime, enemyPool.enemies, rose, hud);
-			}
+			player.Update(deltaTime, enemyPool.enemies, rose, hud);
 
 			waveTimer -= deltaTime;
 			if (waveTimer < 0)
