@@ -233,20 +233,61 @@ void Player::handleEvents(Event* e){
 	}
 	if (e->get("type") == "player.set_attack_direction") {
 		auto dir = e->get("direction");
-		if (e->get("status_edge") == "down") {
+
+		if (e->get("status_edge") == "up") {
 			if (dir == "right") {
-				attackDir = EPlayerAttackDirection::RIGHT;
+				attack_right = false;
 			};
 			if (dir == "up") {
-				attackDir = EPlayerAttackDirection::UP;
+				attack_up = false;
 			};
 			if (dir == "left") {
-				attackDir = EPlayerAttackDirection::LEFT;
+				attack_left = false;
 			};
 			if (dir == "down") {
-				attackDir = EPlayerAttackDirection::DOWN;
+				attack_down = false;
+			};
+		}
+
+		if (e->get("status_edge") == "down") {
+			if (dir == "right") {
+				attack_right = true;
+			};
+			if (dir == "up") {
+				attack_up = true;
+			};
+			if (dir == "left") {
+				attack_left = true;
+			};
+			if (dir == "down") {
+				attack_down = true;
 			};
 		};
+
+		if (attack_up && attack_left) {
+			attackDir = EPlayerAttackDirection::UPLEFT;
+		}
+		else if (attack_up && attack_right) {
+			attackDir = EPlayerAttackDirection::UPRIGHT;
+		}
+		else if (attack_up) {
+			attackDir = EPlayerAttackDirection::UP;
+		}
+		else if (attack_down && attack_right) {
+			attackDir = EPlayerAttackDirection::DOWNRIGHT;
+		}
+		else if (attack_down && attack_left) {
+			attackDir = EPlayerAttackDirection::DOWNLEFT;
+		}
+		else if (attack_down) {
+			attackDir = EPlayerAttackDirection::DOWN;
+		}
+		else if (attack_left) {
+			attackDir = EPlayerAttackDirection::LEFT;
+		}
+		else if (attack_right) {
+			attackDir = EPlayerAttackDirection::RIGHT;
+		}
 	}
 	if (e->get("type") == "player.set_move_direction") {
 		auto dir = e->get("direction");

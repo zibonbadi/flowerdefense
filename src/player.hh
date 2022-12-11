@@ -13,7 +13,11 @@ enum class EPlayerAttackDirection {
 	LEFT,
 	RIGHT,
 	UP,
-	DOWN
+	DOWN,
+	UPLEFT,
+	UPRIGHT,
+	DOWNLEFT,
+	DOWNRIGHT
 };
 
 class Player {
@@ -21,6 +25,7 @@ class Player {
 		Sprite sprite;
 		Animation* animations[12];
 		bool walk_up = false, walk_down = false, walk_left = false, walk_right = false;
+		bool attack_up = false, attack_down = false, attack_left = false, attack_right = false;
 		SDL_FPoint delta				= { .x = 0, .y = 0 };
 		EPlayerMoveDirection moveDir = EPlayerMoveDirection::LEFT;
 		EPlayerAttackDirection attackDir = EPlayerAttackDirection::LEFT;
