@@ -73,6 +73,8 @@ void Player::initAnimations() {
 
 	/* Attack animation definition */
 	attack = new Sprite(Z_PlaneMeta{
+		.x = -INFINITY,
+		.y = -INFINITY,
 		.w = 64.0f,
 		.h = 64.0f
 	});
@@ -576,8 +578,6 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, 
 	e_player_place_fence->set("player.x",std::to_string(playerCoordinates.x));
 	e_player_place_fence->set("player.y",std::to_string(playerCoordinates.y));
 
-	/* Adjust player sprite transform*/
-	player->setTransform(Z_PlaneMeta{ .x = playerCoordinates.x, .y = playerCoordinates.y, .w = 32, .h = 64 });
 	Z_PlaneMeta tmp_transform = {.w = 64, .h = 64};
 	switch(attackDir){
 	case EPlayerAttackDirection::LEFT:{
@@ -620,10 +620,18 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, 
 		break;
 	}
 	};
-	attack->setTransform(tmp_transform);
-
-
 	pastAttackDir = attackDir;
+
+	if (g_game.state == EnumGameState::PLAY) {
+		/* Adjust player attack sprite transform*/
+		attack->setTransform(tmp_transform);
+
+		/* Adjust player sprite transform*/
+		player->setTransform(Z_PlaneMeta{ .x = playerCoordinates.x, .y = playerCoordinates.y, .w = 32, .h = 64 });
+	}
+	else {
+		attack->setTransform(Z_PlaneMeta{ .x = -INFINITY, .y = -INFINITY });
+	}
 }
 
 void Player::reset(float x, float y){

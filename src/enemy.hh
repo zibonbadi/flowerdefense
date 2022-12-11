@@ -15,7 +15,7 @@ enum class EEnemyDirection {
 class Enemy {
 	private:
 		Sprite sprite;
-		float enemySpeed					= 0.5f;
+		float enemySpeed					= 1.5f;
 		SDL_Point goalTileCoordinates		= { .x = 0, .y = 0 };
 		SDL_FPoint interpolStepSize			= { .x = 0, .y = 0 };
 		EEnemyDirection enemyDir;

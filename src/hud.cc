@@ -5,7 +5,7 @@ Hud::Hud(Plane &board) : _board(board){
 			ex_bar_create();
 			gaertner_leben_create();
 			rose_leben_create();
-			text_layer_create();
+			text_layers_create();
 			font_create();
 			eBus_setup();
 }
@@ -131,16 +131,22 @@ void Hud::font_create(){
 				auto lettersprite = g_rc.make_static_sprite_from_texture("font."+letter_str, "font", Z_PlaneMeta {
 					.u = (float)i.second.first, .v = 0, .uw = (float)i.second.second, .vw = 9
 				}).second;
-				text->add_tile(i.first, lettersprite);
+				gameOverText->add_tile(i.first, lettersprite);
+				gameIntroText->add_tile(i.first, lettersprite);
 				tm_inventory->add_tile(i.first, lettersprite);
 			};
 }
 
-void Hud::text_layer_create(){
-	this->text = new Tilemap(16,24);
-	text->write(std::pair(24,16), "GAME OVER\r\nPress R to restart.\r\nPress Q to quit.");
-	this->text->visible = false;
-	_board.attach(text);
+void Hud::text_layers_create(){
+	this->gameOverText = new Tilemap(16,24);
+	gameOverText->write(std::pair(18, 5), "GAME OVER\r\n\r\nR     Start\r\nF1    Spritebox\r\nF2    Hitbox\r\nF3    BFS Player\r\nF4    BFS Flower\r\nQ     Quit");
+	this->gameOverText->visible = false;
+	_board.attach(gameOverText);
+
+	this->gameIntroText = new Tilemap(16, 24);
+	gameIntroText->write(std::pair(18, 5), "FLOWERDEFENSE\r\n\r\nR     Start\r\nF1    Spritebox\r\nF2    Hitbox\r\nF3    BFS Player\r\nF4    BFS Flower\r\nQ     Quit");
+	this->gameIntroText->visible = true;
+	_board.attach(gameIntroText);
 }
 
 
@@ -245,14 +251,23 @@ void Hud::rose_leben_create(){
 			 //rose_leben[1] = g_rc.make_sprite_from_anim("rose_leben", "rose_leben.rose_leben_2", Z_PlaneMeta {  }).second;
 			 //rose_leben[0] = g_rc.make_sprite_from_anim("rose_leben", "rose_leben.rose_leben_1", Z_PlaneMeta { }).second;
 			
-			_board.attach(spr_rose_leben);
+			 this->attach_rose_leben();
+			
 			//_board.attach(rose_leben[0]);
 			//_board.attach(rose_leben[1]);
 			//_board.attach(rose_leben[2]);
 			//_board.attach(rose_leben[3]);
 			//_board.attach(rose_leben[4]);
+}
 
+void Hud::attach_rose_leben()
+{
+	_board.attach(spr_rose_leben);
+}
 
+void Hud::dettach_rose_leben()
+{
+	_board.detach(spr_rose_leben);
 }
 
 void Hud::rose_update_health(){
@@ -276,6 +291,7 @@ void Hud::rose_update_health(){
 	spr_rose_leben->switch_to_anim("rose_leben_1");
 	return;
 }
+
 
 void Hud::rose_leben_runter(){
 	switch (rose_akt_leben)
@@ -415,12 +431,16 @@ void Hud::handleEvents(Event* e){
 		// TODO: Zelda-Style Quarter-Heart generator
 	};
 	if(e->get("type") == "game.state.set"){
+		if (e->get("scene") == "gameintro") {
+			gameIntroText->visible = true;
+		}
 		if(e->get("scene") == "gameover"){
-			text->visible = true;
+			gameOverText->visible = true;
 		}
 		if(e->get("scene") == "game"){
 			// Reset everything
-			text->visible = false;
+			gameIntroText->visible = false;
+			gameOverText->visible = false;
 			wave = 0;
 		}
 	}
@@ -464,5 +484,10 @@ void Hud::Update(Player &player){
 
 
 		}
+
+	}
+
+	if (g_game.state != EnumGameState::PLAY) {
+		ex_bar->setTransform(Z_PlaneMeta{ .x = -INFINITY, .y = -INFINITY });
 	}
 }

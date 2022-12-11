@@ -45,7 +45,7 @@ class Tilemap {
 		int clear_tileset();
 		//int import_map(std::map<std::pair<unsigned int,unsigned int>, int> data);
 		int import_map(std::map<std::pair<unsigned int,unsigned int>, char> data);
-		void write(std::pair<unsigned int,unsigned int> top_left, std::string text);
+		void write(std::pair<unsigned int,unsigned int> top_left, std::string gameOverText);
 		//std::map<std::pair<unsigned int,unsigned int>, int> get_map();
 		std::map<std::pair<unsigned int,unsigned int>, char> get_map();
 		//int get_spot(int x, int y);

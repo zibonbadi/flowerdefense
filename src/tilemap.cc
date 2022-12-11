@@ -147,13 +147,13 @@ int Tilemap::import_map(std::map<std::pair<unsigned int,unsigned int>, char> dat
 	return 0;
 }
 
-void Tilemap::write(std::pair<unsigned int,unsigned int> top_left, std::string text){
+void Tilemap::write(std::pair<unsigned int,unsigned int> top_left, std::string gameOverText){
 	auto top_left_x = top_left.first;
 	auto top_left_y = top_left.second;
 	unsigned int pos_x = 0;
 	unsigned int pos_y = 0;
 
-	for(auto & i : text){
+	for(auto & i : gameOverText){
 		//auto pos = i.first;
 		//auto val = i.second;
 		switch(i){

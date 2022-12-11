@@ -67,6 +67,7 @@ class BFS;
 extern EventBus g_eventbus;
 extern ResourceManager g_rc;
 extern KeyMapper g_keymapper;
+extern Game g_game;
 
 #define SCREEN_HEIGHT 800
 #define SCREEN_WIDTH 800
