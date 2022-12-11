@@ -23,7 +23,7 @@ enum class EPlayerAttackDirection {
 class Player {
 	private:
 		Sprite sprite;
-		Animation* animations[12];
+		Animation* animations[16];
 		bool walk_up = false, walk_down = false, walk_left = false, walk_right = false;
 		bool attack_up = false, attack_down = false, attack_left = false, attack_right = false;
 		SDL_FPoint delta				= { .x = 0, .y = 0 };
