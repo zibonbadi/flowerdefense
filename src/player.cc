@@ -450,10 +450,12 @@ void Player::reset(float x, float y){
 	DEBUG_MSG("Player.reset(): Caught.");
 	health=4;
 	obstacles=0;
-	akt_LV=0;
 	playerCoordinates.x = x;
 	playerCoordinates.y = y;
+	playerSpeed = 200.f;
 	xp_bar = 200;
+	xp_bekommt = 100;
+	akt_LV=0;
 }
 
 Sprite* Player::GetSprite() {
