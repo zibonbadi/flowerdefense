@@ -165,6 +165,94 @@ void Player::initAnimations() {
 	animations[9]->add_xsheet_phase(1, 1);
 	g_rc.add_anim("player.attack.down", animations[9]);
 
+	animations[12] = new Animation(g_rc.get_texture("spritesheet"), 18);
+	animations[12]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 45,  .u = 32 * 0, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[12]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 45,  .u = 32 * 1, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[12]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 45,  .u = 32 * 2, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[12]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 45,  .u = 32 * 3, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[12]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 45,  .u = 32 * 4, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[12]->add_xsheet_phase(0, 1);
+	animations[12]->add_xsheet_phase(1, 1);
+	animations[12]->add_xsheet_phase(2, 2);
+	animations[12]->add_xsheet_phase(3, 2);
+	animations[12]->add_xsheet_phase(4, 1);
+	animations[12]->add_xsheet_phase(2, 2);
+	animations[12]->add_xsheet_phase(4, 1);
+	animations[12]->add_xsheet_phase(1, 2);
+	animations[12]->add_xsheet_phase(3, 1);
+	animations[12]->add_xsheet_phase(4, 1);
+	animations[12]->add_xsheet_phase(1, 1);
+	animations[12]->add_xsheet_phase(2, 3);
+	animations[12]->add_xsheet_phase(3, 2);
+	animations[12]->add_xsheet_phase(1, 1);
+	g_rc.add_anim("player.attack.upleft", animations[12]);
+
+	animations[13] = new Animation(g_rc.get_texture("spritesheet"), 18);
+	animations[13]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 135,  .u = 32 * 0, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[13]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 135,  .u = 32 * 1, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[13]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 135,  .u = 32 * 2, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[13]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 135,  .u = 32 * 3, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[13]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 135,  .u = 32 * 4, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[13]->add_xsheet_phase(0, 1);
+	animations[13]->add_xsheet_phase(1, 1);
+	animations[13]->add_xsheet_phase(2, 2);
+	animations[13]->add_xsheet_phase(3, 2);
+	animations[13]->add_xsheet_phase(4, 1);
+	animations[13]->add_xsheet_phase(2, 2);
+	animations[13]->add_xsheet_phase(4, 1);
+	animations[13]->add_xsheet_phase(1, 2);
+	animations[13]->add_xsheet_phase(3, 1);
+	animations[13]->add_xsheet_phase(4, 1);
+	animations[13]->add_xsheet_phase(1, 1);
+	animations[13]->add_xsheet_phase(2, 3);
+	animations[13]->add_xsheet_phase(3, 2);
+	animations[13]->add_xsheet_phase(1, 1);
+	g_rc.add_anim("player.attack.upright", animations[13]);
+
+	animations[14] = new Animation(g_rc.get_texture("spritesheet"), 18);
+	animations[14]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 315,  .u = 32 * 0, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[14]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 315,  .u = 32 * 1, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[14]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 315,  .u = 32 * 2, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[14]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 315,  .u = 32 * 3, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[14]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 315,  .u = 32 * 4, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[14]->add_xsheet_phase(0, 1);
+	animations[14]->add_xsheet_phase(1, 1);
+	animations[14]->add_xsheet_phase(2, 2);
+	animations[14]->add_xsheet_phase(3, 2);
+	animations[14]->add_xsheet_phase(4, 1);
+	animations[14]->add_xsheet_phase(2, 2);
+	animations[14]->add_xsheet_phase(4, 1);
+	animations[14]->add_xsheet_phase(1, 2);
+	animations[14]->add_xsheet_phase(3, 1);
+	animations[14]->add_xsheet_phase(4, 1);
+	animations[14]->add_xsheet_phase(1, 1);
+	animations[14]->add_xsheet_phase(2, 3);
+	animations[14]->add_xsheet_phase(3, 2);
+	animations[14]->add_xsheet_phase(1, 1);
+	g_rc.add_anim("player.attack.downleft", animations[14]);
+
+	animations[15] = new Animation(g_rc.get_texture("spritesheet"), 18);
+	animations[15]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 225,  .u = 32 * 0, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[15]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 225,  .u = 32 * 1, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[15]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 225,  .u = 32 * 2, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[15]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 225,  .u = 32 * 3, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[15]->add_frame(Z_PlaneMeta{ .pivot_x = 32, .pivot_y = 32, .deg = 225,  .u = 32 * 4, .v = 32 * 9, .uw = 32, .vw = 32 });
+	animations[15]->add_xsheet_phase(0, 1);
+	animations[15]->add_xsheet_phase(1, 1);
+	animations[15]->add_xsheet_phase(2, 2);
+	animations[15]->add_xsheet_phase(3, 2);
+	animations[15]->add_xsheet_phase(4, 1);
+	animations[15]->add_xsheet_phase(2, 2);
+	animations[15]->add_xsheet_phase(4, 1);
+	animations[15]->add_xsheet_phase(1, 2);
+	animations[15]->add_xsheet_phase(3, 1);
+	animations[15]->add_xsheet_phase(4, 1);
+	animations[15]->add_xsheet_phase(1, 1);
+	animations[15]->add_xsheet_phase(2, 3);
+	animations[15]->add_xsheet_phase(3, 2);
+	animations[15]->add_xsheet_phase(1, 1);
+	g_rc.add_anim("player.attack.downright", animations[15]);
+
 	/* Plugging things together */
 	g_rc.add_sprite("player", &sprite);
 	sprite.add_animation("up", g_rc.get_anim("player.up"));
@@ -181,6 +269,10 @@ void Player::initAnimations() {
 	attack->add_animation("down", g_rc.get_anim("player.attack.down"));
 	attack->add_animation("left", g_rc.get_anim("player.attack.left"));
 	attack->add_animation("right", g_rc.get_anim("player.attack.right"));
+	attack->add_animation("upleft", g_rc.get_anim("player.attack.upleft"));
+	attack->add_animation("upright", g_rc.get_anim("player.attack.upright"));
+	attack->add_animation("downleft", g_rc.get_anim("player.attack.downleft"));
+	attack->add_animation("downright", g_rc.get_anim("player.attack.downright"));
 	attack->switch_to_anim("up");
 }
 
@@ -233,20 +325,61 @@ void Player::handleEvents(Event* e){
 	}
 	if (e->get("type") == "player.set_attack_direction") {
 		auto dir = e->get("direction");
-		if (e->get("status_edge") == "down") {
+
+		if (e->get("status_edge") == "up") {
 			if (dir == "right") {
-				attackDir = EPlayerAttackDirection::RIGHT;
+				attack_right = false;
 			};
 			if (dir == "up") {
-				attackDir = EPlayerAttackDirection::UP;
+				attack_up = false;
 			};
 			if (dir == "left") {
-				attackDir = EPlayerAttackDirection::LEFT;
+				attack_left = false;
 			};
 			if (dir == "down") {
-				attackDir = EPlayerAttackDirection::DOWN;
+				attack_down = false;
+			};
+		}
+
+		if (e->get("status_edge") == "down") {
+			if (dir == "right") {
+				attack_right = true;
+			};
+			if (dir == "up") {
+				attack_up = true;
+			};
+			if (dir == "left") {
+				attack_left = true;
+			};
+			if (dir == "down") {
+				attack_down = true;
 			};
 		};
+
+		if (attack_down && attack_right) {
+			attackDir = EPlayerAttackDirection::DOWNRIGHT;
+		}
+		else if (attack_down && attack_left) {
+			attackDir = EPlayerAttackDirection::DOWNLEFT;
+		}
+		else if (attack_down) {
+			attackDir = EPlayerAttackDirection::DOWN;
+		}
+		else if (attack_up && attack_left) {
+			attackDir = EPlayerAttackDirection::UPLEFT;
+		}
+		else if (attack_up && attack_right) {
+			attackDir = EPlayerAttackDirection::UPRIGHT;
+		}
+		else if (attack_up) {
+			attackDir = EPlayerAttackDirection::UP;
+		}
+		else if (attack_right) {
+			attackDir = EPlayerAttackDirection::RIGHT;
+		}
+		else if (attack_left) {
+			attackDir = EPlayerAttackDirection::LEFT;
+		}
 	}
 	if (e->get("type") == "player.set_move_direction") {
 		auto dir = e->get("direction");
@@ -308,24 +441,45 @@ void Player::handleEvents(Event* e){
 void Player::ChangePlayerAnimation(const std::string animIDadditional = "")
 {
 	std::string animID;
+	std::string attackAnimID;
 	switch (attackDir) {
 	case EPlayerAttackDirection::UP:
 		animID = "up";
+		attackAnimID = animID;
 		break;
 	case EPlayerAttackDirection::DOWN:
 		animID = "down";
+		attackAnimID = animID;
 		break;
 	case EPlayerAttackDirection::LEFT:
 		animID = "left";
+		attackAnimID = animID;
 		break;
 	case EPlayerAttackDirection::RIGHT:
 		animID = "right";
+		attackAnimID = animID;
+		break;
+	case EPlayerAttackDirection::UPLEFT:
+		animID = "up";
+		attackAnimID = "upleft";
+		break;
+	case EPlayerAttackDirection::UPRIGHT:
+		animID = "up";
+		attackAnimID = "upright";
+		break;
+	case EPlayerAttackDirection::DOWNLEFT:
+		animID = "down";
+		attackAnimID = "downleft";
+		break;
+	case EPlayerAttackDirection::DOWNRIGHT:
+		animID = "down";
+		attackAnimID = "downright";
 		break;
 	}
 	_animID = animID + animIDadditional;
 	DEBUG_MSG("Switched to player anim \"" << _animID << "\";\"" << animID << "\"")
 	player->switch_to_anim(_animID);
-	attack->switch_to_anim(animID);
+	attack->switch_to_anim(attackAnimID);
 }
 
 void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, Sprite* rose, Hud& hud) {
@@ -446,6 +600,22 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, 
 		tmp_transform.y = playerCoordinates.y+64;
 		break;
 	}
+	case EPlayerAttackDirection::UPLEFT:
+		tmp_transform.x = playerCoordinates.x - 56;
+		tmp_transform.y = playerCoordinates.y - 56;
+		break;
+	case EPlayerAttackDirection::UPRIGHT:
+		tmp_transform.x = playerCoordinates.x + 24;
+		tmp_transform.y = playerCoordinates.y - 56;
+		break;
+	case EPlayerAttackDirection::DOWNLEFT:
+		tmp_transform.x = playerCoordinates.x - 56;
+		tmp_transform.y = playerCoordinates.y + 56;
+		break;
+	case EPlayerAttackDirection::DOWNRIGHT:
+		tmp_transform.x = playerCoordinates.x + 24;
+		tmp_transform.y = playerCoordinates.y + 56;
+		break;
 	default:{
 		break;
 	}
