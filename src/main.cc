@@ -132,6 +132,11 @@ int main(int argc, char* argv[]) {
 				hud.rose_leben_runter();
 				player.reset((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 32 - 200);
 				enemyPool.reset();
+
+				/* Enemypool */
+				enemyPool._spawnTime = spawnTime;
+				enemyPool._spawnCount = spawnCount;
+				enemyPool._poolSize = poolSize;
 			};
 		};
 
