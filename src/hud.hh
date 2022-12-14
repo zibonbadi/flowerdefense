@@ -16,13 +16,13 @@ public:
 	Sprite *rose_leben[5];
 	Sprite *spr_rose_leben;
 	Sprite *LVLSY[3];
-	Tilemap *ex_rahmen, *tm_inventory , *gameOverText, *gameIntroText, *LVLS;
+	Tilemap *ex_rahmen, *tm_inventory , *gameOverText, *gameIntroText, *gameWaveCooldownText, *LVLS;
 
 	int gaertner_akt_leben = 4;
 	int rose_max_leben =50;
 	int rose_akt_leben =50;
 	int xp_akt = 0;
-	int wave = 0;
+	int wave = 1;
 	bool ausgewahelt = false;
 
 	Hud(Plane &board);

@@ -8,6 +8,7 @@
 #include <libopenmpt/libopenmpt.hpp>
 /* stdlib */
 #include <string>
+#include <sstream>
 #include <iostream>
 #include <fstream>
 #include <cstdint>

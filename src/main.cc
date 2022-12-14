@@ -94,10 +94,12 @@ int main(int argc, char* argv[]) {
 		const float spawnTimeMin = 0.2f;
 		const float spawnCount = 1;
 		const float poolSize = 100;
-		const float waveTime = 6.f;
+		const float waveTime = 18.f;
+		const float waveCoolDownTime = 6.0f;
 		Enemypool enemyPool(board, player, collide_enemy, spawnTime, spawnCount, poolSize);
 
 		float waveTimer = waveTime;
+		float waveCoolDownTimer = -1.0f;
 
 		DEBUG_MSG("Entering main loop...");
 
@@ -158,6 +160,9 @@ int main(int argc, char* argv[]) {
 				hud.ex_rahmen->visible = true;
 				hud.tm_inventory->visible = true;
 				hud.attach_rose_leben();
+				waveTimer = waveTime;
+				waveCoolDownTimer = -1.0f;
+
 				g_game.state = EnumGameState::PLAY;
 			};
 		};
@@ -316,35 +321,43 @@ int main(int argc, char* argv[]) {
 			
 
 			if(g_game.state != EnumGameState::SKILLSELECT){
-			player.Update(deltaTime, enemyPool.enemies, rose, hud);
+				player.Update(deltaTime, enemyPool.enemies, rose, hud);
+
+				waveCoolDownTimer -= deltaTime;
+				if (waveCoolDownTimer < 0) {
+					hud.gameWaveCooldownText->visible = false;
+					waveTimer -= deltaTime;
+					if (waveTimer < 0)
+					{
+						enemyPool._spawnTime += spawnTimeDeltaAtWaveEnd;
+						if (enemyPool._spawnTime < spawnTimeMin)
+						{
+							enemyPool._spawnTime = spawnTimeMin;
+						}
+						hud.wave++;
+						waveTimer = waveTime;
+						waveCoolDownTimer = waveCoolDownTime;
+						hud.gameWaveCooldownText->visible = true;
+					}
 
 
-			waveTimer -= deltaTime;
-			if (waveTimer < 0)
-			{
-				enemyPool._spawnTime += spawnTimeDeltaAtWaveEnd;
-				if (enemyPool._spawnTime < spawnTimeMin)
-				{
-					enemyPool._spawnTime = spawnTimeMin;
+
+					enemyPool.Update(deltaTime);
 				}
-				hud.wave++;
-				waveTimer = waveTime;
+				else {
+					hud.gameWaveCooldownText->write(std::pair(18, 5), "Next Wave in\r\n"+std::to_string((int)ceil(waveCoolDownTimer)) + " Seconds");
+				}
+
+				int x_tile = ((int)player.playerCoordinates.x + 32 - 16) / BFS_TILE_WIDTH;
+				int y_tile = ((int)player.playerCoordinates.y + 32 + 24) / BFS_TILE_HEIGHT;
+
+				bfsPlayer.execute(x_tile, y_tile);
+
+				for (int i = 0; i < enemyPool.enemies.size(); i++)
+				{
+					enemyPool.enemies[i]->Update(bfsFlower, bfsPlayer);
+				}
 			}
-
-			
-
-			enemyPool.Update(deltaTime);
-
-			int x_tile = ((int)player.playerCoordinates.x + 32 - 16) / BFS_TILE_WIDTH;
-			int y_tile = ((int)player.playerCoordinates.y + 32 + 24) / BFS_TILE_HEIGHT;
-			
-			bfsPlayer.execute(x_tile, y_tile);
-
-			for (int i = 0; i < enemyPool.enemies.size(); i++)
-			{
-				enemyPool.enemies[i]->Update(bfsFlower, bfsPlayer);
-			}
-		}
 			/* Advance the player animation */
 			g_rc.advance_all_anim(now);
 			g_game.render();
