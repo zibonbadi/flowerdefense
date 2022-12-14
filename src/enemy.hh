@@ -33,7 +33,7 @@ class Enemy {
 		void reborn(float x, float y);
 
 		bool isdead = false;
-		bool visible = true;
+		bool visible = false;
 
 		float enemySpeed					= 1.5f;
 
