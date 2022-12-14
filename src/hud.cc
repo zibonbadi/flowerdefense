@@ -1,6 +1,7 @@
 #include "hud.hh"
 
 Hud::Hud(Plane &board) : _board(board){
+			LVLS = new Tilemap(400,200);
 			ex_rahmen_create();
 			ex_bar_create();
 			gaertner_leben_create();
@@ -528,46 +529,46 @@ bool Hud::option(Player &player,  Enemypool &enemypool){
 
 			// _board.attach(LVLS);
 
-			// LVLSY[0] = g_rc.make_static_sprite_from_texture("tiles.lvlUp_option1", "lvlUp_option", Z_PlaneMeta{ .u = 32 * 0, .v = 200, .uw = 200, .vw = 400 }).second;
-			// LVLSY[1] = g_rc.make_static_sprite_from_texture("tiles.lvlUp_option2", "lvlUp_option", Z_PlaneMeta{ .u = 200 , .v = 600, .uw = 200, .vw = 400 }).second;
-			// LVLSY[2] = g_rc.make_static_sprite_from_texture("tiles.lvlUp_option3", "lvlUp_option", Z_PlaneMeta{ .u = 400, .v = 600, .uw = 200, .vw = 400 }).second;
+			LVLSY[0] = g_rc.make_static_sprite_from_texture("tiles.lvlUp_option1", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 0, .uw = 400, .vw = 200 }).second;
+			LVLSY[1] = g_rc.make_static_sprite_from_texture("tiles.lvlUp_option2", "lvlUp_option", Z_PlaneMeta{ .u = 0 , .v = 200, .uw = 400, .vw = 200 }).second;
+			LVLSY[2] = g_rc.make_static_sprite_from_texture("tiles.lvlUp_option3", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 400, .uw = 400, .vw = 200 }).second;
 
-			// LVLS =  new Tilemap(32,32);
+			//LVLSY[0]->transform()
 
-			// LVLS->add_tile('?', LVLSY[0]);
-			// //LVLS->add_tile('/', lvlUp_option2);
-			// //LVLS->add_tile('+', lvlUp_option3);
+			LVLS->add_tile('?', LVLSY[0]);
+			LVLS->add_tile('/', LVLSY[1]);
+			LVLS->add_tile('+', LVLSY[2]);
 
-			// LVLS->fill(0, 8, 1, 1, '?');
-			// //LVLS->fill(24, 4, 1, 1, '/');
-			// //LVLS->fill(0, 4, 24, 1, '+');
+			LVLS->fill(1, 1, 1, 1, '?');
+			LVLS->fill(1, 2, 1, 1, '/');
+			LVLS->fill(1, 3, 1, 1, '+');
 
-			// _board.attach(LVLS);
+			_board.attach(LVLS);
 
 
 
 if(player.press == true){
+	std::cout<< "----"<<std::endl;
+	std::cout<< "----"<<std::endl;
+
 
 	if(player.mouseY <340 && player.press == true){
 		std::cout<< "--option 1--"<<std::endl;
 		player.option_wahl = 1;
 		player.press = false;
 		ausgewahelt = false;
-
 		return false;
 	}else if(player.mouseY <460 && player.press == true){
 		std::cout<< "--option 2--"<<std::endl;
 		player.option_wahl = 2;
 		player.press = false;
 		ausgewahelt = false;
-
 		return false;
 	}else if(player.mouseY <600 && player.press == true){
 		std::cout<< "--option 3--"<<std::endl;
 		player.option_wahl = 3;
 		player.press = false;
 		ausgewahelt = false;
-
 		return false;
 	}
 	}

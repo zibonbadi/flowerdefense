@@ -311,7 +311,7 @@ int main(int argc, char* argv[]) {
 				}
 			}
 			hud.Update(player, enemyPool);
-			lvlS.Update(player, enemyPool);
+			lvlS.Update(player, enemyPool, hud);
 
 			
 
