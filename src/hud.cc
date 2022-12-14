@@ -134,6 +134,7 @@ void Hud::font_create(){
 				}).second;
 				gameOverText->add_tile(i.first, lettersprite);
 				gameIntroText->add_tile(i.first, lettersprite);
+				gameWaveCooldownText->add_tile(i.first, lettersprite);
 				tm_inventory->add_tile(i.first, lettersprite);
 			};
 }
@@ -148,6 +149,11 @@ void Hud::text_layers_create(){
 	gameIntroText->write(std::pair(18, 5), "FLOWERDEFENSE\r\n\r\nR        Start\r\nQ        Quit\r\n\r\nW        Move UP\r\nA        Move LEFT\r\nS        Move DOWN\r\nD        Move RIGHT\r\n\r\nUP       Attack Up\r\nLEFT     Attack Left\r\nDOWN     Attack Down\r\nRIGHT    Attack Right\r\n\r\nSPACE    Place Fence\r\n\r\n\r\n\r\nDebug\r\n\r\nF1       Spritebox\r\nF2       Hitbox\r\nF3       BFS Player\r\nF4       BFS Flower\r\nF9       SHOW ENGINE LOG");
 	this->gameIntroText->visible = true;
 	_board.attach(gameIntroText);
+
+	this->gameWaveCooldownText = new Tilemap(16, 24);
+	gameWaveCooldownText->write(std::pair(18, 5), "Next Wave in\r\n6 Seconds");
+	this->gameWaveCooldownText->visible = true;
+	_board.attach(gameWaveCooldownText);
 }
 /*
 
@@ -468,7 +474,7 @@ void Hud::handleEvents(Event* e){
 			// Reset everything
 			gameIntroText->visible = false;
 			gameOverText->visible = false;
-			wave = 0;
+			wave = 1;
 		}
 	}
 };
@@ -572,4 +578,5 @@ if(player.press == true){
 		return false;
 	}
 	}
+return true;
 }
