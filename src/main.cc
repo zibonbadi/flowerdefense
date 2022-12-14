@@ -9,12 +9,18 @@ bool g_isPrintEngineDEBUG = false;
 bool running = true;
 
 int main(int argc, char* argv[]) {
+
+	LVLSystem lvlS;
+
+
 	DEBUG_MSG("Engine launched!");
 	try {
 		DEBUG_MSG("Building system...");
 
 		/* Import spritesheet */
 		g_rc.import_texture("spritesheet", "./assets/spritesheet.png");
+		g_rc.import_texture("lvlUp_option", "./assets/lvlUp_option.png");
+
 
 		/* Select tiles from tileset */
 		auto grass = g_rc.make_static_sprite_from_texture("tiles.grass", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
@@ -56,7 +62,6 @@ int main(int argc, char* argv[]) {
 
 		Hud hud(hud_plane);
 		//hud.exp_create(5,8);
-
 		// Hook plane into scene
 		g_game.attach(&board);
 		g_game.attach(&hud_plane);
@@ -295,13 +300,24 @@ int main(int argc, char* argv[]) {
 				case SDL_KEYDOWN: {
 					g_keymapper.probe(e.key);
 				}
+				case SDL_MOUSEBUTTONDOWN:
+				player.press = true;
+				player.mouseY = e.button.y;
+				break;
+
 				default: {
 					break;
 				}
 				}
 			}
+			hud.Update(player, enemyPool);
+			lvlS.Update(player, enemyPool);
 
+			
+
+			if(g_game.state != EnumGameState::SKILLSELECT){
 			player.Update(deltaTime, enemyPool.enemies, rose, hud);
+
 
 			waveTimer -= deltaTime;
 			if (waveTimer < 0)
@@ -315,8 +331,7 @@ int main(int argc, char* argv[]) {
 				waveTimer = waveTime;
 			}
 
-			hud.Update(player);
-
+			
 
 			enemyPool.Update(deltaTime);
 
@@ -329,7 +344,7 @@ int main(int argc, char* argv[]) {
 			{
 				enemyPool.enemies[i]->Update(bfsFlower, bfsPlayer);
 			}
-
+		}
 			/* Advance the player animation */
 			g_rc.advance_all_anim(now);
 			g_game.render();

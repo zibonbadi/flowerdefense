@@ -472,7 +472,7 @@ void Hud::handleEvents(Event* e){
 	}
 };
 
-void Hud::Update(Player &player){
+void Hud::Update(Player &player,  Enemypool &enemypool){
 	// Update gaertner health display
 	//tm_inventory->fill(0, 1, 15, 3, ' ');
 
@@ -498,22 +498,77 @@ void Hud::Update(Player &player){
 			player.xp_bekommt = 10;
 		}
 		player.akt_LV++;
+		player.lvl_up = true;
+		ausgewahelt = true;
 
-		//LV1
-		if(player.akt_LV%2){
-			player.playerSpeed = player.playerSpeed* 1.2;
-			player.obstacles++;
+		g_game.state = EnumGameState::SKILLSELECT;
+	}
 
-		}else{
-			//player.obstacles++;
-			player.obstacles = player.obstacles +3;
-
-
-		}
-
+	if(ausgewahelt == true){
+		option(player, enemypool);		
 	}
 
 	if (g_game.state != EnumGameState::PLAY) {
 		ex_bar->setTransform(Z_PlaneMeta{ .x = -INFINITY, .y = -INFINITY });
+	}
+
+	player.press = false;
+
+}
+
+bool Hud::option(Player &player,  Enemypool &enemypool){
+
+
+			 //auto LVLSy = g_rc.make_static_sprite_from_texture("tiles.plus_eins", "plus_eins", Z_PlaneMeta{ .u = 0, .v = 0, .uw = 4000, .vw = 4000 }).second;
+
+			// LVLS =  new Tilemap(32,32);
+			// LVLS->add_tile('?', LVLSy);
+
+			// LVLS->fill(8, 5, 10, 5, '?');
+
+			// _board.attach(LVLS);
+
+			// LVLSY[0] = g_rc.make_static_sprite_from_texture("tiles.lvlUp_option1", "lvlUp_option", Z_PlaneMeta{ .u = 32 * 0, .v = 200, .uw = 200, .vw = 400 }).second;
+			// LVLSY[1] = g_rc.make_static_sprite_from_texture("tiles.lvlUp_option2", "lvlUp_option", Z_PlaneMeta{ .u = 200 , .v = 600, .uw = 200, .vw = 400 }).second;
+			// LVLSY[2] = g_rc.make_static_sprite_from_texture("tiles.lvlUp_option3", "lvlUp_option", Z_PlaneMeta{ .u = 400, .v = 600, .uw = 200, .vw = 400 }).second;
+
+			// LVLS =  new Tilemap(32,32);
+
+			// LVLS->add_tile('?', LVLSY[0]);
+			// //LVLS->add_tile('/', lvlUp_option2);
+			// //LVLS->add_tile('+', lvlUp_option3);
+
+			// LVLS->fill(0, 8, 1, 1, '?');
+			// //LVLS->fill(24, 4, 1, 1, '/');
+			// //LVLS->fill(0, 4, 24, 1, '+');
+
+			// _board.attach(LVLS);
+
+
+
+if(player.press == true){
+
+	if(player.mouseY <340 && player.press == true){
+		std::cout<< "--option 1--"<<std::endl;
+		player.option_wahl = 1;
+		player.press = false;
+		ausgewahelt = false;
+
+		return false;
+	}else if(player.mouseY <460 && player.press == true){
+		std::cout<< "--option 2--"<<std::endl;
+		player.option_wahl = 2;
+		player.press = false;
+		ausgewahelt = false;
+
+		return false;
+	}else if(player.mouseY <600 && player.press == true){
+		std::cout<< "--option 3--"<<std::endl;
+		player.option_wahl = 3;
+		player.press = false;
+		ausgewahelt = false;
+
+		return false;
+	}
 	}
 }

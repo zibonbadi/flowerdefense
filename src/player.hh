@@ -49,7 +49,13 @@ class Player {
 		int xp_bar = 200;
 		int xp_bekommt = 100;
 		int akt_LV = 0;
+		bool lvl_up = false;
 		float invulnerableTimeFrame;
+
+		bool press = false;
+		int mouseX = 0;
+		int mouseY = 0;
+		int option_wahl = 0;
 
 
 		Player(float x, float y, float invulnerableTimeFrame);

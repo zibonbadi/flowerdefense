@@ -8,19 +8,22 @@ public:
 	Animation* gaertner_leben_1;
 	Animation* rose_leben_a[5];
 	Animation* ex_anzeige;
+	Animation* LVL_anzeige;
 	EBus_Fn* f_eHandler;
 	Sprite *ex_bar;
 	Sprite *ex;
 	Sprite *gaertner_leben[4];
 	Sprite *rose_leben[5];
 	Sprite *spr_rose_leben;
-	Tilemap *ex_rahmen, *tm_inventory , *gameOverText, *gameIntroText;
+	Sprite *LVLSY[3];
+	Tilemap *ex_rahmen, *tm_inventory , *gameOverText, *gameIntroText, *LVLS;
 
 	int gaertner_akt_leben = 4;
 	int rose_max_leben =50;
 	int rose_akt_leben =50;
 	int xp_akt = 0;
 	int wave = 0;
+	bool ausgewahelt = false;
 
 	Hud(Plane &board);
 	// Hud();
@@ -43,6 +46,7 @@ public:
 	void exp_create(float x, float y);
 	void text_layers_create();
 	void font_create();
-	void Update(Player &player);
+	void Update(Player &player,  Enemypool &enemypool);
 
+	bool option(Player &player,  Enemypool &enemypool);
 };

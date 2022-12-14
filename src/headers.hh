@@ -35,6 +35,8 @@ class ResourceManager;
 class Sprite;
 class Tilemap;
 class Hud;
+class LVLSystem;
+
 
 using EBus_Fn = std::function<void(Event*)>;
 
@@ -62,6 +64,7 @@ class BFS;
 #include "enemy.hh"
 #include "enemypool.hh"
 #include "hud.hh"
+#include "LVLSystem.hh"
 
 // Global Engine Objects
 extern EventBus g_eventbus;
