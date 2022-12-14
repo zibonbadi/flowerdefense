@@ -473,7 +473,7 @@ void Hud::handleEvents(Event* e){
 			// Reset everything
 			gameIntroText->visible = false;
 			gameOverText->visible = false;
-			wave = 0;
+			wave = 1;
 		}
 	}
 };
