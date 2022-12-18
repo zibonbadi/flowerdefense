@@ -12,7 +12,10 @@ int main(int argc, char* argv[]) {
 
 	LVLSystem lvlS;
 
-
+	SDL_version sdl_version;
+	SDL_GetVersion(&sdl_version);
+	DEBUG_MSG("SDL VERSION: " << ((int)sdl_version.major) << "." << ((int)sdl_version.minor) << "." << ((int)sdl_version.patch));
+	DEBUG_MSG("MIXER VERSION: " << ((int)Mix_Linked_Version()->major) << "." << ((int)Mix_Linked_Version()->minor) << "." << ((int)Mix_Linked_Version()->patch));
 	DEBUG_MSG("Engine launched!");
 	try {
 		DEBUG_MSG("Building system...");
