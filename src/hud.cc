@@ -545,9 +545,9 @@ bool Hud::option(Player &player,  Enemypool &enemypool){
 			LVLS->add_tile('/', LVLSY[1]);
 			LVLS->add_tile('+', LVLSY[2]);
 
-			LVLS->fill(1, 1, 1, 1, '?');
-			LVLS->fill(1, 2, 1, 1, '/');
-			LVLS->fill(1, 3, 1, 1, '+');
+			LVLS->fill(0, 1, 1, 1, '?');
+			LVLS->fill(0, 2, 1, 1, '/');
+			LVLS->fill(0, 3, 1, 1, '+');
 
 			_board.attach(LVLS);
 
