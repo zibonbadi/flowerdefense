@@ -76,7 +76,7 @@ void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer) {
 
 
 
-	Tilemap* bfsArrows;
+	Tilemap* bfsArrows = bfsFlower.bfsArrows;
 
 	if (_enemyType == EEnemyType::BUG) {
 		
@@ -95,12 +95,12 @@ void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer) {
 	}
 
 	if(!isdead){
-		int tileSize = -1;
+		int tileSize = bfsArrows->get_transform().w;
 		char movingDir = -1;
 		const char reverseBFSDir[] = { 'b','t','r','l','4','1','2', '3' };
+		const char bFSDir[]		   = { 't','b','l','r','1','4','3', '2' };
 
 		if (_enemyType == EEnemyType::BUG) {
-			tileSize = bfsArrows->get_transform().w;
 			movingDir = bfsArrows->get_spot(coordinates.x / tileSize, coordinates.y / tileSize);
 		}
 
@@ -113,31 +113,31 @@ void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer) {
 			angle -= 90.f;
 			DEBUG_MSG(angle)
 			if (angle < -67.5 && angle >= -112.5) {
-				movingDir = reverseBFSDir[(int)EEnemyDirection::RIGHT];
-			}
-			else if (angle < -112.5 && angle >= -157.5) {
-				movingDir = reverseBFSDir[(int)EEnemyDirection::TOPRIGHT];
-			}
-			else if (angle < -157.5 || angle > 157.5) {
-				movingDir = reverseBFSDir[(int)EEnemyDirection::TOP];
-			}
-			else if (angle > 112.5 && angle <= 157.5) {
-				movingDir = reverseBFSDir[(int)EEnemyDirection::TOPLEFT];
-			}
-			else if (angle > 67.5 && angle <= 112.5) {
 				movingDir = reverseBFSDir[(int)EEnemyDirection::LEFT];
 			}
-			else if (angle > 22.5 && angle <= 67.5) {
+			else if (angle < -112.5 && angle >= -157.5) {
 				movingDir = reverseBFSDir[(int)EEnemyDirection::BOTTOMLEFT];
 			}
-			else if (angle <= 22.5 || angle >= -22.5) {
+			else if (angle < -157.5 || angle > 157.5) {
 				movingDir = reverseBFSDir[(int)EEnemyDirection::BOTTOM];
 			}
-			else if (angle < -22.5 && angle >= -67.5) {
+			else if (angle > 112.5 && angle <= 157.5) {
 				movingDir = reverseBFSDir[(int)EEnemyDirection::BOTTOMRIGHT];
 			}
+			else if (angle > 67.5 && angle <= 112.5) {
+				movingDir = reverseBFSDir[(int)EEnemyDirection::RIGHT];
+			}
+			else if (angle > 22.5 && angle <= 67.5) {
+				movingDir = reverseBFSDir[(int)EEnemyDirection::TOPRIGHT];
+			}
+			else if (angle <= 22.5 || angle >= -22.5) {
+				movingDir = reverseBFSDir[(int)EEnemyDirection::TOP];
+			}
+			else if (angle < -22.5 && angle >= -67.5) {
+				movingDir = reverseBFSDir[(int)EEnemyDirection::TOPLEFT];
+			}
 		}
-
+		
 		/* Change bug sprite animation*/
 		if (goalTileCoordinates.x == ((int)(coordinates.x)) &&
 			goalTileCoordinates.y == ((int)(coordinates.y))) {

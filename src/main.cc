@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
 		const float spawnTimeDeltaAtWaveEnd = -0.2f;
 		const float spawnTimeMin = 0.2f;
 		const float spawnCount = 1;
-		const float poolSize = 1;
+		const float poolSize = 100;
 		const float waveTime = 18.f;
 		const float waveCoolDownTime = 6.0f;
 		Enemypool enemyPool(board, player, collide_enemy, spawnTime, spawnCount, poolSize);
