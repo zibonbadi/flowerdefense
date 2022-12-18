@@ -95,46 +95,46 @@ void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer) {
 		goalTileCoordinates.y == ((int)(coordinates.y))) {
 		switch (movingDir) {
 			case 't':
+				if(enemyDir != EEnemyDirection::TOP) sprite.switch_to_anim("top");
 				enemyDir = EEnemyDirection::TOP;
-				sprite.switch_to_anim("top");
 				goalTileCoordinates.y -= tileSize;
 				break;
 			case 'b':
+				if (enemyDir != EEnemyDirection::BOTTOM) sprite.switch_to_anim("bottom");
 				enemyDir = EEnemyDirection::BOTTOM;
-				sprite.switch_to_anim("bottom");
 				goalTileCoordinates.y += tileSize;
 				break;
 			case 'l':
+				if (enemyDir != EEnemyDirection::LEFT) sprite.switch_to_anim("left");
 				enemyDir = EEnemyDirection::LEFT;
-				sprite.switch_to_anim("left");
 				goalTileCoordinates.x -= tileSize;
 				break;
 			case 'r':
+				if (enemyDir != EEnemyDirection::RIGHT) sprite.switch_to_anim("right");
 				enemyDir = EEnemyDirection::RIGHT;
-				sprite.switch_to_anim("right");
 				goalTileCoordinates.x += tileSize;
 				break;
 			case '1':
+				if (enemyDir != EEnemyDirection::TOPLEFT) sprite.switch_to_anim("topleft");
 				enemyDir = EEnemyDirection::TOPLEFT;
-				sprite.switch_to_anim("topleft");
 				goalTileCoordinates.x -= tileSize;
 				goalTileCoordinates.y -= tileSize;
 				break;
 			case '2':
+				if (enemyDir != EEnemyDirection::TOPRIGHT) sprite.switch_to_anim("topright");
 				enemyDir = EEnemyDirection::TOPRIGHT;
-				sprite.switch_to_anim("topright");
 				goalTileCoordinates.x += tileSize;
 				goalTileCoordinates.y -= tileSize;
 				break;
 			case '3':
+				if (enemyDir != EEnemyDirection::BOTTOMLEFT) sprite.switch_to_anim("bottomleft");
 				enemyDir = EEnemyDirection::BOTTOMLEFT;
-				sprite.switch_to_anim("bottomleft");
 				goalTileCoordinates.x -= tileSize;
 				goalTileCoordinates.y += tileSize;
 				break;
 			case '4':
+				if (enemyDir != EEnemyDirection::BOTTOMRIGHT) sprite.switch_to_anim("bottomright");
 				enemyDir = EEnemyDirection::BOTTOMRIGHT;
-				sprite.switch_to_anim("bottomright");
 				goalTileCoordinates.x += tileSize;
 				goalTileCoordinates.y += tileSize;
 				break;
