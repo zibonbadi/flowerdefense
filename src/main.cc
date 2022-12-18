@@ -111,6 +111,8 @@ int main(int argc, char* argv[]) {
 			g_game.load_mod(g_rc.get_mod("bgm"), -1, -1);
 		}
 
+		g_rc.import_sound("restart", "./assets/restart.wav") != nullptr;
+
 
 		/* Set up control events */
 		EBus_Fn f_quit = [&](Event* e) {
@@ -146,6 +148,7 @@ int main(int argc, char* argv[]) {
 			}
 			else if (e->get("type") == "game.state.set" && e->get("scene") == "game"){
 				// Reset everything
+				g_game.play(g_rc.get_sound("restart"));
 				DEBUG_MSG("f_restart(e): Caught." << e->get("scene"));
 				obstacles.clear_map();
 

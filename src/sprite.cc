@@ -76,7 +76,7 @@ Z_PlaneMeta Sprite::get_transform(){
 int Sprite::switch_to_anim(std::string animation_name){
 	if(this->anime.find(animation_name) != this->anime.end()){
 		this->current_anime = animation_name;
-		this->anime[animation_name]->restart();
+		//this->anime[animation_name]->restart();
 		//this->anime[animation_name]->sync();
 	}
 	return 0;
