@@ -93,13 +93,53 @@ int ResourceManager::free_mod(std::string id){
 	}
 };
 
-
 openmpt::module* ResourceManager::get_mod(std::string id){
 	if(this->mods[id]){
 		return this->mods[id];
 	}
 	return nullptr;
 };
+
+
+/* Sounds */
+Mix_Chunk* ResourceManager::import_sound(std::string id, std::string path){
+	try{
+		auto new_sound = Mix_LoadWAV( path.c_str() );
+		if(new_sound == nullptr){ throw std::runtime_error("Unable to open file"); }
+		
+		// Avoid memory leakage
+		if (this->sounds.find(id) != this->sounds.end()){ Mix_FreeChunk(this->sounds[id]); }
+		this->sounds[id] = new_sound;
+		ENGINE_DEBUG_MSG("ResourceManager<" << this << ">: Added sound '" << path << "' -> '" << id << "':(" << this->sounds[id] << ")");
+		return this->sounds[id];
+	}catch(std::exception &e){
+		std::cerr << "ResourceManager.import_sound(" << path << ") exception: " << e.what() << std::endl;
+		return nullptr;
+	}
+}
+
+int ResourceManager::free_sound(std::string id){
+	try{
+		auto it = this->sounds.find(id);
+		if (it != this->sounds.end()){
+			Mix_FreeChunk(this->sounds[id]);
+			this->sounds.erase(it);
+		};
+		return 0;
+	}catch(std::exception& e){
+		std::cerr << "ResourceManager.free_sound() error: " << e.what() << std::endl;
+		return -1;
+	}
+};
+
+
+Mix_Chunk* ResourceManager::get_sound(std::string id){
+	if(this->sounds[id]){
+		return this->sounds[id];
+	}
+	return nullptr;
+};
+
 
 /* Animation */
 std::pair<std::string, Animation*> ResourceManager::add_anim(std::string id, Animation* anim){

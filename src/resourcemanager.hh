@@ -10,6 +10,7 @@ class ResourceManager {
 		/* Containers */
 		std::map<std::string, SDL_Texture*> textures;
 		std::map<std::string, openmpt::module*> mods;
+		std::map<std::string, Mix_Chunk*> sounds;
 		std::map<std::string, Animation*> animations;
 		std::map<std::string, Sprite*> sprites;
 	public:
@@ -27,6 +28,11 @@ class ResourceManager {
 		openmpt::module* import_mod(std::string id, std::string path);
 		int free_mod(std::string id);
 		openmpt::module* get_mod(std::string id);
+
+		/* Sounds (Mix_Chunks) */
+		Mix_Chunk* import_sound(std::string id, std::string path);
+		int free_sound(std::string id);
+		Mix_Chunk* get_sound(std::string id);
 
 
 		/* Animations */

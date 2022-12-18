@@ -21,7 +21,8 @@ Game::Game(uint16_t w, uint16_t h){
 
 Game::~Game(){
 	delete this->a_specs;
-	SDL_CloseAudioDevice(this->a_master);
+	//SDL_CloseAudioDevice(this->a_master);
+	Mix_CloseAudio();
 };
 
 
@@ -80,6 +81,7 @@ void Game::_init(uint16_t w, uint16_t h){
 	SDL_AudioSpec* a_spec_tmp = new SDL_AudioSpec;
 
 
+	/*
 	this->a_master = SDL_OpenAudioDevice(NULL, 0, &aspec_want, a_spec_tmp, 0);
 	if (this->a_master <= 0) {
 		std::cerr << "SDL_OpenAudioDevice() failed. Why? " << SDL_GetError() << std::endl;
@@ -90,6 +92,19 @@ void Game::_init(uint16_t w, uint16_t h){
 		SDL_PauseAudioDevice(this->a_master, 0);
 	}
 	ENGINE_DEBUG_MSG("Audio (SDL_Audio) Initialized.");
+	*/
+
+	//this->a_master = Mix_OpenAudioDevice(
+	//if( Mix_OpenAudioDevice(
+	if( Mix_OpenAudio(
+		aspec_want.freq, // Frequency
+		aspec_want.format, // Format
+		aspec_want.channels, // Channels
+		aspec_want.samples // Chunk Size
+		) < 0){
+		std::cerr << "Mix_OpenAudioDevice() failed. Why? " << SDL_GetError() << std::endl;
+	}
+	ENGINE_DEBUG_MSG("Audio (SDL_Mixer) Initialized.");
 
 	this->window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->w, this->h, wflags);
 
@@ -169,6 +184,7 @@ int Game::load_mod(std::string path, int32_t subsong, int32_t repeats) {
 			((mod_artist == "") ? "[UNKNOWN]" : mod_artist) << " - " <<
 			((mod_title == "") ? "[UNKNOWN]" : mod_title) <<
 			'[' << (int)subsong << "]x" << (int)repeats);
+
 		return 0;
 	}
 	catch (std::exception& e) {
@@ -217,8 +233,16 @@ void Game::render() {
 			// Attempting to correct for audio source. FAILED
 			//size_t audio_count = this->mod_buf->read_interleaved_stereo((int32_t) this->a_specs->freq, (size_t) this->a_specs->samples, this->a_buf_interleaved.data());
 			if (audio_count != 0) {
+				auto mixchunk = Mix_QuickLoad_RAW((Uint8*) this->a_buf_interleaved.data(), audio_count * 8);
 				// Stereo 32-Bit samples -> 2 channels * 4 Bytes of audio
-				int audio_status = SDL_QueueAudio(this->a_master, this->a_buf_interleaved.data(), audio_count * 8);
+				//int audio_status = SDL_QueueAudio(this->a_master, this->a_buf_interleaved.data(), audio_count * 8);
+
+				if( mixchunk != nullptr){
+					/* Mix together audio */
+					Mix_PlayChannel(0, mixchunk, -1);
+				}else{
+					ENGINE_DEBUG_MSG("Mix_PlayChannel playback error: ");
+				}
 			}
 		}
 
@@ -255,3 +279,9 @@ void Game::render() {
 	}
 };
 
+int Game::play(Mix_Chunk* sound){
+	if(sound != nullptr){
+		Mix_PlayChannel(-1, sound, 1);
+	}
+	return 0;
+};
