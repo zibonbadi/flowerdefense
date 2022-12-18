@@ -217,7 +217,7 @@ void Game::render() {
 			//size_t audio_count = this->mod_buf->read_interleaved_stereo((int32_t) this->a_specs->freq, (size_t) this->a_specs->samples, this->a_buf_interleaved.data());
 			if (audio_count != 0) {
 				// Stereo 32-Bit samples -> 2 channels * 4 Bytes of audio
-				//int audio_status = SDL_QueueAudio(this->a_master, this->a_buf_interleaved.data(), audio_count * 8);
+				int audio_status = SDL_QueueAudio(this->a_master, this->a_buf_interleaved.data(), audio_count * 8);
 			}
 		}
 
