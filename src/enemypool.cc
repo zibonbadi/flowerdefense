@@ -11,7 +11,7 @@ Enemypool::Enemypool(Plane& board, Player& player, Z_PlaneMeta& collide_enemy, f
 
 	for (int i = 0; i < poolSize; i++)
 	{
-		enemies.push_back(new Enemy(-INFINITY, -INFINITY, _player, EEnemyType::BUG));
+		enemies.push_back(new Enemy(-INFINITY, -INFINITY, _player, EEnemyType::BEE));
 	}
 	
 	// Hook handleEvents into event handler
@@ -199,7 +199,68 @@ void Enemypool::initAnimations() {
 	animations[8] = new Animation(g_rc.get_texture("spritesheet"), 1);
 	animations[8]->add_frame(Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 5, .uw = 32, .vw = 32 });
 	animations[8]->add_xsheet_phase(0, 1);
-	g_rc.add_anim("bug.dead", animations[8]);
+	g_rc.add_anim("enemy.dead", animations[8]);
+
+
+
+
+	// BEE animations
+
+	animations[9] = new Animation(g_rc.get_texture("spritesheet"), 1);
+	animations[9]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 0, .u = 32 * 0, .v = 32 * 14, .uw = 32, .vw = 32 });
+	animations[9]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 0, .u = 32 * 1, .v = 32 * 14, .uw = 32, .vw = 32 });
+	animations[9]->add_xsheet_phase(0, 1);
+	animations[9]->add_xsheet_phase(1, 1);
+	g_rc.add_anim("bee.top", animations[9]);
+
+	animations[10] = new Animation(g_rc.get_texture("spritesheet"), 1);
+	animations[10]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -45, .u = 32 * 0, .v = 32 * 14, .uw = 32, .vw = 32 });
+	animations[10]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -45, .u = 32 * 1, .v = 32 * 14, .uw = 32, .vw = 32 });
+	animations[10]->add_xsheet_phase(0, 1);
+	animations[10]->add_xsheet_phase(1, 1);
+	g_rc.add_anim("bee.topleft", animations[10]);
+
+	animations[11] = new Animation(g_rc.get_texture("spritesheet"), 1);
+	animations[11]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -90, .u = 32 * 0, .v = 32 * 14, .uw = 32, .vw = 32 });
+	animations[11]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -90, .u = 32 * 1, .v = 32 * 14, .uw = 32, .vw = 32 });
+	animations[11]->add_xsheet_phase(0, 1);
+	animations[11]->add_xsheet_phase(1, 1);
+	g_rc.add_anim("bee.left", animations[11]);
+
+	animations[12] = new Animation(g_rc.get_texture("spritesheet"), 1);
+	animations[12]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -135, .u = 32 * 0, .v = 32 * 14, .uw = 32, .vw = 32 });
+	animations[12]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -135, .u = 32 * 1, .v = 32 * 14, .uw = 32, .vw = 32 });
+	animations[12]->add_xsheet_phase(0, 1);
+	animations[12]->add_xsheet_phase(1, 1);
+	g_rc.add_anim("bee.bottomleft", animations[12]);
+
+	animations[13] = new Animation(g_rc.get_texture("spritesheet"), 1);
+	animations[13]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -180, .u = 32 * 0, .v = 32 * 14, .uw = 32, .vw = 32 });
+	animations[13]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -180, .u = 32 * 1, .v = 32 * 14, .uw = 32, .vw = 32 });
+	animations[13]->add_xsheet_phase(0, 1);
+	animations[13]->add_xsheet_phase(1, 1);
+	g_rc.add_anim("bee.bottom", animations[13]);
+
+	animations[14] = new Animation(g_rc.get_texture("spritesheet"), 1);
+	animations[14]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 135, .u = 32 * 0, .v = 32 * 14, .uw = 32, .vw = 32 });
+	animations[14]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 135, .u = 32 * 1, .v = 32 * 14, .uw = 32, .vw = 32 });
+	animations[14]->add_xsheet_phase(0, 1);
+	animations[14]->add_xsheet_phase(1, 1);
+	g_rc.add_anim("bee.bottomright", animations[14]);
+
+	animations[15] = new Animation(g_rc.get_texture("spritesheet"), 1);
+	animations[15]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 90, .u = 32 * 0, .v = 32 * 14, .uw = 32, .vw = 32 });
+	animations[15]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 90, .u = 32 * 1, .v = 32 * 14, .uw = 32, .vw = 32 });
+	animations[15]->add_xsheet_phase(0, 1);
+	animations[15]->add_xsheet_phase(1, 1);
+	g_rc.add_anim("bee.right", animations[15]);
+
+	animations[16] = new Animation(g_rc.get_texture("spritesheet"), 1);
+	animations[16]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 45, .u = 32 * 0, .v = 32 * 14, .uw = 32, .vw = 32 });
+	animations[16]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 45, .u = 32 * 1, .v = 32 * 14, .uw = 32, .vw = 32 });
+	animations[16]->add_xsheet_phase(0, 1);
+	animations[16]->add_xsheet_phase(1, 1);
+	g_rc.add_anim("bee.topright", animations[16]);
 }
 
 void Enemypool::handleEvents(Event* e){

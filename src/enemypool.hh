@@ -5,7 +5,7 @@ class Enemypool
 {
 private:
 	// Store animations in pool to save redundancy
-	Animation* animations[9];
+	Animation* animations[25];
 	Plane& _board;
 	Player& _player;
 	Z_PlaneMeta& _collide_enemy;

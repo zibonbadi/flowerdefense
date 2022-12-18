@@ -17,15 +17,38 @@ void Enemy::init(float x, float y)
 
 void Enemy::setSpriteAnimations() {
 	//g_rc.add_sprite("enemy", &sprite);
-	sprite.add_animation("top",		g_rc.get_anim("bug.top"));
-	sprite.add_animation("bottom",	g_rc.get_anim("bug.bottom"));
-	sprite.add_animation("left",	g_rc.get_anim("bug.left"));
-	sprite.add_animation("right",	g_rc.get_anim("bug.right"));
-	sprite.add_animation("topleft", g_rc.get_anim("bug.topleft"));
-	sprite.add_animation("topright", g_rc.get_anim("bug.topright"));
-	sprite.add_animation("bottomleft", g_rc.get_anim("bug.bottomleft"));
-	sprite.add_animation("bottomright", g_rc.get_anim("bug.bottomright"));
-	sprite.add_animation("dead", g_rc.get_anim("bug.dead"));
+
+
+	switch (_enemyType)
+	{
+	case EEnemyType::BUG:
+		sprite.add_animation("top", g_rc.get_anim("bug.top"));
+		sprite.add_animation("bottom", g_rc.get_anim("bug.bottom"));
+		sprite.add_animation("left", g_rc.get_anim("bug.left"));
+		sprite.add_animation("right", g_rc.get_anim("bug.right"));
+		sprite.add_animation("topleft", g_rc.get_anim("bug.topleft"));
+		sprite.add_animation("topright", g_rc.get_anim("bug.topright"));
+		sprite.add_animation("bottomleft", g_rc.get_anim("bug.bottomleft"));
+		sprite.add_animation("bottomright", g_rc.get_anim("bug.bottomright"));
+		break;
+	case EEnemyType::MEALWORM:
+		// TODO
+		break;
+	case EEnemyType::BEE:
+		sprite.add_animation("top", g_rc.get_anim("bee.top"));
+		sprite.add_animation("bottom", g_rc.get_anim("bee.bottom"));
+		sprite.add_animation("left", g_rc.get_anim("bee.left"));
+		sprite.add_animation("right", g_rc.get_anim("bee.right"));
+		sprite.add_animation("topleft", g_rc.get_anim("bee.topleft"));
+		sprite.add_animation("topright", g_rc.get_anim("bee.topright"));
+		sprite.add_animation("bottomleft", g_rc.get_anim("bee.bottomleft"));
+		sprite.add_animation("bottomright", g_rc.get_anim("bee.bottomright"));
+		break;
+	default:
+		break;
+	}
+
+	sprite.add_animation("dead", g_rc.get_anim("enemy.dead"));
 	sprite.switch_to_anim("right");
 }
 
