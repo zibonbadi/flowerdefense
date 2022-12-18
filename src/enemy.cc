@@ -13,41 +13,51 @@ void Enemy::init(float x, float y)
 	goalTileCoordinates.y = y;
 	sprite.debug_sprite = _player.GetSprite()->debug_sprite;
 	sprite.debug_collide = _player.GetSprite()->debug_collide;
-}
-
-void Enemy::setSpriteAnimations() {
-	//g_rc.add_sprite("enemy", &sprite);
-
 
 	switch (_enemyType)
 	{
 	case EEnemyType::BUG:
-		sprite.add_animation("top", g_rc.get_anim("bug.top"));
-		sprite.add_animation("bottom", g_rc.get_anim("bug.bottom"));
-		sprite.add_animation("left", g_rc.get_anim("bug.left"));
-		sprite.add_animation("right", g_rc.get_anim("bug.right"));
-		sprite.add_animation("topleft", g_rc.get_anim("bug.topleft"));
-		sprite.add_animation("topright", g_rc.get_anim("bug.topright"));
-		sprite.add_animation("bottomleft", g_rc.get_anim("bug.bottomleft"));
-		sprite.add_animation("bottomright", g_rc.get_anim("bug.bottomright"));
+		_enemySpeed = 1.5f;
 		break;
 	case EEnemyType::MEALWORM:
-		// TODO
+		_enemySpeed = 1.f;
 		break;
 	case EEnemyType::BEE:
-		sprite.add_animation("top", g_rc.get_anim("bee.top"));
-		sprite.add_animation("bottom", g_rc.get_anim("bee.bottom"));
-		sprite.add_animation("left", g_rc.get_anim("bee.left"));
-		sprite.add_animation("right", g_rc.get_anim("bee.right"));
-		sprite.add_animation("topleft", g_rc.get_anim("bee.topleft"));
-		sprite.add_animation("topright", g_rc.get_anim("bee.topright"));
-		sprite.add_animation("bottomleft", g_rc.get_anim("bee.bottomleft"));
-		sprite.add_animation("bottomright", g_rc.get_anim("bee.bottomright"));
+		_enemySpeed = 2.5f;
 		break;
 	default:
 		break;
 	}
+}
 
+void Enemy::setSpriteAnimations() {
+	//g_rc.add_sprite("enemy", &sprite);
+	std::string enemy_type_id;
+
+	switch (_enemyType)
+	{
+	case EEnemyType::BUG:
+		enemy_type_id = "bug";
+
+		break;
+	case EEnemyType::MEALWORM:
+		enemy_type_id = "mealworm";
+		// TODO
+		break;
+	case EEnemyType::BEE:
+		enemy_type_id = "bee";
+		break;
+	default:
+		break;
+	}
+	sprite.add_animation("top", g_rc.get_anim(enemy_type_id + ".top"));
+	sprite.add_animation("bottom", g_rc.get_anim(enemy_type_id + ".bottom"));
+	sprite.add_animation("left", g_rc.get_anim(enemy_type_id + ".left"));
+	sprite.add_animation("right", g_rc.get_anim(enemy_type_id + ".right"));
+	sprite.add_animation("topleft", g_rc.get_anim(enemy_type_id + ".topleft"));
+	sprite.add_animation("topright", g_rc.get_anim(enemy_type_id + ".topright"));
+	sprite.add_animation("bottomleft", g_rc.get_anim(enemy_type_id + ".bottomleft"));
+	sprite.add_animation("bottomright", g_rc.get_anim(enemy_type_id + ".bottomright"));
 	sprite.add_animation("dead", g_rc.get_anim("enemy.dead"));
 	sprite.switch_to_anim("right");
 }
@@ -143,8 +153,8 @@ void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer) {
 	}
 
 	SDL_FPoint adjustedInterpolStepSize;
-	adjustedInterpolStepSize.x = interpolStepSize.x * enemySpeed;
-	adjustedInterpolStepSize.y = interpolStepSize.y * enemySpeed;
+	adjustedInterpolStepSize.x = interpolStepSize.x * _enemySpeed;
+	adjustedInterpolStepSize.y = interpolStepSize.y * _enemySpeed;
 
 	if (abs(goalTileCoordinates.x - coordinates.x) < abs(adjustedInterpolStepSize.x)) {
 		adjustedInterpolStepSize.x = goalTileCoordinates.x - coordinates.x;

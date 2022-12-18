@@ -42,7 +42,7 @@ class Enemy {
 		bool isdead = false;
 		bool visible = false;
 
-		float enemySpeed					= 1.5f;
+		float _enemySpeed;
 
 		//~Enemy();
 };

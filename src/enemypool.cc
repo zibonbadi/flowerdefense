@@ -11,7 +11,7 @@ Enemypool::Enemypool(Plane& board, Player& player, Z_PlaneMeta& collide_enemy, f
 
 	for (int i = 0; i < poolSize; i++)
 	{
-		enemies.push_back(new Enemy(-INFINITY, -INFINITY, _player, EEnemyType::BEE));
+		enemies.push_back(new Enemy(-INFINITY, -INFINITY, _player, EEnemyType::MEALWORM));
 	}
 	
 	// Hook handleEvents into event handler
@@ -261,6 +261,86 @@ void Enemypool::initAnimations() {
 	animations[16]->add_xsheet_phase(0, 1);
 	animations[16]->add_xsheet_phase(1, 1);
 	g_rc.add_anim("bee.topright", animations[16]);
+
+
+
+
+
+
+
+	// Mealworm animations
+
+	animations[17] = new Animation(g_rc.get_texture("spritesheet"), 1);
+	animations[17]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 0, .u = 32 * 0, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[17]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 0, .u = 32 * 1, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[17]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 0, .u = 32 * 2, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[17]->add_xsheet_phase(0, 1);
+	animations[17]->add_xsheet_phase(1, 1);
+	animations[17]->add_xsheet_phase(2, 1);
+	g_rc.add_anim("mealworm.top", animations[17]);
+
+	animations[18] = new Animation(g_rc.get_texture("spritesheet"), 1);
+	animations[18]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -45, .u = 32 * 0, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[18]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -45, .u = 32 * 1, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[18]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -45, .u = 32 * 2, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[18]->add_xsheet_phase(0, 1);
+	animations[18]->add_xsheet_phase(1, 1);
+	animations[18]->add_xsheet_phase(2, 1);
+	g_rc.add_anim("mealworm.topleft", animations[18]);
+
+	animations[19] = new Animation(g_rc.get_texture("spritesheet"), 1);
+	animations[19]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -90, .u = 32 * 0, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[19]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -90, .u = 32 * 1, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[19]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -90, .u = 32 * 2, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[19]->add_xsheet_phase(0, 1);
+	animations[19]->add_xsheet_phase(1, 1);
+	animations[19]->add_xsheet_phase(2, 1);
+	g_rc.add_anim("mealworm.left", animations[19]);
+
+	animations[20] = new Animation(g_rc.get_texture("spritesheet"), 1);
+	animations[20]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -135, .u = 32 * 0, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[20]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -135, .u = 32 * 1, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[20]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -135, .u = 32 * 2, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[20]->add_xsheet_phase(0, 1);
+	animations[20]->add_xsheet_phase(1, 1);
+	animations[20]->add_xsheet_phase(2, 1);
+	g_rc.add_anim("mealworm.bottomleft", animations[20]);
+
+	animations[21] = new Animation(g_rc.get_texture("spritesheet"), 1);
+	animations[21]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -180, .u = 32 * 0, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[21]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -180, .u = 32 * 1, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[21]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = -180, .u = 32 * 2, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[21]->add_xsheet_phase(0, 1);
+	animations[21]->add_xsheet_phase(1, 1);
+	animations[21]->add_xsheet_phase(2, 1);
+	g_rc.add_anim("mealworm.bottom", animations[21]);
+
+	animations[22] = new Animation(g_rc.get_texture("spritesheet"), 1);
+	animations[22]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 135, .u = 32 * 0, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[22]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 135, .u = 32 * 1, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[22]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 135, .u = 32 * 2, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[22]->add_xsheet_phase(0, 1);
+	animations[22]->add_xsheet_phase(1, 1);
+	animations[22]->add_xsheet_phase(2, 1);
+	g_rc.add_anim("mealworm.bottomright", animations[22]);
+
+	animations[23] = new Animation(g_rc.get_texture("spritesheet"), 1);
+	animations[23]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 90, .u = 32 * 0, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[23]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 90, .u = 32 * 1, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[23]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 90, .u = 32 * 2, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[23]->add_xsheet_phase(0, 1);
+	animations[23]->add_xsheet_phase(1, 1);
+	animations[23]->add_xsheet_phase(2, 1);
+	g_rc.add_anim("mealworm.right", animations[23]);
+
+	animations[24] = new Animation(g_rc.get_texture("spritesheet"), 1);
+	animations[24]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 45, .u = 32 * 0, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[24]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 45, .u = 32 * 1, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[24]->add_frame(Z_PlaneMeta{ .pivot_x = 16, .pivot_y = 16, .deg = 45, .u = 32 * 2, .v = 32 * 13, .uw = 32, .vw = 32 });
+	animations[24]->add_xsheet_phase(0, 1);
+	animations[24]->add_xsheet_phase(1, 1);
+	animations[24]->add_xsheet_phase(2, 1);
+	g_rc.add_anim("mealworm.topright", animations[24]);
 }
 
 void Enemypool::handleEvents(Event* e){
