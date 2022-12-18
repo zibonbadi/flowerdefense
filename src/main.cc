@@ -107,7 +107,7 @@ int main(int argc, char* argv[]) {
 		DEBUG_MSG("Entering main loop...");
 
 		// Gloptastic tracker beats
-		if(g_rc.import_mod("bgm", "./assets/cycle.stm") != nullptr){
+		if(g_rc.import_mod("bgm", "./assets/liftyasoul.xm") != nullptr){
 			g_game.load_mod(g_rc.get_mod("bgm"), -1, -1);
 		}
 
