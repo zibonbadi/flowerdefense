@@ -109,6 +109,7 @@ void Game::_init(uint16_t w, uint16_t h){
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 	SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_SCALING, "1");
+	SDL_SetRenderDrawBlendMode( this->renderer, SDL_BLENDMODE_BLEND );
 
 	SDL_RenderSetViewport(this->renderer, nullptr);
 	SDL_RenderSetLogicalSize(this->renderer, this->w, this->h);
@@ -247,7 +248,7 @@ void Game::render() {
 
 		//ENGINE_DEBUG_MSG("Game.render(): Calling SDL_RenderPresent..." << std::endl;
 		// Pass to graphics card
-		SDL_RenderPresent(this->renderer);
+		//SDL_RenderPresent(this->renderer);
 		//ENGINE_DEBUG_MSG("Game.render(): Done." << std::endl;
 	}catch(std::exception &e){
 		std::cerr << "Game.render() exception: " << e.what() << std::endl;

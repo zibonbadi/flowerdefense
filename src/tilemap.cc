@@ -61,6 +61,10 @@ int Tilemap::set_grit(int grit_w, int grit_h){
 	return 0;
 };
 
+std::pair<int, int> Tilemap::get_grit() {
+	return std::pair(this->grit_w, this->grit_h);
+};
+
 void Tilemap::transform(Z_PlaneMeta transform){
 	this->transform_rect.x += transform.x;
 	this->transform_rect.y += transform.y;
