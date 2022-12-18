@@ -30,6 +30,10 @@ void Enemy::setSpriteAnimations() {
 }
 
 void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer) {
+	if (!this->visible) {
+		return;
+	}
+
 	SDL_FPoint flightPathPlayer = {
 		.x = _player.playerCoordinates.x - coordinates.x,
 		.y = _player.playerCoordinates.y - coordinates.y,

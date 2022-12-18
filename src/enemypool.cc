@@ -23,11 +23,12 @@ Enemypool::Enemypool(Plane& board, Player& player, Z_PlaneMeta& collide_enemy, f
 void Enemypool::Update(const float& deltaTime)
 {
 	_spawnTimer -= deltaTime;
-	if (_spawnTimer < 0) 
+	if (_spawnTimer < 0)
 	{
 		Spawn(_spawnCount);
 		_spawnTimer = _spawnTime;
 		Recollect();
+
 	}
 }
 
@@ -84,7 +85,7 @@ void Enemypool::Spawn(int count)
 		int border = ((rand() % 4));		   // Werte 0-3
 
 		int tileIndex;
-		if (border == 1 || border == 2)
+		if (border == 1 || border == 3)
 		{
 			tileIndex = ((rand() % TileCountX));  // Werte 0-24
 		}
@@ -104,16 +105,16 @@ void Enemypool::Spawn(int count)
 		if(enemy){
 			switch (border)
 			{
-			case 0:
+			case 0: // left
 				enemy->init(0, BFS_TILE_HEIGHT * tileIndex);
 				break;
-			case 1:
+			case 1: // top
 				enemy->init(BFS_TILE_WIDTH * tileIndex, 0);
 				break;
-			case 2:
+			case 2: // right
 				enemy->init(BFS_TILE_WIDTH * (TileCountX - 1), BFS_TILE_HEIGHT * tileIndex);
 				break;
-			case 3:
+			case 3: // bottom
 				enemy->init(BFS_TILE_WIDTH * tileIndex, BFS_TILE_HEIGHT * (TileCountY - 1));
 				break;
 			}
