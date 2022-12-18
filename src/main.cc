@@ -191,35 +191,56 @@ int main(int argc, char* argv[]) {
 			}
 		};
 			
+		bool tileHL = false;
+		SDL_Rect tile_hl_rect;
+		auto _obstacles_target = obstacles.get_coordinate_from_offset(
+			player.playerCoordinates.x+32 - 16,
+			player.playerCoordinates.y+32 + 20
+		);
+		auto _obstacles_spot = obstacles.get_spot(_obstacles_target.second, _obstacles_target.first);
+		auto _obstacles_grit = obstacles.get_grit();
+
 		EBus_Fn f_place_obstacle = [&](Event* e) {
-			if (e->get("status_edge") == "up") {
-				auto target = obstacles.get_coordinate_from_offset(
-					std::stoi(e->get("player.x"))+32 - 16,
-					std::stoi(e->get("player.y"))+32 + 20
+			DEBUG_MSG("Checking spot(" << _obstacles_target.first << ", " << _obstacles_target.second << ')');
+
+				_obstacles_target = obstacles.get_coordinate_from_offset(
+					player.playerCoordinates.x+32 - 16,
+					player.playerCoordinates.y+32 + 20
 				);
-				DEBUG_MSG("Checking spot(" << target.first << ", " << target.second << ')');
-				auto spot = obstacles.get_spot(target.second, target.first);
-				switch(spot){
+				_obstacles_spot = obstacles.get_spot(_obstacles_target.second, _obstacles_target.first);
+				_obstacles_grit = obstacles.get_grit();
+				tile_hl_rect.x = _obstacles_target.first;
+				tile_hl_rect.y = _obstacles_target.second;
+				tile_hl_rect.w = _obstacles_grit.first;
+				tile_hl_rect.h = _obstacles_grit.second;
+
+			if (e->get("status_edge") == "up") {
+				switch(_obstacles_spot){
 				case 'x': {
 					DEBUG_MSG("Removing obstacle");
-					obstacles.fill(target.second, target.first, 1, 1, ' ');
+					obstacles.fill(_obstacles_target.second, _obstacles_target.first, 1, 1, ' ');
 					player.obstacles++;
 					break;
 				}
 				case ' ': {
 					if( player.obstacles > 0 ){
 						DEBUG_MSG("Placing obstacle");
-						obstacles.fill(target.second, target.first, 1, 1, 'x');
+						obstacles.fill(_obstacles_target.second, _obstacles_target.first, 1, 1, 'x');
 						player.obstacles--;
 					}
 					break;
 				}
 				default: {
-					DEBUG_MSG("Found tile \"" << spot << '\"');
-				break;
+					DEBUG_MSG("Found tile \"" << _obstacles_spot << '\"');
+					break;
 				}
 				}
 				bfsFlower.execute(25, 25);
+				tileHL = false;
+			}
+			if (e->get("status_edge") == "down") {
+				DEBUG_MSG("Highlight Rect properties: { .x = " << tile_hl_rect.x << ", .y = " << tile_hl_rect.y <<  ", .w = " << tile_hl_rect.w <<  ", .h = " << tile_hl_rect.h << " }" );
+				tileHL = true;
 			}
 		};
 
@@ -366,6 +387,27 @@ int main(int argc, char* argv[]) {
 			/* Advance the player animation */
 			g_rc.advance_all_anim(now);
 			g_game.render();
+
+			/* Janky Tile highlights */
+			if(tileHL){
+				ENGINE_DEBUG_MSG("Rendering tileHL...")
+				_obstacles_target = obstacles.get_coordinate_from_offset(
+					player.playerCoordinates.y+32 + 20,
+					player.playerCoordinates.x+32 - 16
+				);
+				_obstacles_spot = obstacles.get_spot(_obstacles_target.first, _obstacles_target.second);
+				_obstacles_grit = obstacles.get_grit();
+				tile_hl_rect.x = _obstacles_target.first*_obstacles_grit.first;
+				tile_hl_rect.y = _obstacles_target.second*_obstacles_grit.second;
+				tile_hl_rect.w = _obstacles_grit.first;
+				tile_hl_rect.h = _obstacles_grit.second;
+
+				SDL_SetRenderDrawColor(g_game.getRenderer(), 0xcf, 0xcf, 0xcf, 0x7f );
+				SDL_RenderFillRect(g_game.getRenderer(), &tile_hl_rect);
+			}
+
+			SDL_RenderPresent(g_game.getRenderer());
+
 			past = now;
 		}
 	}

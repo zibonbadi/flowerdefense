@@ -38,6 +38,7 @@ class Tilemap {
 		//char new_crop(char id, Z_PlaneMeta crop);
 		char add_tile(char id, Sprite* tile);
 		int set_grit(int grit_w, int grit_h);
+		std::pair<int, int> get_grit();
 		void transform(Z_PlaneMeta transform);
 		Z_PlaneMeta get_transform();
 		void set_transform(Z_PlaneMeta new_tf);
