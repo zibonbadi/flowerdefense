@@ -59,12 +59,6 @@ void Game::_init(uint16_t w, uint16_t h){
 	}
 
 	/* Audio */
-	/*
-	if(Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) < 0){
-		ENGINE_DEBUG_MSG("SDL2_Mixer failed! Why? " << SDL_GetError());
-		throw std::runtime_error("Runtime error in Game constructor");
-	}
-	*/
 
 	if(Mix_Init(mixflags) < 0){
 		ENGINE_DEBUG_MSG("SDL2_Mixer failed! Why? " << SDL_GetError());
@@ -81,7 +75,6 @@ void Game::_init(uint16_t w, uint16_t h){
 	SDL_AudioSpec* a_spec_tmp = new SDL_AudioSpec;
 
 
-	/*
 	this->a_master = SDL_OpenAudioDevice(NULL, 0, &aspec_want, a_spec_tmp, 0);
 	if (this->a_master <= 0) {
 		std::cerr << "SDL_OpenAudioDevice() failed. Why? " << SDL_GetError() << std::endl;
@@ -92,7 +85,6 @@ void Game::_init(uint16_t w, uint16_t h){
 		SDL_PauseAudioDevice(this->a_master, 0);
 	}
 	ENGINE_DEBUG_MSG("Audio (SDL_Audio) Initialized.");
-	*/
 
 	//this->a_master = Mix_OpenAudioDevice(
 	//if( Mix_OpenAudioDevice(
@@ -233,16 +225,18 @@ void Game::render() {
 			// Attempting to correct for audio source. FAILED
 			//size_t audio_count = this->mod_buf->read_interleaved_stereo((int32_t) this->a_specs->freq, (size_t) this->a_specs->samples, this->a_buf_interleaved.data());
 			if (audio_count != 0) {
-				auto mixchunk = Mix_QuickLoad_RAW((Uint8*) this->a_buf_interleaved.data(), audio_count * 8);
+				//auto mixchunk = Mix_QuickLoad_RAW((Uint8*) this->a_buf_interleaved.data(), audio_count * 8);
 				// Stereo 32-Bit samples -> 2 channels * 4 Bytes of audio
-				//int audio_status = SDL_QueueAudio(this->a_master, this->a_buf_interleaved.data(), audio_count * 8);
+				int audio_status = SDL_QueueAudio(this->a_master, this->a_buf_interleaved.data(), audio_count * 8);
 
-				if( mixchunk != nullptr){
 					/* Mix together audio */
+				/*
+				if( mixchunk != nullptr){
 					Mix_PlayChannel(0, mixchunk, -1);
 				}else{
 					ENGINE_DEBUG_MSG("Mix_PlayChannel playback error: ");
 				}
+				*/
 			}
 		}
 
@@ -281,7 +275,7 @@ void Game::render() {
 
 int Game::play(Mix_Chunk* sound){
 	if(sound != nullptr){
-		Mix_PlayChannel(-1, sound, 1);
+		Mix_PlayChannel(1, sound, 0);
 	}
 	return 0;
 };

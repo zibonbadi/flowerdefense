@@ -148,7 +148,9 @@ int main(int argc, char* argv[]) {
 			}
 			else if (e->get("type") == "game.state.set" && e->get("scene") == "game"){
 				// Reset everything
-				g_game.play(g_rc.get_sound("restart"));
+				if(e->get("status_edge") == "down"){
+					g_game.play(g_rc.get_sound("restart"));
+				}
 				DEBUG_MSG("f_restart(e): Caught." << e->get("scene"));
 				obstacles.clear_map();
 
