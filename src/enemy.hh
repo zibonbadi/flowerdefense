@@ -7,9 +7,9 @@ enum class EEnemyDirection {
 	LEFT,
 	RIGHT,
 	TOPLEFT,
-	TOPRIGHT,
+	BOTTOMRIGHT,
 	BOTTOMLEFT,
-	BOTTOMRIGHT
+	TOPRIGHT
 };
 
 enum class EEnemyType {

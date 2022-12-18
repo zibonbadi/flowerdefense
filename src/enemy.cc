@@ -97,7 +97,7 @@ void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer) {
 	if(!isdead){
 		int tileSize = -1;
 		char movingDir = -1;
-		const char _reverseBFSDir[] = { 'b','t','r','l','4','1','2', '3' };
+		const char reverseBFSDir[] = { 'b','t','r','l','4','1','2', '3' };
 
 		if (_enemyType == EEnemyType::BUG) {
 			tileSize = bfsArrows->get_transform().w;
@@ -105,7 +105,37 @@ void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer) {
 		}
 
 		if (_enemyType == EEnemyType::MEALWORM) {
-			movingDir = _reverseBFSDir[(int)_enemyDir];
+			movingDir = reverseBFSDir[(int)_enemyDir];
+		}
+
+		if (_enemyType == EEnemyType::BEE) {
+			float angle = atan2(flightPathRose.y, flightPathRose.x) * 180 / M_PI;
+			angle -= 90.f;
+			DEBUG_MSG(angle)
+			if (angle < -67.5 && angle >= -112.5) {
+				movingDir = reverseBFSDir[(int)EEnemyDirection::RIGHT];
+			}
+			else if (angle < -112.5 && angle >= -157.5) {
+				movingDir = reverseBFSDir[(int)EEnemyDirection::TOPRIGHT];
+			}
+			else if (angle < -157.5 || angle > 157.5) {
+				movingDir = reverseBFSDir[(int)EEnemyDirection::TOP];
+			}
+			else if (angle > 112.5 && angle <= 157.5) {
+				movingDir = reverseBFSDir[(int)EEnemyDirection::TOPLEFT];
+			}
+			else if (angle > 67.5 && angle <= 112.5) {
+				movingDir = reverseBFSDir[(int)EEnemyDirection::LEFT];
+			}
+			else if (angle > 22.5 && angle <= 67.5) {
+				movingDir = reverseBFSDir[(int)EEnemyDirection::BOTTOMLEFT];
+			}
+			else if (angle <= 22.5 || angle >= -22.5) {
+				movingDir = reverseBFSDir[(int)EEnemyDirection::BOTTOM];
+			}
+			else if (angle < -22.5 && angle >= -67.5) {
+				movingDir = reverseBFSDir[(int)EEnemyDirection::BOTTOMRIGHT];
+			}
 		}
 
 		/* Change bug sprite animation*/
@@ -114,45 +144,45 @@ void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer) {
 			switch (movingDir) {
 			case 't':
 				if (_enemyDir != EEnemyDirection::TOP) sprite.switch_to_anim("top");
-				if (_enemyType == EEnemyType::BUG) _enemyDir = EEnemyDirection::TOP;
+				_enemyDir = EEnemyDirection::TOP;
 				goalTileCoordinates.y -= tileSize;
 				break;
 			case 'b':
 				if (_enemyDir != EEnemyDirection::BOTTOM) sprite.switch_to_anim("bottom");
-				if (_enemyType == EEnemyType::BUG) _enemyDir = EEnemyDirection::BOTTOM;
+				_enemyDir = EEnemyDirection::BOTTOM;
 				goalTileCoordinates.y += tileSize;
 				break;
 			case 'l':
 				if (_enemyDir != EEnemyDirection::LEFT) sprite.switch_to_anim("left");
-				if (_enemyType == EEnemyType::BUG) _enemyDir = EEnemyDirection::LEFT;
+				_enemyDir = EEnemyDirection::LEFT;
 				goalTileCoordinates.x -= tileSize;
 				break;
 			case 'r':
 				if (_enemyDir != EEnemyDirection::RIGHT) sprite.switch_to_anim("right");
-				if (_enemyType == EEnemyType::BUG) _enemyDir = EEnemyDirection::RIGHT;
+				_enemyDir = EEnemyDirection::RIGHT;
 				goalTileCoordinates.x += tileSize;
 				break;
 			case '1':
 				if (_enemyDir != EEnemyDirection::TOPLEFT) sprite.switch_to_anim("topleft");
-				if (_enemyType == EEnemyType::BUG) _enemyDir = EEnemyDirection::TOPLEFT;
+				_enemyDir = EEnemyDirection::TOPLEFT;
 				goalTileCoordinates.x -= tileSize;
 				goalTileCoordinates.y -= tileSize;
 				break;
 			case '2':
 				if (_enemyDir != EEnemyDirection::TOPRIGHT) sprite.switch_to_anim("topright");
-				if (_enemyType == EEnemyType::BUG) _enemyDir = EEnemyDirection::TOPRIGHT;
+				_enemyDir = EEnemyDirection::TOPRIGHT;
 				goalTileCoordinates.x += tileSize;
 				goalTileCoordinates.y -= tileSize;
 				break;
 			case '3':
 				if (_enemyDir != EEnemyDirection::BOTTOMLEFT) sprite.switch_to_anim("bottomleft");
-				if (_enemyType == EEnemyType::BUG) _enemyDir = EEnemyDirection::BOTTOMLEFT;
+				_enemyDir = EEnemyDirection::BOTTOMLEFT;
 				goalTileCoordinates.x -= tileSize;
 				goalTileCoordinates.y += tileSize;
 				break;
 			case '4':
 				if (_enemyDir != EEnemyDirection::BOTTOMRIGHT) sprite.switch_to_anim("bottomright");
-				if (_enemyType == EEnemyType::BUG) _enemyDir = EEnemyDirection::BOTTOMRIGHT;
+				_enemyDir = EEnemyDirection::BOTTOMRIGHT;
 				goalTileCoordinates.x += tileSize;
 				goalTileCoordinates.y += tileSize;
 				break;

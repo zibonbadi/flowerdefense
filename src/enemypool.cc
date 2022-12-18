@@ -11,7 +11,7 @@ Enemypool::Enemypool(Plane& board, Player& player, Z_PlaneMeta& collide_enemy, f
 
 	for (int i = 0; i < poolSize; i++)
 	{
-		enemies.push_back(new Enemy(-INFINITY, -INFINITY, _player, EEnemyType::MEALWORM, EEnemyDirection::RIGHT));
+		enemies.push_back(new Enemy(-INFINITY, -INFINITY, _player, EEnemyType::BEE, EEnemyDirection::RIGHT));
 	}
 	
 	// Hook handleEvents into event handler
