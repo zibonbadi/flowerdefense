@@ -1,6 +1,6 @@
 #include "enemy.hh"
 
-Enemy::Enemy(float x, float y, Player& player) : _player(player) {
+Enemy::Enemy(float x, float y, Player& player, EEnemyType enemyType) : _player(player), _enemyType(enemyType) {
 	init(x, y);
 	setSpriteAnimations();
 }
@@ -16,16 +16,16 @@ void Enemy::init(float x, float y)
 }
 
 void Enemy::setSpriteAnimations() {
-	g_rc.add_sprite("enemy", &sprite);
-	sprite.add_animation("top",		g_rc.get_anim("enemy.top"));
-	sprite.add_animation("bottom",	g_rc.get_anim("enemy.bottom"));
-	sprite.add_animation("left",	g_rc.get_anim("enemy.left"));
-	sprite.add_animation("right",	g_rc.get_anim("enemy.right"));
-	sprite.add_animation("topleft", g_rc.get_anim("enemy.topleft"));
-	sprite.add_animation("topright", g_rc.get_anim("enemy.topright"));
-	sprite.add_animation("bottomleft", g_rc.get_anim("enemy.bottomleft"));
-	sprite.add_animation("bottomright", g_rc.get_anim("enemy.bottomright"));
-	sprite.add_animation("dead", g_rc.get_anim("enemy.dead"));
+	//g_rc.add_sprite("enemy", &sprite);
+	sprite.add_animation("top",		g_rc.get_anim("bug.top"));
+	sprite.add_animation("bottom",	g_rc.get_anim("bug.bottom"));
+	sprite.add_animation("left",	g_rc.get_anim("bug.left"));
+	sprite.add_animation("right",	g_rc.get_anim("bug.right"));
+	sprite.add_animation("topleft", g_rc.get_anim("bug.topleft"));
+	sprite.add_animation("topright", g_rc.get_anim("bug.topright"));
+	sprite.add_animation("bottomleft", g_rc.get_anim("bug.bottomleft"));
+	sprite.add_animation("bottomright", g_rc.get_anim("bug.bottomright"));
+	sprite.add_animation("dead", g_rc.get_anim("bug.dead"));
 	sprite.switch_to_anim("right");
 }
 
@@ -149,7 +149,7 @@ void Enemy::dying(){
 }
 
 void Enemy::disappear(){
-	sprite.setTransform(Z_PlaneMeta{});
+	sprite.setTransform(Z_PlaneMeta{ .x = -INFINITY, .y = -INFINITY });
 	visible = false;
 }
 

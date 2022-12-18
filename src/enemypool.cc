@@ -11,7 +11,7 @@ Enemypool::Enemypool(Plane& board, Player& player, Z_PlaneMeta& collide_enemy, f
 
 	for (int i = 0; i < poolSize; i++)
 	{
-		enemies.push_back(new Enemy(-INFINITY, -INFINITY, _player));
+		enemies.push_back(new Enemy(-INFINITY, -INFINITY, _player, EEnemyType::BUG));
 	}
 	
 	// Hook handleEvents into event handler
@@ -159,47 +159,47 @@ void Enemypool::initAnimations() {
 	animations[0] = new Animation(g_rc.get_texture("spritesheet"), 1);
 	animations[0]->add_frame(Z_PlaneMeta{ .u = 32 * 0, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[0]->add_xsheet_phase(0, 1);
-	g_rc.add_anim("enemy.top", animations[0]);
+	g_rc.add_anim("bug.top", animations[0]);
 
 	animations[1] = new Animation(g_rc.get_texture("spritesheet"), 1);
 	animations[1]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[1]->add_xsheet_phase(0, 1);
-	g_rc.add_anim("enemy.topleft", animations[1]);
+	g_rc.add_anim("bug.topleft", animations[1]);
 
 	animations[2] = new Animation(g_rc.get_texture("spritesheet"), 1);
 	animations[2]->add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[2]->add_xsheet_phase(0, 1);
-	g_rc.add_anim("enemy.left", animations[2]);
+	g_rc.add_anim("bug.left", animations[2]);
 
 	animations[3] = new Animation(g_rc.get_texture("spritesheet"), 1);
 	animations[3]->add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[3]->add_xsheet_phase(0, 1);
-	g_rc.add_anim("enemy.bottomleft", animations[3]);
+	g_rc.add_anim("bug.bottomleft", animations[3]);
 
 	animations[4] = new Animation(g_rc.get_texture("spritesheet"), 1);
 	animations[4]->add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[4]->add_xsheet_phase(0, 1);
-	g_rc.add_anim("enemy.bottom", animations[4]);
+	g_rc.add_anim("bug.bottom", animations[4]);
 
 	animations[5] = new Animation(g_rc.get_texture("spritesheet"), 1);
 	animations[5]->add_frame(Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[5]->add_xsheet_phase(0, 1);
-	g_rc.add_anim("enemy.bottomright", animations[5]);
+	g_rc.add_anim("bug.bottomright", animations[5]);
 
 	animations[6] = new Animation(g_rc.get_texture("spritesheet"), 1);
 	animations[6]->add_frame(Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[6]->add_xsheet_phase(0, 1);
-	g_rc.add_anim("enemy.right", animations[6]);
+	g_rc.add_anim("bug.right", animations[6]);
 
 	animations[7] = new Animation(g_rc.get_texture("spritesheet"), 1);
 	animations[7]->add_frame(Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 6, .uw = 32, .vw = 32 });
 	animations[7]->add_xsheet_phase(0, 1);
-	g_rc.add_anim("enemy.topright", animations[7]);
+	g_rc.add_anim("bug.topright", animations[7]);
 
 	animations[8] = new Animation(g_rc.get_texture("spritesheet"), 1);
 	animations[8]->add_frame(Z_PlaneMeta{ .u = 32 * 6, .v = 32 * 5, .uw = 32, .vw = 32 });
 	animations[8]->add_xsheet_phase(0, 1);
-	g_rc.add_anim("enemy.dead", animations[8]);
+	g_rc.add_anim("bug.dead", animations[8]);
 }
 
 void Enemypool::handleEvents(Event* e){

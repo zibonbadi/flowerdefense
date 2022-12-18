@@ -12,6 +12,12 @@ enum class EEnemyDirection {
 	BOTTOMRIGHT
 };
 
+enum class EEnemyType {
+	BUG,
+	MEALWORM,
+	BEE
+};
+
 class Enemy {
 	private:
 		Sprite sprite;
@@ -22,8 +28,9 @@ class Enemy {
 		std::string _id;
 		Player& _player;
 	public:
+		EEnemyType _enemyType;
 		SDL_FPoint coordinates				= { .x = 0, .y = 0 };
-		Enemy(float x, float y, Player& player);
+		Enemy(float x, float y, Player& player, EEnemyType enemyType);
 		void init(float x, float y);
 		void setSpriteAnimations();
 		void Update(const BFS& bfsFlower,const BFS& bfsPlayer);
