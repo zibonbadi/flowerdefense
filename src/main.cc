@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 		auto obstacle = g_rc.make_static_sprite_from_texture("tiles.obstacle", "spritesheet", Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 
 
-		Player player((SCREEN_WIDTH / 2) - 16, (SCREEN_HEIGHT / 2) - 32 - 200, 1.5f);
+		Player player((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 64, 1.5f);
 		Tilemap ground(32, 32)/*, plants(32, 32)*/, obstacles;
 
 		// Set backup color for rose tile
@@ -135,6 +135,10 @@ int main(int argc, char* argv[]) {
 				g_game.state = EnumGameState::INTRO;
 			}
 			else if (e->get("type") == "game.state.set" && e->get("scene") == "gameover") {
+				if (g_game.state == EnumGameState::INTRO) {
+					return; // let the intro just show the intro text, and not the game over text
+				}
+
 				hud.ex_rahmen->visible = false;
 				hud.tm_inventory->visible = false;
 				hud.dettach_rose_leben();
@@ -347,9 +351,8 @@ int main(int argc, char* argv[]) {
 			if(g_game.state != EnumGameState::SKILLSELECT){
 				player.Update(deltaTime, enemyPool.enemies, rose, hud);
 
-				if (g_game.state == EnumGameState::PLAY) {
-					waveCoolDownTimer -= deltaTime;
-				}
+				waveCoolDownTimer -= deltaTime;
+				
 
 				if (waveCoolDownTimer < 0) {
 					hud.gameWaveCooldownText->visible = false;

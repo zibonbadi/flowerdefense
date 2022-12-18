@@ -11,7 +11,7 @@ Enemypool::Enemypool(Plane& board, Player& player, Z_PlaneMeta& collide_enemy, f
 
 	for (int i = 0; i < poolSize; i++)
 	{
-		enemies.push_back(new Enemy(-100.0f, -100.0f, _player));
+		enemies.push_back(new Enemy(-INFINITY, -INFINITY, _player));
 	}
 	
 	// Hook handleEvents into event handler
@@ -55,7 +55,7 @@ void Enemypool::Recollect()
 	for (auto & e : enemies)
 	{
 		if (!e->visible) {
-			e->reborn(-100.0f, -100.0f);
+			e->reborn(-INFINITY, -INFINITY);
 			//availableEnemies.push_back(e);
 			//_availableEnemiesSize++;
 			//enemies.erase(e);

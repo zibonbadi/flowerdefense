@@ -44,7 +44,7 @@ class Player {
 	public:
 		Sprite *attack;
 		float playerSpeed = 200.f;
-		SDL_FPoint playerCoordinates	= { .x = 0, .y = 0 };
+		SDL_FPoint playerCoordinates	= { .x = INFINITY, .y = INFINITY };
 		unsigned int health = 4, obstacles = 4;
 		int xp_bar = 200;
 		int xp_bekommt = 100;

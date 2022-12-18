@@ -630,7 +630,8 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, 
 		player->setTransform(Z_PlaneMeta{ .x = playerCoordinates.x, .y = playerCoordinates.y, .w = 32, .h = 64 });
 	}
 	else {
-		attack->setTransform(Z_PlaneMeta{ .x = -INFINITY, .y = -INFINITY });
+		player->setTransform(Z_PlaneMeta{ .x = INFINITY, .y = INFINITY, .w = 32, .h = 64 });
+		attack->setTransform(Z_PlaneMeta{ .x = INFINITY, .y = INFINITY });
 	}
 }
 
