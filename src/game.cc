@@ -226,8 +226,14 @@ void Game::render() {
 			//size_t audio_count = this->mod_buf->read_interleaved_stereo((int32_t) this->a_specs->freq, (size_t) this->a_specs->samples, this->a_buf_interleaved.data());
 			if (audio_count != 0) {
 				//auto mixchunk = Mix_QuickLoad_RAW((Uint8*) this->a_buf_interleaved.data(), audio_count * 8);
+				
+				// Lower volume (50% ~= -12dB; logarithmic volume perception)
+				auto mod_data = this->a_buf_interleaved.data();
+				std::transform(a_buf_interleaved.cbegin(), a_buf_interleaved.cend(),
+						a_buf_interleaved.begin(), // write to the same location
+						[](float f) { return f*0.5f; });
 				// Stereo 32-Bit samples -> 2 channels * 4 Bytes of audio
-				int audio_status = SDL_QueueAudio(this->a_master, this->a_buf_interleaved.data(), audio_count * 8);
+				int audio_status = SDL_QueueAudio(this->a_master, mod_data, audio_count * 8);
 
 					/* Mix together audio */
 				/*
