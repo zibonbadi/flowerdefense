@@ -2,10 +2,10 @@
 #include "headers.hh"
 
 enum class EEnemyDirection {
-	LEFT,
-	RIGHT,
 	TOP,
 	BOTTOM,
+	LEFT,
+	RIGHT,
 	TOPLEFT,
 	TOPRIGHT,
 	BOTTOMLEFT,
@@ -24,13 +24,13 @@ class Enemy {
 		
 		SDL_Point goalTileCoordinates		= { .x = 0, .y = 0 };
 		SDL_FPoint interpolStepSize			= { .x = 0, .y = 0 };
-		EEnemyDirection enemyDir;
+		EEnemyDirection _enemyDir			= EEnemyDirection::RIGHT;
 		std::string _id;
 		Player& _player;
 	public:
 		EEnemyType _enemyType;
 		SDL_FPoint coordinates				= { .x = 0, .y = 0 };
-		Enemy(float x, float y, Player& player, EEnemyType enemyType);
+		Enemy(float x, float y, Player& player, EEnemyType enemyType, EEnemyDirection enemyDir);
 		void init(float x, float y);
 		void setSpriteAnimations();
 		void Update(const BFS& bfsFlower,const BFS& bfsPlayer);

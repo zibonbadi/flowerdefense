@@ -1,6 +1,6 @@
 #include "enemy.hh"
 
-Enemy::Enemy(float x, float y, Player& player, EEnemyType enemyType) : _player(player), _enemyType(enemyType) {
+Enemy::Enemy(float x, float y, Player& player, EEnemyType enemyType, EEnemyDirection enemyDir) : _player(player), _enemyType(enemyType), _enemyDir(enemyDir) {
 	init(x, y);
 	setSpriteAnimations();
 }
@@ -20,7 +20,7 @@ void Enemy::init(float x, float y)
 		_enemySpeed = 1.5f;
 		break;
 	case EEnemyType::MEALWORM:
-		_enemySpeed = 1.f;
+		_enemySpeed = 0.5f;
 		break;
 	case EEnemyType::BEE:
 		_enemySpeed = 2.5f;
@@ -67,77 +67,96 @@ void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer) {
 		return;
 	}
 
-	SDL_FPoint flightPathPlayer = {
-		.x = _player.playerCoordinates.x - coordinates.x,
-		.y = _player.playerCoordinates.y - coordinates.y,
-	};
 	SDL_FPoint flightPathRose = {
 	.x = (SCREEN_WIDTH / 2) - coordinates.x,
 	.y = (SCREEN_HEIGHT / 2) - coordinates.y,
 	};
 
-	float flightPathPlayerLength = sqrt(flightPathPlayer.x * flightPathPlayer.x + flightPathPlayer.y * flightPathPlayer.y);
 	float flightPathRoseLength = sqrt(flightPathRose.x * flightPathRose.x + flightPathRose.y * flightPathRose.y);
 
-	Tilemap* bfsArrows;
-	if (flightPathPlayerLength < flightPathRoseLength) {
-		bfsArrows = bfsPlayer.bfsArrows;
-	}
-	else {
-		bfsArrows = bfsFlower.bfsArrows;
-	}
-	if(!isdead){
-	const int tileSize = bfsArrows->get_transform().w;
-	char movingDir = bfsArrows->get_spot(coordinates.x / tileSize, coordinates.y / tileSize);
 
-	/* Change enemy sprite animation*/
-	if (goalTileCoordinates.x == ((int)(coordinates.x)) &&
-		goalTileCoordinates.y == ((int)(coordinates.y))) {
-		switch (movingDir) {
+
+	Tilemap* bfsArrows;
+
+	if (_enemyType == EEnemyType::BUG) {
+		
+		SDL_FPoint flightPathPlayer = {
+			.x = _player.playerCoordinates.x - coordinates.x,
+			.y = _player.playerCoordinates.y - coordinates.y,
+		};
+		float flightPathPlayerLength = sqrt(flightPathPlayer.x * flightPathPlayer.x + flightPathPlayer.y * flightPathPlayer.y);
+
+		if (flightPathPlayerLength < flightPathRoseLength) {
+			bfsArrows = bfsPlayer.bfsArrows;
+		}
+		else {
+			bfsArrows = bfsFlower.bfsArrows;
+		}
+	}
+
+	if(!isdead){
+		int tileSize = -1;
+		char movingDir = -1;
+		const char _reverseBFSDir[] = { 'b','t','r','l','4','1','2', '3' };
+
+		if (_enemyType == EEnemyType::BUG) {
+			tileSize = bfsArrows->get_transform().w;
+			movingDir = bfsArrows->get_spot(coordinates.x / tileSize, coordinates.y / tileSize);
+		}
+
+		if (_enemyType == EEnemyType::MEALWORM) {
+			movingDir = _reverseBFSDir[(int)_enemyDir];
+		}
+
+		/* Change bug sprite animation*/
+		if (goalTileCoordinates.x == ((int)(coordinates.x)) &&
+			goalTileCoordinates.y == ((int)(coordinates.y))) {
+			switch (movingDir) {
 			case 't':
-				if(enemyDir != EEnemyDirection::TOP) sprite.switch_to_anim("top");
-				enemyDir = EEnemyDirection::TOP;
+				if (_enemyDir != EEnemyDirection::TOP) sprite.switch_to_anim("top");
+				if (_enemyType == EEnemyType::BUG) _enemyDir = EEnemyDirection::TOP;
 				goalTileCoordinates.y -= tileSize;
 				break;
 			case 'b':
-				if (enemyDir != EEnemyDirection::BOTTOM) sprite.switch_to_anim("bottom");
-				enemyDir = EEnemyDirection::BOTTOM;
+				if (_enemyDir != EEnemyDirection::BOTTOM) sprite.switch_to_anim("bottom");
+				if (_enemyType == EEnemyType::BUG) _enemyDir = EEnemyDirection::BOTTOM;
 				goalTileCoordinates.y += tileSize;
 				break;
 			case 'l':
-				if (enemyDir != EEnemyDirection::LEFT) sprite.switch_to_anim("left");
-				enemyDir = EEnemyDirection::LEFT;
+				if (_enemyDir != EEnemyDirection::LEFT) sprite.switch_to_anim("left");
+				if (_enemyType == EEnemyType::BUG) _enemyDir = EEnemyDirection::LEFT;
 				goalTileCoordinates.x -= tileSize;
 				break;
 			case 'r':
-				if (enemyDir != EEnemyDirection::RIGHT) sprite.switch_to_anim("right");
-				enemyDir = EEnemyDirection::RIGHT;
+				if (_enemyDir != EEnemyDirection::RIGHT) sprite.switch_to_anim("right");
+				if (_enemyType == EEnemyType::BUG) _enemyDir = EEnemyDirection::RIGHT;
 				goalTileCoordinates.x += tileSize;
 				break;
 			case '1':
-				if (enemyDir != EEnemyDirection::TOPLEFT) sprite.switch_to_anim("topleft");
-				enemyDir = EEnemyDirection::TOPLEFT;
+				if (_enemyDir != EEnemyDirection::TOPLEFT) sprite.switch_to_anim("topleft");
+				if (_enemyType == EEnemyType::BUG) _enemyDir = EEnemyDirection::TOPLEFT;
 				goalTileCoordinates.x -= tileSize;
 				goalTileCoordinates.y -= tileSize;
 				break;
 			case '2':
-				if (enemyDir != EEnemyDirection::TOPRIGHT) sprite.switch_to_anim("topright");
-				enemyDir = EEnemyDirection::TOPRIGHT;
+				if (_enemyDir != EEnemyDirection::TOPRIGHT) sprite.switch_to_anim("topright");
+				if (_enemyType == EEnemyType::BUG) _enemyDir = EEnemyDirection::TOPRIGHT;
 				goalTileCoordinates.x += tileSize;
 				goalTileCoordinates.y -= tileSize;
 				break;
 			case '3':
-				if (enemyDir != EEnemyDirection::BOTTOMLEFT) sprite.switch_to_anim("bottomleft");
-				enemyDir = EEnemyDirection::BOTTOMLEFT;
+				if (_enemyDir != EEnemyDirection::BOTTOMLEFT) sprite.switch_to_anim("bottomleft");
+				if (_enemyType == EEnemyType::BUG) _enemyDir = EEnemyDirection::BOTTOMLEFT;
 				goalTileCoordinates.x -= tileSize;
 				goalTileCoordinates.y += tileSize;
 				break;
 			case '4':
-				if (enemyDir != EEnemyDirection::BOTTOMRIGHT) sprite.switch_to_anim("bottomright");
-				enemyDir = EEnemyDirection::BOTTOMRIGHT;
+				if (_enemyDir != EEnemyDirection::BOTTOMRIGHT) sprite.switch_to_anim("bottomright");
+				if (_enemyType == EEnemyType::BUG) _enemyDir = EEnemyDirection::BOTTOMRIGHT;
 				goalTileCoordinates.x += tileSize;
 				goalTileCoordinates.y += tileSize;
 				break;
+			}
 		}
 
 		interpolStepSize.x = goalTileCoordinates.x - coordinates.x;
@@ -150,27 +169,27 @@ void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer) {
 			interpolStepSize.y *= length_inverse;
 		}
 
+		SDL_FPoint adjustedInterpolStepSize;
+		adjustedInterpolStepSize.x = interpolStepSize.x * _enemySpeed;
+		adjustedInterpolStepSize.y = interpolStepSize.y * _enemySpeed;
+
+		if (abs(goalTileCoordinates.x - coordinates.x) < abs(adjustedInterpolStepSize.x)) {
+			adjustedInterpolStepSize.x = goalTileCoordinates.x - coordinates.x;
+		}
+
+		if (abs(goalTileCoordinates.y - coordinates.y) < abs(adjustedInterpolStepSize.y)) {
+			adjustedInterpolStepSize.y = goalTileCoordinates.y - coordinates.y;
+		}
+
+		/* Add delta to enemy coordinates */
+		coordinates.x += adjustedInterpolStepSize.x;
+		coordinates.y += adjustedInterpolStepSize.y;
+
+
+		/* Adjust enemy sprite transform*/             // x - 8 so that the sprite centroid moves exactly along the bfs path
+		sprite.setTransform(Z_PlaneMeta{ .x = coordinates.x - 8, .y = coordinates.y - 8, .w = 32, .h = 32 });
 	}
-
-	SDL_FPoint adjustedInterpolStepSize;
-	adjustedInterpolStepSize.x = interpolStepSize.x * _enemySpeed;
-	adjustedInterpolStepSize.y = interpolStepSize.y * _enemySpeed;
-
-	if (abs(goalTileCoordinates.x - coordinates.x) < abs(adjustedInterpolStepSize.x)) {
-		adjustedInterpolStepSize.x = goalTileCoordinates.x - coordinates.x;
-	}
-
-	if (abs(goalTileCoordinates.y - coordinates.y) < abs(adjustedInterpolStepSize.y)) {
-		adjustedInterpolStepSize.y = goalTileCoordinates.y - coordinates.y;
-	}
-
-	/* Add delta to enemy coordinates */
-	coordinates.x += adjustedInterpolStepSize.x;
-	coordinates.y += adjustedInterpolStepSize.y;
-
-	/* Adjust enemy sprite transform*/             // x - 8 so that the sprite centroid moves exactly along the bfs path
-	sprite.setTransform(Z_PlaneMeta{ .x = coordinates.x - 8, .y = coordinates.y - 8, .w = 32, .h = 32 });
-}}
+}
 
 Sprite* Enemy::GetSprite() {
 	return &sprite;
