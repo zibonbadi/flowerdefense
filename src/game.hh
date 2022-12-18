@@ -5,8 +5,7 @@ enum class EnumGameState {
 	INTRO,
 	PLAY,
 	GAMEOVER,
-	SKILLSELECT,
-	WAVECOOLDOWN
+	SKILLSELECT
 };
 
 class Game {

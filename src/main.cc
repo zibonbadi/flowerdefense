@@ -323,7 +323,10 @@ int main(int argc, char* argv[]) {
 			if(g_game.state != EnumGameState::SKILLSELECT){
 				player.Update(deltaTime, enemyPool.enemies, rose, hud);
 
-				waveCoolDownTimer -= deltaTime;
+				if (g_game.state == EnumGameState::PLAY) {
+					waveCoolDownTimer -= deltaTime;
+				}
+
 				if (waveCoolDownTimer < 0) {
 					hud.gameWaveCooldownText->visible = false;
 					waveTimer -= deltaTime;
@@ -337,7 +340,9 @@ int main(int argc, char* argv[]) {
 						hud.wave++;
 						waveTimer = waveTime;
 						waveCoolDownTimer = waveCoolDownTime;
-						hud.gameWaveCooldownText->visible = true;
+						if (g_game.state == EnumGameState::PLAY) {
+							hud.gameWaveCooldownText->visible = true;
+						}
 					}
 
 
