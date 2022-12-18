@@ -1,6 +1,6 @@
 #include "enemy.hh"
 
-Enemy::Enemy(float x, float y, Player& player) : _player(player) {
+Enemy::Enemy(float x, float y, Player& player, EEnemyType enemyType) : _player(player), _enemyType(enemyType) {
 	init(x, y);
 	setSpriteAnimations();
 }
@@ -13,18 +13,51 @@ void Enemy::init(float x, float y)
 	goalTileCoordinates.y = y;
 	sprite.debug_sprite = _player.GetSprite()->debug_sprite;
 	sprite.debug_collide = _player.GetSprite()->debug_collide;
+
+	switch (_enemyType)
+	{
+	case EEnemyType::BUG:
+		_enemySpeed = 1.5f;
+		break;
+	case EEnemyType::MEALWORM:
+		_enemySpeed = 1.f;
+		break;
+	case EEnemyType::BEE:
+		_enemySpeed = 2.5f;
+		break;
+	default:
+		break;
+	}
 }
 
 void Enemy::setSpriteAnimations() {
-	g_rc.add_sprite("enemy", &sprite);
-	sprite.add_animation("top",		g_rc.get_anim("enemy.top"));
-	sprite.add_animation("bottom",	g_rc.get_anim("enemy.bottom"));
-	sprite.add_animation("left",	g_rc.get_anim("enemy.left"));
-	sprite.add_animation("right",	g_rc.get_anim("enemy.right"));
-	sprite.add_animation("topleft", g_rc.get_anim("enemy.topleft"));
-	sprite.add_animation("topright", g_rc.get_anim("enemy.topright"));
-	sprite.add_animation("bottomleft", g_rc.get_anim("enemy.bottomleft"));
-	sprite.add_animation("bottomright", g_rc.get_anim("enemy.bottomright"));
+	//g_rc.add_sprite("enemy", &sprite);
+	std::string enemy_type_id;
+
+	switch (_enemyType)
+	{
+	case EEnemyType::BUG:
+		enemy_type_id = "bug";
+
+		break;
+	case EEnemyType::MEALWORM:
+		enemy_type_id = "mealworm";
+		// TODO
+		break;
+	case EEnemyType::BEE:
+		enemy_type_id = "bee";
+		break;
+	default:
+		break;
+	}
+	sprite.add_animation("top", g_rc.get_anim(enemy_type_id + ".top"));
+	sprite.add_animation("bottom", g_rc.get_anim(enemy_type_id + ".bottom"));
+	sprite.add_animation("left", g_rc.get_anim(enemy_type_id + ".left"));
+	sprite.add_animation("right", g_rc.get_anim(enemy_type_id + ".right"));
+	sprite.add_animation("topleft", g_rc.get_anim(enemy_type_id + ".topleft"));
+	sprite.add_animation("topright", g_rc.get_anim(enemy_type_id + ".topright"));
+	sprite.add_animation("bottomleft", g_rc.get_anim(enemy_type_id + ".bottomleft"));
+	sprite.add_animation("bottomright", g_rc.get_anim(enemy_type_id + ".bottomright"));
 	sprite.add_animation("dead", g_rc.get_anim("enemy.dead"));
 	sprite.switch_to_anim("right");
 }
@@ -62,46 +95,46 @@ void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer) {
 		goalTileCoordinates.y == ((int)(coordinates.y))) {
 		switch (movingDir) {
 			case 't':
+				if(enemyDir != EEnemyDirection::TOP) sprite.switch_to_anim("top");
 				enemyDir = EEnemyDirection::TOP;
-				sprite.switch_to_anim("top");
 				goalTileCoordinates.y -= tileSize;
 				break;
 			case 'b':
+				if (enemyDir != EEnemyDirection::BOTTOM) sprite.switch_to_anim("bottom");
 				enemyDir = EEnemyDirection::BOTTOM;
-				sprite.switch_to_anim("bottom");
 				goalTileCoordinates.y += tileSize;
 				break;
 			case 'l':
+				if (enemyDir != EEnemyDirection::LEFT) sprite.switch_to_anim("left");
 				enemyDir = EEnemyDirection::LEFT;
-				sprite.switch_to_anim("left");
 				goalTileCoordinates.x -= tileSize;
 				break;
 			case 'r':
+				if (enemyDir != EEnemyDirection::RIGHT) sprite.switch_to_anim("right");
 				enemyDir = EEnemyDirection::RIGHT;
-				sprite.switch_to_anim("right");
 				goalTileCoordinates.x += tileSize;
 				break;
 			case '1':
+				if (enemyDir != EEnemyDirection::TOPLEFT) sprite.switch_to_anim("topleft");
 				enemyDir = EEnemyDirection::TOPLEFT;
-				sprite.switch_to_anim("topleft");
 				goalTileCoordinates.x -= tileSize;
 				goalTileCoordinates.y -= tileSize;
 				break;
 			case '2':
+				if (enemyDir != EEnemyDirection::TOPRIGHT) sprite.switch_to_anim("topright");
 				enemyDir = EEnemyDirection::TOPRIGHT;
-				sprite.switch_to_anim("topright");
 				goalTileCoordinates.x += tileSize;
 				goalTileCoordinates.y -= tileSize;
 				break;
 			case '3':
+				if (enemyDir != EEnemyDirection::BOTTOMLEFT) sprite.switch_to_anim("bottomleft");
 				enemyDir = EEnemyDirection::BOTTOMLEFT;
-				sprite.switch_to_anim("bottomleft");
 				goalTileCoordinates.x -= tileSize;
 				goalTileCoordinates.y += tileSize;
 				break;
 			case '4':
+				if (enemyDir != EEnemyDirection::BOTTOMRIGHT) sprite.switch_to_anim("bottomright");
 				enemyDir = EEnemyDirection::BOTTOMRIGHT;
-				sprite.switch_to_anim("bottomright");
 				goalTileCoordinates.x += tileSize;
 				goalTileCoordinates.y += tileSize;
 				break;
@@ -120,8 +153,8 @@ void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer) {
 	}
 
 	SDL_FPoint adjustedInterpolStepSize;
-	adjustedInterpolStepSize.x = interpolStepSize.x * enemySpeed;
-	adjustedInterpolStepSize.y = interpolStepSize.y * enemySpeed;
+	adjustedInterpolStepSize.x = interpolStepSize.x * _enemySpeed;
+	adjustedInterpolStepSize.y = interpolStepSize.y * _enemySpeed;
 
 	if (abs(goalTileCoordinates.x - coordinates.x) < abs(adjustedInterpolStepSize.x)) {
 		adjustedInterpolStepSize.x = goalTileCoordinates.x - coordinates.x;
@@ -149,7 +182,7 @@ void Enemy::dying(){
 }
 
 void Enemy::disappear(){
-	sprite.setTransform(Z_PlaneMeta{});
+	sprite.setTransform(Z_PlaneMeta{ .x = -INFINITY, .y = -INFINITY });
 	visible = false;
 }
 
