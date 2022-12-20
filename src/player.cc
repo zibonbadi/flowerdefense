@@ -505,6 +505,7 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, 
 			enemy->disappear();
 			xp_bar += xp_bekommt;
 			}
+			g_game.play(g_rc.get_sound("player.pickup.xp"));
 		}
 		if(rose->collision(enemy->GetSprite())) {
 			if (!enemy->isdead && enemy->visible) {

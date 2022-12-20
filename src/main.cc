@@ -118,6 +118,7 @@ int main(int argc, char* argv[]) {
 		g_rc.import_sound("fence.select", "./assets/select.wav");
 		g_rc.import_sound("enemy.kill", "./assets/kill.wav");
 		g_rc.import_sound("player.damage", "./assets/damage.wav");
+		g_rc.import_sound("player.pickup.xp", "./assets/pickup_xp.wav");
 
 
 		/* Set up control events */
