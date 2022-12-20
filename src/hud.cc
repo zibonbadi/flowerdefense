@@ -550,6 +550,7 @@ bool Hud::option(Player &player,  Enemypool &enemypool){
 			LVLS->fill(0, 3, 1, 1, '+');
 
 			_board.attach(LVLS);
+			g_game.play(g_rc.get_sound("lvlup"));
 
 
 

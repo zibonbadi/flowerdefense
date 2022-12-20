@@ -122,6 +122,7 @@ void Enemypool::Spawn(int count)
 			_board.attach(enemy->GetSprite());
 			//enemies.push_back(enemy);
 		}
+		g_game.play(g_rc.get_sound("bee.spawn"));
 	}
 }
 

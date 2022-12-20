@@ -281,7 +281,7 @@ void Game::render() {
 
 int Game::play(Mix_Chunk* sound){
 	if(sound != nullptr){
-		Mix_PlayChannel(1, sound, 0);
+		Mix_PlayChannel(-1, sound, 0);
 	}
 	return 0;
 };

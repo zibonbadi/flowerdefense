@@ -111,7 +111,13 @@ int main(int argc, char* argv[]) {
 			g_game.load_mod(g_rc.get_mod("bgm"), -1, -1);
 		}
 
-		g_rc.import_sound("restart", "./assets/restart.wav") != nullptr;
+		g_rc.import_sound("restart", "./assets/restart.wav");
+		g_rc.import_sound("bee.spawn", "./assets/spawn_bee.wav");
+		g_rc.import_sound("player.lvlup", "./assets/lvlup.wav");
+		g_rc.import_sound("fence.place", "./assets/place_fence.wav");
+		g_rc.import_sound("fence.select", "./assets/select.wav");
+		g_rc.import_sound("enemy.kill", "./assets/kill.wav");
+		g_rc.import_sound("player.damage", "./assets/damage.wav");
 
 
 		/* Set up control events */
@@ -232,6 +238,7 @@ int main(int argc, char* argv[]) {
 					DEBUG_MSG("Removing obstacle");
 					obstacles.fill(_obstacles_target.second, _obstacles_target.first, 1, 1, ' ');
 					player.obstacles++;
+					g_game.play(g_rc.get_sound("fence.place"));
 					break;
 				}
 				case ' ': {
@@ -239,6 +246,7 @@ int main(int argc, char* argv[]) {
 						DEBUG_MSG("Placing obstacle");
 						obstacles.fill(_obstacles_target.second, _obstacles_target.first, 1, 1, 'x');
 						player.obstacles--;
+						g_game.play(g_rc.get_sound("fence.place"));
 					}
 					break;
 				}
@@ -252,6 +260,7 @@ int main(int argc, char* argv[]) {
 			}
 			if (e->get("status_edge") == "down") {
 				DEBUG_MSG("Highlight Rect properties: { .x = " << tile_hl_rect.x << ", .y = " << tile_hl_rect.y <<  ", .w = " << tile_hl_rect.w <<  ", .h = " << tile_hl_rect.h << " }" );
+				g_game.play(g_rc.get_sound("fence.select"));
 				tileHL = true;
 			}
 		};

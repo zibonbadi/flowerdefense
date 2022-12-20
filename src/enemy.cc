@@ -227,6 +227,7 @@ Sprite* Enemy::GetSprite() {
 void Enemy::dying(){
 	isdead = true;
 	sprite.switch_to_anim("dead");
+	g_game.play(g_rc.get_sound("enemy.kill"));
 }
 
 void Enemy::disappear(){

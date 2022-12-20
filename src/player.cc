@@ -526,6 +526,7 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, 
 		if (_animID.find(".damage") == std::string::npos) {
 			ChangePlayerAnimation(".damage");
 			health--;
+			g_game.play(g_rc.get_sound("enemy.damage"));
 		}
 		this->invulnerableCooldown = this->invulnerableTimeFrame;
 	}
