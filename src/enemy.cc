@@ -2,7 +2,6 @@
 
 Enemy::Enemy(float x, float y, Player& player, EEnemyType enemyType, EEnemyDirection enemyDir) : _player(player), _enemyType(enemyType), _enemyDir(enemyDir) {
 	init(x, y);
-	setSpriteAnimations();
 }
 
 void Enemy::init(float x, float y)
@@ -28,6 +27,7 @@ void Enemy::init(float x, float y)
 	default:
 		break;
 	}
+	setSpriteAnimations();
 }
 
 void Enemy::setSpriteAnimations() {

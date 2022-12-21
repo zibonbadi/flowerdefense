@@ -11,7 +11,7 @@ Enemypool::Enemypool(Plane& board, Player& player, Z_PlaneMeta& collide_enemy, f
 
 	for (int i = 0; i < poolSize; i++)
 	{
-		enemies.push_back(new Enemy(-INFINITY, -INFINITY, _player, EEnemyType::BEE, EEnemyDirection::RIGHT));
+		enemies.push_back(new Enemy(-INFINITY, -INFINITY, _player, EEnemyType::BUG, EEnemyDirection::RIGHT));
 	}
 	
 	// Hook handleEvents into event handler
@@ -76,16 +76,17 @@ void Enemypool::Spawn(int count, const int& waveNumber)
 	constexpr int TileCountX = SCREEN_WIDTH / BFS_TILE_WIDTH;
 	constexpr int TileCountY = SCREEN_HEIGHT / BFS_TILE_HEIGHT;
 
-	srand(time(NULL));
 	for (int i = 0; i < count; i++)
 	{
 
 		// left Border = 0 ; top Border = 1 ; right Border = 2 ; bottom Border = 3
+		srand(time(NULL));
 		int border = ((rand() % 4));		   // Werte 0-3
 
 		int tileIndex;
 		if (border == 1 || border == 3)
 		{
+			srand(time(NULL));
 			tileIndex = ((rand() % TileCountX));  // Werte 0-24
 		}
 		else
@@ -102,6 +103,7 @@ void Enemypool::Spawn(int count, const int& waveNumber)
 		enemy->visible = true;
 
 		if (waveNumber > 5) {
+			srand(time(NULL));
 			int typeNumber = rand() % 10;
 			if (typeNumber == 9) {	// wahrscheinlichkeit von 10% spawnt bee
 				enemy->_enemyType = EEnemyType::BEE;
@@ -111,6 +113,7 @@ void Enemypool::Spawn(int count, const int& waveNumber)
 		}
 
 		if (waveNumber > 7) {
+			srand(time(NULL));
 			int typeNumber = rand() % 2;
 			if (enemy->_enemyType == EEnemyType::BEE && typeNumber == 0) {	// wahrscheinlichkeit von 10% spawnt bee
 					enemy->_enemyType = EEnemyType::MEALWORM;
@@ -137,7 +140,9 @@ void Enemypool::Spawn(int count, const int& waveNumber)
 			_board.attach(enemy->GetSprite());
 			//enemies.push_back(enemy);
 		}
-		g_game.play(g_rc.get_sound("bee.spawn"));
+		if (enemy->_enemyType == EEnemyType::BEE) {
+			g_game.play(g_rc.get_sound("bee.spawn"));
+		}
 	}
 }
 
