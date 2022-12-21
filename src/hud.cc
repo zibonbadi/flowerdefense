@@ -2,6 +2,7 @@
 
 Hud::Hud(Plane &board) : _board(board){
 			LVLS = new Tilemap(400,200);
+			LVLS->transform(Z_PlaneMeta{.x = 200, .y = 100});
 			ex_rahmen_create();
 			ex_bar_create();
 			gaertner_leben_create();
@@ -545,9 +546,9 @@ bool Hud::option(Player &player,  Enemypool &enemypool){
 			LVLS->add_tile('/', LVLSY[1]);
 			LVLS->add_tile('+', LVLSY[2]);
 
-			LVLS->fill(0, 1, 1, 1, '?');
-			LVLS->fill(0, 2, 1, 1, '/');
-			LVLS->fill(0, 3, 1, 1, '+');
+			LVLS->fill(0, 0, 1, 1, '?');
+			LVLS->fill(0, 1, 1, 1, '/');
+			LVLS->fill(0, 2, 1, 1, '+');
 
 			_board.attach(LVLS);
 			g_game.play(g_rc.get_sound("lvlup"));
