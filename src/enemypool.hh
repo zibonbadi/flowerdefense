@@ -22,9 +22,9 @@ public:
 	~Enemypool();
 	int getAvailableCount();
 	Enemy* getFirstAvailable();
-	void Update(const float& deltaTime);
+	void Update(const float& deltaTime, const int& waveNumber);
 	void Recollect();
-	void Spawn(int count);
+	void Spawn(int count, const int& waveNumber);
 	void initAnimations();
 	void create();
 	void reset();

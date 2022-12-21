@@ -20,15 +20,14 @@ Enemypool::Enemypool(Plane& board, Player& player, Z_PlaneMeta& collide_enemy, f
 	//g_eventbus.subscribe("game.state.set", f_eHandler);
 }
 
-void Enemypool::Update(const float& deltaTime)
+void Enemypool::Update(const float& deltaTime, const int& waveNumber)
 {
 	_spawnTimer -= deltaTime;
 	if (_spawnTimer < 0)
 	{
-		Spawn(_spawnCount);
+		Spawn(_spawnCount, waveNumber);
 		_spawnTimer = _spawnTime;
 		Recollect();
-
 	}
 }
 
@@ -63,7 +62,7 @@ void Enemypool::Recollect()
 	}
 }
 
-void Enemypool::Spawn(int count)
+void Enemypool::Spawn(int count, const int& waveNumber)
 {
 	auto available = getAvailableCount();
 	if ((available  - count) < 0)
@@ -101,6 +100,22 @@ void Enemypool::Spawn(int count)
 		*/
 		Enemy* enemy = getFirstAvailable();
 		enemy->visible = true;
+
+		if (waveNumber > 5) {
+			int typeNumber = rand() % 10;
+			if (typeNumber == 9) {	// wahrscheinlichkeit von 10% spawnt bee
+				enemy->_enemyType = EEnemyType::BEE;
+			} else {
+				enemy->_enemyType = EEnemyType::BUG;
+			}
+		}
+
+		if (waveNumber > 7) {
+			int typeNumber = rand() % 2;
+			if (enemy->_enemyType == EEnemyType::BEE && typeNumber == 0) {	// wahrscheinlichkeit von 10% spawnt bee
+					enemy->_enemyType = EEnemyType::MEALWORM;
+			}
+		}
 
 		if(enemy){
 			switch (border)

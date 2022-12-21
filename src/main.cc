@@ -389,7 +389,7 @@ int main(int argc, char* argv[]) {
 
 
 
-					enemyPool.Update(deltaTime);
+					enemyPool.Update(deltaTime, hud.wave);
 				}
 				else {
 					hud.gameWaveCooldownText->write(std::pair(18, 5), "Next Wave in\r\n"+std::to_string((int)ceil(waveCoolDownTimer)) + " Seconds");
