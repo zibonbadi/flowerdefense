@@ -1,12 +1,9 @@
 #include "LVLSystem.hh"
 #include <iostream>
 
-
 bool LVLSystem::Update(Player &player, Enemypool &enemypool, Hud &hud){
 
     if(player.option_wahl != 0){
-
-        
         if(player.option_wahl == 1){
             Option_Eins(player); 
 

@@ -355,9 +355,11 @@ int main(int argc, char* argv[]) {
 				case SDL_KEYUP:
 				case SDL_KEYDOWN: {
 					g_keymapper.probe(e.key);
+				break;
 				}
 				case SDL_MOUSEBUTTONDOWN:
 				player.press = true;
+				player.mouseX = e.button.x;
 				player.mouseY = e.button.y;
 				break;
 
