@@ -50,18 +50,19 @@ int main(int argc, char* argv[]) {
 
 
 		BFS bfsPlayer(obstacles, "bfsPlayer.");
-		bfsPlayer.execute(10, 10);
 
 		BFS bfsFlower(obstacles, "bfsFlower.");
 		bfsFlower.execute(25, 25);
+		float flowerBFSrandomizerCooldownTime = 0.5f;
+		float flowerBFSrandomizerCooldownTimer = flowerBFSrandomizerCooldownTime;
 
 		// Construct scene planes
 		board.attach(&ground);
 		//board.attach(&plants);
 		board.attach(&obstacles);
 		board.attach(rose);
-		board.attach(player.GetSprite());
 		board.attach(player.attack);
+		board.attach(player.GetSprite());
 
 		Hud hud(hud_plane);
 		//hud.exp_create(5,8);
@@ -406,6 +407,13 @@ int main(int argc, char* argv[]) {
 				int y_tile = ((int)player.playerCoordinates.y + 32 + 24) / BFS_TILE_HEIGHT;
 
 				bfsPlayer.execute(x_tile, y_tile);
+
+				flowerBFSrandomizerCooldownTimer -= deltaTime;
+				if (flowerBFSrandomizerCooldownTimer < 0) {
+					bfsFlower.execute(25, 25);
+
+					flowerBFSrandomizerCooldownTimer = flowerBFSrandomizerCooldownTime;
+				}
 
 				for (int i = 0; i < enemyPool.enemies.size(); i++)
 				{
