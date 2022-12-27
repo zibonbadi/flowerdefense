@@ -18,6 +18,11 @@ Enemypool::Enemypool(Plane& board, Player& player, Z_PlaneMeta& collide_enemy, f
 	this->f_eHandler = new EBus_Fn( std::bind(&Enemypool::handleEvents, this, std::placeholders::_1) );
 	// Specify event subscriptions
 	//g_eventbus.subscribe("game.state.set", f_eHandler);
+
+	dist = new std::uniform_int_distribution<int>(0, 3);
+	dist2 = new std::uniform_int_distribution<int>(0, SCREEN_WIDTH / BFS_TILE_WIDTH);
+	dist3 = new std::uniform_int_distribution<int>(0, 9);
+	dist4 = new std::uniform_int_distribution<int>(0, 1);
 }
 
 void Enemypool::Update(const float& deltaTime, const int& waveNumber)
@@ -25,16 +30,16 @@ void Enemypool::Update(const float& deltaTime, const int& waveNumber)
 	_spawnTimer -= deltaTime;
 	if (_spawnTimer < 0)
 	{
+		Recollect();
 		Spawn(_spawnCount, waveNumber);
 		_spawnTimer = _spawnTime;
-		Recollect();
 	}
 }
 
 int Enemypool::getAvailableCount(){
 	auto rVal = 0;
 	for (auto & e : enemies){
-		if (!e->visible){
+		if (!e->visible && !e->isdead){  // isdead so we know they have been recollected (and reborned)
 			rVal++;
 		}
 	}
@@ -43,7 +48,7 @@ int Enemypool::getAvailableCount(){
 
 Enemy* Enemypool::getFirstAvailable(){
 	for (auto & e : enemies){
-		if (!e->visible)
+		if (!e->visible && !e->isdead)  // isdead so we know they have been recollected (and reborned)
 			return e;
 	}
 	return nullptr;
@@ -55,9 +60,7 @@ void Enemypool::Recollect()
 	{
 		if (!e->visible) {
 			e->reborn(-INFINITY, -INFINITY);
-			//availableEnemies.push_back(e);
-			//_availableEnemiesSize++;
-			//enemies.erase(e);
+			_board.detach(e->GetSprite());
 		}
 	}
 }
@@ -80,18 +83,18 @@ void Enemypool::Spawn(int count, const int& waveNumber)
 	{
 
 		// left Border = 0 ; top Border = 1 ; right Border = 2 ; bottom Border = 3
-		srand(time(NULL));
-		int border = ((rand() % 4));		   // Werte 0-3
+		g->seed(rd());
+		int border = (*dist)(*g);			// Werte 0-3
 
+		g->seed(rd());
 		int tileIndex;
 		if (border == 1 || border == 3)
 		{
-			srand(time(NULL));
-			tileIndex = ((rand() % TileCountX));  // Werte 0-24
+			tileIndex = (*dist2)(*g);  // Werte 0-24
 		}
 		else
 		{
-			tileIndex = ((rand() % TileCountY));  // Werte 0-24
+			tileIndex = (*dist2)(*g);  // Werte 0-24
 		}
 
 		/*
@@ -103,8 +106,8 @@ void Enemypool::Spawn(int count, const int& waveNumber)
 		enemy->visible = true;
 
 		if (waveNumber > 5) {
-			srand(time(NULL));
-			int typeNumber = rand() % 10;
+			g->seed(rd());
+			int typeNumber = (*dist3)(*g);
 			if (typeNumber == 9) {	// wahrscheinlichkeit von 10% spawnt bee
 				enemy->_enemyType = EEnemyType::BEE;
 			} else {
@@ -113,10 +116,10 @@ void Enemypool::Spawn(int count, const int& waveNumber)
 		}
 
 		if (waveNumber > 7) {
-			srand(time(NULL));
-			int typeNumber = rand() % 2;
-			if (enemy->_enemyType == EEnemyType::BEE && typeNumber == 0) {	// wahrscheinlichkeit von 10% spawnt bee
-					enemy->_enemyType = EEnemyType::MEALWORM;
+			g->seed(rd());
+			int typeNumber = (*dist4)(*g);
+			if (enemy->_enemyType == EEnemyType::BEE && typeNumber == 0) {	// wahrscheinlichkeit von 5% spawnt bee und 5% spawnt mealworm
+				enemy->_enemyType = EEnemyType::MEALWORM;
 			}
 		}
 
@@ -143,10 +146,12 @@ void Enemypool::Spawn(int count, const int& waveNumber)
 		if (enemy->_enemyType == EEnemyType::BEE) {
 			g_game.play(g_rc.get_sound("bee.spawn"));
 		}
+		DEBUG_MSG(++countOfAllSpawnedEnemies)
 	}
 }
 
 void Enemypool::reset(){
+	countOfAllSpawnedEnemies = 0;
 	bool done = false;
 	//enemies.clear();
 	//availableEnemies.clear();
@@ -171,6 +176,12 @@ Enemypool::~Enemypool()
 	for (auto & a : animations) {
 		delete a;
 	}
+	
+	delete g;
+	delete dist;
+	delete dist2;
+	delete dist3;
+	delete dist4;
 }
 
 void Enemypool::initAnimations() {

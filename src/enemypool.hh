@@ -15,6 +15,13 @@ public:
 	float _spawnTime = 5.f;
 	int _spawnCount = 3;
 	float _spawnTimer = 0;//_spawnTime;
+	int countOfAllSpawnedEnemies = 0;
+	std::random_device rd;
+	std::mt19937* g = new std::mt19937(rd());  // rd is a std::random_device object
+	std::uniform_int_distribution<int>* dist;
+	std::uniform_int_distribution<int>* dist2;
+	std::uniform_int_distribution<int>* dist3;
+	std::uniform_int_distribution<int>* dist4;
 	//int _availableEnemiesSize;
 	std::vector<Enemy*> enemies;
 	//std::vector<Enemy*> availableEnemies;

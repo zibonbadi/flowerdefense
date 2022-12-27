@@ -20,6 +20,8 @@
 #include <array>
 #include <memory>
 #include <functional>
+#include <random>
+
 
 /* utils */
 #include "defs.h"
