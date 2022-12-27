@@ -160,12 +160,13 @@ int main(int argc, char* argv[]) {
 				hud.dettach_rose_leben();
 				g_game.state = EnumGameState::GAMEOVER;
 			}
-			else if (e->get("type") == "game.state.set" && e->get("scene") == "game"){
+			else if (e->get("type") == "game.state.set" && e->get("scene") == "game" &&
+			(g_game.state == EnumGameState::INTRO || g_game.state == EnumGameState::GAMEOVER) ){
 				// Reset everything
 				if(e->get("status_edge") == "down"){
 					g_game.play(g_rc.get_sound("restart"));
 				}
-				DEBUG_MSG("f_restart(e): Caught." << e->get("scene"));
+				DEBUG_MSG("f_game_state_set(e): Caught." << e->get("scene"));
 				obstacles.clear_map();
 
 				obstacles.fill(4, 9, 4, 1, 'x');
@@ -312,7 +313,7 @@ int main(int argc, char* argv[]) {
 		Event e_print_debug("print.debug");
 
 		g_keymapper.bind(SDLK_ESCAPE, &e_quit);
-		g_keymapper.bind(SDLK_r, &e_game_state_set);
+		g_keymapper.bind(SDLK_RETURN, &e_game_state_set);
 		g_keymapper.bind(SDLK_F1, &e_debug_spritebox_toggle);
 		g_keymapper.bind(SDLK_F2, &e_debug_colliders_toggle);
 		g_keymapper.bind(SDLK_F3, &e_bfs_player_visibility);
@@ -354,9 +355,11 @@ int main(int argc, char* argv[]) {
 				case SDL_KEYUP:
 				case SDL_KEYDOWN: {
 					g_keymapper.probe(e.key);
+				break;
 				}
 				case SDL_MOUSEBUTTONDOWN:
 				player.press = true;
+				player.mouseX = e.button.x;
 				player.mouseY = e.button.y;
 				break;
 
