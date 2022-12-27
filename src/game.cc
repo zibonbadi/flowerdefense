@@ -98,7 +98,7 @@ void Game::_init(uint16_t w, uint16_t h){
 	}
 	ENGINE_DEBUG_MSG("Audio (SDL_Mixer) Initialized.");
 
-	this->window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->w, this->h, wflags);
+	this->window = SDL_CreateWindow("Flower Defense", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->w, this->h, wflags);
 
 	/* Window & GPU */
 	if (!this->window) {
