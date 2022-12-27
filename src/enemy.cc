@@ -63,7 +63,7 @@ void Enemy::setSpriteAnimations() {
 	sprite.add_animation("dead", g_rc.get_anim("enemy.dead"));
 }
 
-void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer) {
+void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer, Tilemap* course) {
 	if (!this->visible || isdead) {
 		return;
 	}
@@ -107,11 +107,12 @@ void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer) {
 			movingDir = bfsArrows->get_spot(coordinates.x / tileSize, coordinates.y / tileSize);
 		}
 
-		if (_enemyType == EEnemyType::MEALWORM) {
-			movingDir = BFS::traverseDir[(int)_enemyDir];
-		}
+		//if (_enemyType == EEnemyType::MEALWORM) {
+			//movingDir = BFS::traverseDir[(int)_enemyDir];
+		//}
 
-		if (_enemyType == EEnemyType::BEE) {
+		//if (_enemyType == EEnemyType::BEE) {
+		if (_enemyType == EEnemyType::BEE || _enemyType == EEnemyType::MEALWORM) {
 			float angle = atan2(flightPathRose.y, flightPathRose.x) * 180 / M_PI;
 			//DEBUG_MSG(angle)
 			if (angle < -67.5 && angle >= -112.5) {
@@ -187,6 +188,13 @@ void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer) {
 			goalTileCoordinates.y += tileSize;
 			break;
 		}
+	}
+
+	auto localspot = course->get_coordinate_from_offset(coordinates.x, coordinates.y);
+	if(_enemyType == EEnemyType::MEALWORM && course->get_spot(localspot.second, localspot.first) == 'x'){
+		//DEBUG_MSG("Eat this fence (" << localspot.second << ',' << localspot.first << ')' )
+		course->fill(localspot.second, localspot.first, 1, 1, ' ');
+		disappear();
 	}
 
 	interpolStepSize.x = goalTileCoordinates.x - coordinates.x;

@@ -378,7 +378,7 @@ int main(int argc, char* argv[]) {
 
 				for (int i = 0; i < enemyPool.enemies.size(); i++)
 				{
-					enemyPool.enemies[i]->Update(bfsFlower, bfsPlayer);
+					enemyPool.enemies[i]->Update(bfsFlower, bfsPlayer, &obstacles);
 				}
 			}
 			/* Advance the player animation */

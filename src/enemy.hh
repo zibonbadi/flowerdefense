@@ -33,7 +33,7 @@ class Enemy {
 		Enemy(float x, float y, Player& player, EEnemyType enemyType, EEnemyDirection enemyDir);
 		void init(float x, float y);
 		void setSpriteAnimations();
-		void Update(const BFS& bfsFlower,const BFS& bfsPlayer);
+		void Update(const BFS& bfsFlower,const BFS& bfsPlayer,Tilemap *course);
 		Sprite* GetSprite();
 		void disappear();
 		void dying();
