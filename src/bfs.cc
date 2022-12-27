@@ -1,7 +1,6 @@
 #include "bfs.hh"
 #include <sstream>
 #include <algorithm>
-#include <random>
 
 void BFS::execute(const std::pair<int, int>& root) {
 	BFS::execute(root.first, root.second);
@@ -38,10 +37,10 @@ void BFS::execute(const int& x_root, const int& y_root) {
 	// 3  b  4
 
 	// Direction vectors
-								// t,  b,  l,  r, tl, br, bl, tr
 	const int deltaX[] =		{  0,  0, -1,  1, -1,  1, -1,  1 };
 	const int deltaY[] =		{ -1,  1,  0,  0, -1,  1,  1, -1 };
-	const char reverseDir[] =	{'b','t','r','l','4','1','2', '3'};
+	//BFS::scanDir	   =		{'t','b','l','r','1','4','3', '2'};
+	//BFS::traverseDir =        {'b','t','r','l','4','1','2', '3'};
 	std::vector<int> order =	{  0,  1,  2,  3,  4,  5,  6,  7 };
 	std::random_device rd;
 	std::mt19937 g(rd());
@@ -110,7 +109,7 @@ void BFS::execute(const int& x_root, const int& y_root) {
 				q.push(std::pair{ adjx, adjy });
 				visited[adjy][adjx] = true;
 
-				charVec[adjy][adjx] = reverseDir[i];
+				charVec[adjy][adjx] = BFS::traverseDir[i];
 
 				//arrowMap.write(std::pair{ adjx, adjy }, charVec[adjy][adjx] + "");
 			}

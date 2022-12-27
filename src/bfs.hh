@@ -12,4 +12,6 @@ public:
 	void execute(const std::pair<int, int>& root);
 	void execute(const int& x, const int& y);
 	~BFS();
+	static constexpr char scanDir[8]			= { 't', 'b', 'l', 'r', '1', '4', '3', '2' };
+	static constexpr char traverseDir[8]		= { 'b', 't', 'r', 'l', '4', '1', '2', '3' };
 };

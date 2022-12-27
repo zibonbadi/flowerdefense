@@ -487,7 +487,6 @@ void Player::ChangePlayerAnimation(const std::string animIDadditional = "")
 void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, Sprite* rose, Hud& hud) {
 
 	bool collide_player = false;
-	bool collide_attack = false;
 	for (Enemy* enemy : enemies) {
 		if (this->attack->collision(enemy->GetSprite())) {
 			if(!enemy->isdead && enemy->visible){
@@ -496,14 +495,14 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, 
 		}
 		if (this->player->collision(enemy->GetSprite())) {
 			if(enemy->isdead && enemy->visible){ // falls enemy ein xp pickup
-			enemy->disappear();
-			xp_bar += xp_bekommt;
+				enemy->disappear();
+				xp_bar += xp_bekommt;
 
-			}else if(!enemy->isdead){
-			collide_player = true;
-			enemy->dying();
-			enemy->disappear();
-			xp_bar += xp_bekommt;
+			} else if(!enemy->isdead){
+				collide_player = true;
+				enemy->dying();
+				enemy->disappear();
+				xp_bar += xp_bekommt;
 			}
 			g_game.play(g_rc.get_sound("player.pickup.xp"));
 		}
