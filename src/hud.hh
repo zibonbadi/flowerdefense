@@ -23,6 +23,7 @@ public:
 	int rose_akt_leben =50;
 	int xp_akt = 0;
 	int wave = 1;
+	int enemiesInWaveLeft = -1;
 	bool ausgewahelt = false;
 
 	Hud(Plane &board);

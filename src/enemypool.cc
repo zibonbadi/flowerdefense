@@ -2,14 +2,14 @@
 #include <cstdio>      /* srand, rand */
 #include <ctime>      /* time */
 
-Enemypool::Enemypool(Plane& board, Player& player, Z_PlaneMeta& collide_enemy, float spawnTime, int spawnCount, int poolSize) : _board(board), _player(player), _collide_enemy(collide_enemy), _spawnTime(spawnTime), _spawnCount(spawnCount), _poolSize(poolSize)
+Enemypool::Enemypool(Plane& board, Player& player, Z_PlaneMeta& collide_enemy, Hud& hud) : _board(board), _player(player), _collide_enemy(collide_enemy), _hud(hud)
 {
 	//enemies.resize(poolSize);
 	//enemies = poolSize;
 
 	initAnimations();
 
-	for (int i = 0; i < poolSize; i++)
+	for (int i = 0; i < _poolSize; i++)
 	{
 		enemies.push_back(new Enemy(-INFINITY, -INFINITY, _player, EEnemyType::BUG, EEnemyDirection::RIGHT));
 	}
@@ -23,23 +23,80 @@ Enemypool::Enemypool(Plane& board, Player& player, Z_PlaneMeta& collide_enemy, f
 	dist2 = new std::uniform_int_distribution<int>(0, SCREEN_WIDTH / BFS_TILE_WIDTH);
 	dist3 = new std::uniform_int_distribution<int>(0, 9);
 	dist4 = new std::uniform_int_distribution<int>(0, 1);
+	reset();
 }
 
-void Enemypool::Update(const float& deltaTime, const int& waveNumber)
+void Enemypool::Update(const float& deltaTime)
 {
-	_spawnTimer -= deltaTime;
-	if (_spawnTimer < 0)
-	{
-		Recollect();
-		Spawn(_spawnCount, waveNumber);
-		_spawnTimer = _spawnTime;
+	_waveCoolDownTimer -= deltaTime;
+
+
+	if (_waveCoolDownTimer < 0) {
+		_hud.gameWaveCooldownText->visible = false;
+
+		_spawnTimer -= deltaTime;
+		if (_spawnTimer < 0)
+		{
+
+			Recollect();
+
+			_enemySpawnsInWaveLeftCounter -= _spawnCount;
+			if (_enemySpawnsInWaveLeftCounter < 0)
+				_enemySpawnsInWaveLeftCounter = 0;
+
+			if (_enemySpawnsInWaveLeftCounter > 0)
+			{
+				if(_enemySpawnsInWaveLeftCounter >= _spawnCount)
+					Spawn(_spawnCount, _hud.wave);
+				else
+					Spawn(_enemySpawnsInWaveLeftCounter, _hud.wave);
+			}
+
+			int visibleCount = getVisibleCount();
+
+			if (_enemySpawnsInWaveLeftCounter == 0 && visibleCount == 0)
+			{
+				// wave has ended
+				// no more enemies in wave left
+				_adjustedSpawnTime += _spawnTimeDeltaAtWaveEnd;
+				if (_adjustedSpawnTime < _spawnTimeMin)
+				{
+					_adjustedSpawnTime = _spawnTimeMin;
+				}
+				_hud.wave++;
+				_adjustedEnemiesPerWaveCount = static_cast<int>(_adjustedEnemiesPerWaveCount * _enemiesPerWaveCountScalerAteWaveEnd);
+				_enemySpawnsInWaveLeftCounter = _adjustedEnemiesPerWaveCount;
+				_hud.enemiesInWaveLeft	  = _enemySpawnsInWaveLeftCounter;
+				_waveCoolDownTimer = _waveCoolDownTime;
+				if (g_game.state == EnumGameState::PLAY) {
+					_hud.gameWaveCooldownText->visible = true;
+				}
+			}
+			_spawnTimer = _adjustedSpawnTime;
+		}
 	}
+	else {
+		_hud.gameWaveCooldownText->write(std::pair(18, 5), "Next Wave in\r\n" + std::to_string((int)ceil(_waveCoolDownTimer)) + " Seconds");
+	}
+
+	_hud.enemiesInWaveLeft = (_enemySpawnsInWaveLeftCounter + getVisibleCount());
 }
+
+int Enemypool::getVisibleCount() {
+	auto rVal = 0;
+	for (auto& e : enemies) {
+		if (e->visible) {  
+			rVal++;
+		}
+	}
+	return rVal;
+}
+
 
 int Enemypool::getAvailableCount(){
 	auto rVal = 0;
 	for (auto & e : enemies){
-		if (!e->visible && !e->isdead){  // isdead so we know they have been recollected (and reborned)
+		if (!e->visible && !e->isdead){  // !isdead so we know they have been recollected (and reborned)
 			rVal++;
 		}
 	}
@@ -48,7 +105,7 @@ int Enemypool::getAvailableCount(){
 
 Enemy* Enemypool::getFirstAvailable(){
 	for (auto & e : enemies){
-		if (!e->visible && !e->isdead)  // isdead so we know they have been recollected (and reborned)
+		if (!e->visible && !e->isdead)  // !isdead so we know they have been recollected (and reborned)
 			return e;
 	}
 	return nullptr;
@@ -146,12 +203,12 @@ void Enemypool::Spawn(int count, const int& waveNumber)
 		if (enemy->_enemyType == EEnemyType::BEE) {
 			g_game.play(g_rc.get_sound("bee.spawn"));
 		}
-		DEBUG_MSG(++countOfAllSpawnedEnemies)
+		DEBUG_MSG(++_countOfAllSpawnedEnemies)
 	}
 }
 
 void Enemypool::reset(){
-	countOfAllSpawnedEnemies = 0;
+	_countOfAllSpawnedEnemies = 0;
 	bool done = false;
 	//enemies.clear();
 	//availableEnemies.clear();
@@ -161,10 +218,19 @@ void Enemypool::reset(){
 		e->disappear();
 	}
 
-	_spawnCount = 3;
-	_spawnTimer = 0;//_spawnTime;
+	_adjustedSpawnTime	= _startSpawnTime;
+	_spawnTimer			= _startSpawnTime;
 		
+	_adjustedEnemiesPerWaveCount	= _startEnemiesPerWaveCount;
+	_enemySpawnsInWaveLeftCounter		= _startEnemiesPerWaveCount;
+
+	_waveCoolDownTimer = _waveCoolDownTime;
+
+	_hud.enemiesInWaveLeft = _startEnemiesPerWaveCount;
+	_hud.wave = 1;
+
 	DEBUG_MSG("Enemypool.reset(): Caught." << done);
+	_enemySpawnsInWaveLeftCounter = _adjustedEnemiesPerWaveCount;
 }
 
 Enemypool::~Enemypool()

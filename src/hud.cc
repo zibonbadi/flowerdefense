@@ -496,8 +496,9 @@ void Hud::Update(Player &player,  Enemypool &enemypool){
 	tm_inventory->fill(0, 2, player.health, 1, '+');
 	tm_inventory->write(std::pair(28,4), str_rose_leben);
 	tm_inventory->write(std::pair(0,3), "^"+std::to_string(player.obstacles));
-	tm_inventory->write(std::pair(0,30), "Wave:"+std::to_string(wave));
-	tm_inventory->write(std::pair(0,31), "Lv:"+std::to_string(player.akt_LV));
+	tm_inventory->write(std::pair(0, 30), "XpLv: "+std::to_string(player.akt_LV));
+	tm_inventory->write(std::pair(0, 31), "Wave: " + std::to_string(wave));
+	tm_inventory->write(std::pair(0, 32), "Mobs: " + std::to_string(enemiesInWaveLeft));
 
 	ex_bar_steuern(player.xp_bar);
 	if(player.xp_bar>= 1000){

@@ -10,12 +10,24 @@ private:
 	Player& _player;
 	Z_PlaneMeta& _collide_enemy;
 	EBus_Fn* f_eHandler;
+	Hud&	_hud;
+	int		_countOfAllSpawnedEnemies = 0;
+	float	_spawnTimer = 0;//_spawnTime;
+	float	_waveCoolDownTimer = -1.0f;
+	int		_enemySpawnsInWaveLeftCounter;
+	float	_adjustedSpawnTime;
+	int		_adjustedEnemiesPerWaveCount;
+
 public:
-	int _poolSize = 1000;
-	float _spawnTime = 5.f;
-	int _spawnCount = 3;
-	float _spawnTimer = 0;//_spawnTime;
-	int countOfAllSpawnedEnemies = 0;
+	const int   _poolSize = 1000;
+	const int	_startSpawnTime = 2.f;
+	const float _waveCoolDownTime = 6.0f;
+	const float _spawnTimeDeltaAtWaveEnd = -0.2f;
+	const float _spawnTimeMin = 0.2f;
+	const int   _spawnCount = 1;
+	const int	_startEnemiesPerWaveCount = 10;
+	const float _enemiesPerWaveCountScalerAteWaveEnd = 1.2f;
+
 	std::random_device rd;
 	std::mt19937* g = new std::mt19937(rd());  // rd is a std::random_device object
 	std::uniform_int_distribution<int>* dist;
@@ -25,11 +37,12 @@ public:
 	//int _availableEnemiesSize;
 	std::vector<Enemy*> enemies;
 	//std::vector<Enemy*> availableEnemies;
-	Enemypool(Plane& board, Player& player, Z_PlaneMeta& collide_enemy, float spawnTime, int spawnCount, int poolSize);
+	Enemypool(Plane& board, Player& player, Z_PlaneMeta& collide_enemy, Hud& hud);
 	~Enemypool();
 	int getAvailableCount();
 	Enemy* getFirstAvailable();
-	void Update(const float& deltaTime, const int& waveNumber);
+	void Update(const float& deltaTime);
+	int  getVisibleCount();
 	void Recollect();
 	void Spawn(int count, const int& waveNumber);
 	void initAnimations();
