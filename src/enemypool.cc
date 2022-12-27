@@ -52,7 +52,7 @@ void Enemypool::Update(const float& deltaTime)
 					Spawn(_enemySpawnsInWaveLeftCounter, _hud.wave);
 			}
 
-			int visibleCount = getVisibleCount();
+			int visibleCount = getVisibleAndAliveCount();
 
 			if (_enemySpawnsInWaveLeftCounter == 0 && visibleCount == 0)
 			{
@@ -79,13 +79,13 @@ void Enemypool::Update(const float& deltaTime)
 		_hud.gameWaveCooldownText->write(std::pair(18, 5), "Next Wave in\r\n" + std::to_string((int)ceil(_waveCoolDownTimer)) + " Seconds");
 	}
 
-	_hud.enemiesInWaveLeft = (_enemySpawnsInWaveLeftCounter + getVisibleCount());
+	_hud.enemiesInWaveLeft = (_enemySpawnsInWaveLeftCounter + getVisibleAndAliveCount());
 }
 
-int Enemypool::getVisibleCount() {
+int Enemypool::getVisibleAndAliveCount() {
 	auto rVal = 0;
 	for (auto& e : enemies) {
-		if (e->visible) {  
+		if (e->visible && !e->isdead) {  
 			rVal++;
 		}
 	}

@@ -42,7 +42,7 @@ public:
 	int getAvailableCount();
 	Enemy* getFirstAvailable();
 	void Update(const float& deltaTime);
-	int  getVisibleCount();
+	int  getVisibleAndAliveCount();
 	void Recollect();
 	void Spawn(int count, const int& waveNumber);
 	void initAnimations();
