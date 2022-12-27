@@ -141,13 +141,13 @@ void Hud::font_create(){
 }
 
 void Hud::text_layers_create(){
-	this->gameOverText = new Tilemap(16,24);
-	gameOverText->write(std::pair(18, 10), "GAME OVER\r\n\r\nR        Start\r\nQ        Quit\r\n\r\nW        Move UP\r\nA        Move LEFT\r\nS        Move DOWN\r\nD        Move RIGHT\r\n\r\nUP       Attack Up\r\nLEFT     Attack Left\r\nDOWN     Attack Down\r\nRIGHT    Attack Right\r\n\r\nSPACE    Place Fence");
+	this->gameOverText = new Tilemap(24,32);
+	gameOverText->write(std::pair(10, 10), "   GAME OVER\r\n\r\nRETURN   Restart\r\nESCAPE      Quit");
 	this->gameOverText->visible = false;
 	_board.attach(gameOverText);
 
 	this->gameIntroText = new Tilemap(16, 24);
-	gameIntroText->write(std::pair(18, 5), "FLOWERDEFENSE\r\n\r\nR        Start\r\nQ        Quit\r\n\r\nW        Move UP\r\nA        Move LEFT\r\nS        Move DOWN\r\nD        Move RIGHT\r\n\r\nUP       Attack Up\r\nLEFT     Attack Left\r\nDOWN     Attack Down\r\nRIGHT    Attack Right\r\n\r\nSPACE    Place Fence\r\n\r\n\r\n\r\nDebug\r\n\r\nF1       Spritebox\r\nF2       Hitbox\r\nF3       BFS Player\r\nF4       BFS Flower\r\nF9       SHOW ENGINE LOG");
+	gameIntroText->write(std::pair(18, 5), "FLOWERDEFENSE\r\n\r\nRETURN   Start\r\nESCAPE   Quit\r\n\r\nW        Move UP\r\nA        Move LEFT\r\nS        Move DOWN\r\nD        Move RIGHT\r\n\r\nUP       Attack Up\r\nLEFT     Attack Left\r\nDOWN     Attack Down\r\nRIGHT    Attack Right\r\n\r\nSPACE    Place Fence\r\n\r\n\r\n\r\nDebug\r\n\r\nF1       Spritebox\r\nF2       Hitbox\r\nF3       BFS Player\r\nF4       BFS Flower\r\nF9       SHOW ENGINE LOG");
 	this->gameIntroText->visible = true;
 	_board.attach(gameIntroText);
 
@@ -465,11 +465,14 @@ void Hud::handleEvents(Event* e){
 		// TODO: Zelda-Style Quarter-Heart generator
 	};
 	if(e->get("type") == "game.state.set"){
+		DEBUG_MSG("HUD: Scene change caught")
 		if (e->get("scene") == "gameintro") {
 			gameIntroText->visible = true;
+			gameOverText->visible = false;
 		}
 		if(e->get("scene") == "gameover"){
 			gameOverText->visible = true;
+			gameIntroText->visible = false;
 		}
 		if(e->get("scene") == "game"){
 			// Reset everything

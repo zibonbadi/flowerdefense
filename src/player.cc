@@ -538,7 +538,7 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, 
 		}
 	}
 
-	if(health<1){
+	if(health<1 && g_game.state == EnumGameState::PLAY){
 		Event die("player.die");
 		g_eventbus.send(&die);
 	}
