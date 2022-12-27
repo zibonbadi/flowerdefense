@@ -584,17 +584,17 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, 
 	switch(attackDir){
 	case EPlayerAttackDirection::LEFT:{
 		tmp_transform.x = playerCoordinates.x-64;
-		tmp_transform.y = playerCoordinates.y;
+		tmp_transform.y = playerCoordinates.y+12;
 		break;
 	}
 	case EPlayerAttackDirection::RIGHT:{
 		tmp_transform.x = playerCoordinates.x+32;
-		tmp_transform.y = playerCoordinates.y;
+		tmp_transform.y = playerCoordinates.y+12;
 		break;
 	}
 	case EPlayerAttackDirection::UP:{
 		tmp_transform.x = playerCoordinates.x-16;
-		tmp_transform.y = playerCoordinates.y-64;
+		tmp_transform.y = playerCoordinates.y-40;
 		break;
 	}
 	case EPlayerAttackDirection::DOWN:{
@@ -604,11 +604,11 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, 
 	}
 	case EPlayerAttackDirection::UPLEFT:
 		tmp_transform.x = playerCoordinates.x - 56;
-		tmp_transform.y = playerCoordinates.y - 56;
+		tmp_transform.y = playerCoordinates.y - 32;
 		break;
 	case EPlayerAttackDirection::UPRIGHT:
 		tmp_transform.x = playerCoordinates.x + 24;
-		tmp_transform.y = playerCoordinates.y - 56;
+		tmp_transform.y = playerCoordinates.y - 32;
 		break;
 	case EPlayerAttackDirection::DOWNLEFT:
 		tmp_transform.x = playerCoordinates.x - 56;
