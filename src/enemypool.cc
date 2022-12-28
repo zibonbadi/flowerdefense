@@ -20,7 +20,7 @@ Enemypool::Enemypool(Plane& board, Player& player, Z_PlaneMeta& collide_enemy, H
 	//g_eventbus.subscribe("game.state.set", f_eHandler);
 
 	dist = new std::uniform_int_distribution<int>(0, 3);
-	dist2 = new std::uniform_int_distribution<int>(0, SCREEN_WIDTH / BFS_TILE_WIDTH);
+	dist2 = new std::uniform_int_distribution<int>(0, (SCREEN_WIDTH / BFS_TILE_WIDTH) - 1);
 	dist3 = new std::uniform_int_distribution<int>(0, 9);
 	dist4 = new std::uniform_int_distribution<int>(0, 1);
 	reset();
