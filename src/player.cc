@@ -24,52 +24,61 @@ void Player::initAnimations() {
 	/* Player animation definition */
 
 	animations[0] = new Animation(g_rc.get_texture("spritesheet"), 5);
-	animations[0]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 0, .uw = 32, .vw = 64 });
+	animations[0]->add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 0, .uw = 32, .vw = 64 });
+	animations[0]->add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 0, .uw = 32, .vw = 64 });
 	animations[0]->add_xsheet_phase(0, 1);
+	animations[0]->add_xsheet_phase(1, 1);
 	g_rc.add_anim("player.up", animations[0]);
 
 	animations[4] = new Animation(g_rc.get_texture("spritesheet"), 10);
-	animations[4]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 64 * 1, .uw = 32, .vw = 64 });
-	animations[4]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 64 * 0, .uw = 32, .vw = 64 });
+	animations[4]->add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 0, .uw = 32, .vw = 64 });
+	animations[4]->add_frame(Z_PlaneMeta{ .u = 32 * 5, .v = 0, .uw = 32, .vw = 64 });
 	animations[4]->add_xsheet_phase(0, 1);
 	animations[4]->add_xsheet_phase(1, 1);
 	g_rc.add_anim("player.up.damage", animations[4]);
 
 	animations[1] = new Animation(g_rc.get_texture("spritesheet"), 5);
 	animations[1]->add_frame(Z_PlaneMeta{ .u = 32 * 0, .v = 64 * 0, .uw = 32, .vw = 64 });
+	animations[1]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 64 * 0, .uw = 32, .vw = 64 });
 	animations[1]->add_xsheet_phase(0, 1);
+	animations[1]->add_xsheet_phase(1, 1);
 	g_rc.add_anim("player.down", animations[1]);
 
 	animations[5] = new Animation(g_rc.get_texture("spritesheet"), 10);
-	animations[5]->add_frame(Z_PlaneMeta{ .u = 32 * 0, .v = 64 * 1, .uw = 32, .vw = 64 });
 	animations[5]->add_frame(Z_PlaneMeta{ .u = 32 * 0, .v = 64 * 0, .uw = 32, .vw = 64 });
+	animations[5]->add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 64 * 0, .uw = 32, .vw = 64 });
 	animations[5]->add_xsheet_phase(0, 1);
 	animations[5]->add_xsheet_phase(1, 1);
 	g_rc.add_anim("player.down.damage", animations[5]);
 
-	animations[2] = new Animation(g_rc.get_texture("spritesheet"), 5);
-	animations[2]->add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 64 * 0, .uw = 32, .vw = 64 });
-	animations[2]->add_xsheet_phase(0, 1);
-	g_rc.add_anim("player.left", animations[2]);
-
-	animations[6] = new Animation(g_rc.get_texture("spritesheet"), 10);
-	animations[6]->add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 64 * 1, .uw = 32, .vw = 64 });
-	animations[6]->add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 64 * 0, .uw = 32, .vw = 64 });
-	animations[6]->add_xsheet_phase(0, 1);
-	animations[6]->add_xsheet_phase(1, 1);
-	g_rc.add_anim("player.left.damage", animations[6]);
-
 	animations[3] = new Animation(g_rc.get_texture("spritesheet"), 5);
-	animations[3]->add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 64 * 0, .uw = 32, .vw = 64 });
+	animations[3]->add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 64 * 1, .uw = 32, .vw = 64 });
+	animations[3]->add_frame(Z_PlaneMeta{ .u = 32 * 4, .v = 64 * 1, .uw = 32, .vw = 64 });
 	animations[3]->add_xsheet_phase(0, 1);
-	g_rc.add_anim("player.right", animations[3]);
+	animations[3]->add_xsheet_phase(1, 1);
+	g_rc.add_anim("player.left", animations[3]);
 
 	animations[7] = new Animation(g_rc.get_texture("spritesheet"), 10);
-	animations[7]->add_frame(Z_PlaneMeta{ .u = 32*3, .v = 64 * 1, .uw = 32, .vw = 64 });
-	animations[7]->add_frame(Z_PlaneMeta{ .u = 32*3, .v = 64 * 0, .uw = 32, .vw = 64 });
+	animations[7]->add_frame(Z_PlaneMeta{ .u = 32 * 3, .v = 64 * 1, .uw = 32, .vw = 64 });
+	animations[7]->add_frame(Z_PlaneMeta{ .u = 32 * 5, .v = 64 * 1, .uw = 32, .vw = 64 });
 	animations[7]->add_xsheet_phase(0, 1);
 	animations[7]->add_xsheet_phase(1, 1);
-	g_rc.add_anim("player.right.damage", animations[7]);
+	g_rc.add_anim("player.left.damage", animations[7]);
+
+	animations[2] = new Animation(g_rc.get_texture("spritesheet"), 5);
+	animations[2]->add_frame(Z_PlaneMeta{ .u = 32 * 0, .v = 64 * 1, .uw = 32, .vw = 64 });
+	animations[2]->add_frame(Z_PlaneMeta{ .u = 32 * 1, .v = 64 * 1, .uw = 32, .vw = 64 });
+	animations[2]->add_xsheet_phase(0, 1);
+	animations[2]->add_xsheet_phase(1, 1);
+	g_rc.add_anim("player.right", animations[2]);
+
+	animations[6] = new Animation(g_rc.get_texture("spritesheet"), 10);
+	animations[6]->add_frame(Z_PlaneMeta{ .u = 32 * 0, .v = 64 * 1, .uw = 32, .vw = 64 });
+	animations[6]->add_frame(Z_PlaneMeta{ .u = 32 * 2, .v = 64 * 1, .uw = 32, .vw = 64 });
+	animations[6]->add_xsheet_phase(0, 1);
+	animations[6]->add_xsheet_phase(1, 1);
+	g_rc.add_anim("player.right.damage", animations[6]);
+
 
 	/* Attack animation definition */
 	attack = new Sprite(Z_PlaneMeta{
