@@ -654,7 +654,7 @@ void Player::reset(float x, float y){
 	playerSpeed = 200.f;
 	xp_bar = 200;
 	xp_bekommt = 100;
-	akt_LV=0;
+	akt_LV=1;
 }
 
 Sprite* Player::GetSprite() {

@@ -48,7 +48,7 @@ class Player {
 		unsigned int health = 4, obstacles = 4;
 		int xp_bar = 200;
 		int xp_bekommt = 100;
-		int akt_LV = 0;
+		int akt_LV = 1;
 		bool lvl_up = false;
 		float invulnerableTimeFrame;
 

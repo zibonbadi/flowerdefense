@@ -153,7 +153,7 @@ void Hud::text_layers_create(){
 
 	this->gameWaveCooldownText = new Tilemap(16, 24);
 	gameWaveCooldownText->write(std::pair(18, 5), "Next Wave in\r\n6 Seconds");
-	this->gameWaveCooldownText->visible = true;
+	this->gameWaveCooldownText->visible = false;
 	_board.attach(gameWaveCooldownText);
 }
 /*
@@ -496,9 +496,9 @@ void Hud::Update(Player &player,  Enemypool &enemypool){
 	tm_inventory->fill(0, 2, player.health, 1, '+');
 	tm_inventory->write(std::pair(28,4), str_rose_leben);
 	tm_inventory->write(std::pair(0,3), "^"+std::to_string(player.obstacles));
-	tm_inventory->write(std::pair(0, 30), "XpLv: "+std::to_string(player.akt_LV));
-	tm_inventory->write(std::pair(0, 31), "Wave: " + std::to_string(wave));
-	tm_inventory->write(std::pair(0, 32), "Mobs: " + std::to_string(enemiesInWaveLeft));
+	tm_inventory->write(std::pair(0, 30), "Mobs: " + std::to_string(enemiesInWaveLeft));
+	tm_inventory->write(std::pair(0, 31), "XpLv: "+std::to_string(player.akt_LV));
+	tm_inventory->write(std::pair(0, 32), "Wave: " + std::to_string(wave));
 
 	ex_bar_steuern(player.xp_bar);
 	if(player.xp_bar>= 1000){

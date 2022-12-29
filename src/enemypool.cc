@@ -75,7 +75,7 @@ void Enemypool::Update(const float& deltaTime)
 			_spawnTimer = _adjustedSpawnTime;
 		}
 	}
-	else {
+	else if (g_game.state == EnumGameState::PLAY) {
 		_hud.gameWaveCooldownText->write(std::pair(18, 5), "Next Wave in\r\n" + std::to_string((int)ceil(_waveCoolDownTimer)) + " Seconds");
 	}
 

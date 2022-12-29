@@ -137,6 +137,7 @@ int main(int argc, char* argv[]) {
 			if(e->get("type") == "game.state.set" && e->get("scene") == "gameintro") {
 				hud.ex_rahmen->visible = false;
 				hud.tm_inventory->visible = false;
+				hud.gameWaveCooldownText->visible = false;
 				hud.dettach_rose_leben();
 				g_game.state = EnumGameState::INTRO;
 			}
@@ -174,6 +175,8 @@ int main(int argc, char* argv[]) {
 
 				hud.ex_rahmen->visible = true;
 				hud.tm_inventory->visible = true;
+				hud.gameWaveCooldownText->visible = true;
+
 				hud.attach_rose_leben();
 
 				g_game.state = EnumGameState::PLAY;
