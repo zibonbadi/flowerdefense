@@ -25,8 +25,8 @@ public:
 	const float _spawnTimeDeltaAtWaveEnd = -0.2f;
 	const float _spawnTimeMin = 0.2f;
 	const int   _spawnCount = 1;
-	const int	_startEnemiesPerWaveCount = 10;
-	const float _enemiesPerWaveCountScalerAteWaveEnd = 1.2f;
+	const int	_startEnemiesPerWaveCount = 20;
+	const float _enemiesPerWaveCountScalerAteWaveEnd = 1.3f;
 
 	std::random_device rd;
 	std::mt19937* g = new std::mt19937(rd());  // rd is a std::random_device object

@@ -162,20 +162,20 @@ void Enemypool::Spawn(int count, const int& waveNumber)
 		Enemy* enemy = getFirstAvailable();
 		enemy->visible = true;
 
-		if (waveNumber > 5) {
+		if (waveNumber >= 3) {
 			g->seed(rd());
 			int typeNumber = (*dist3)(*g);
-			if (typeNumber == 9) {	// wahrscheinlichkeit von 10% spawnt bee
+			if (typeNumber == 9 || typeNumber == 8 || typeNumber == 7) {	// wahrscheinlichkeit von 30% spawnt bee
 				enemy->_enemyType = EEnemyType::BEE;
 			} else {
 				enemy->_enemyType = EEnemyType::BUG;
 			}
 		}
 
-		if (waveNumber > 7) {
+		if (waveNumber >= 5) {
 			g->seed(rd());
 			int typeNumber = (*dist4)(*g);
-			if (enemy->_enemyType == EEnemyType::BEE && typeNumber == 0) {	// wahrscheinlichkeit von 5% spawnt bee und 5% spawnt mealworm
+			if (enemy->_enemyType == EEnemyType::BEE && typeNumber == 0) {	// wahrscheinlichkeit von 15% spawnt bee und 15% spawnt mealworm
 				enemy->_enemyType = EEnemyType::MEALWORM;
 			}
 		}

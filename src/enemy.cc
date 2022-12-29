@@ -21,10 +21,10 @@ void Enemy::init(float x, float y)
 		_enemySpeed = 1.5f + between0and3 * 0.5;
 		break;
 	case EEnemyType::MEALWORM:
-		_enemySpeed = 0.5f;
+		_enemySpeed = 1.5f;
 		break;
 	case EEnemyType::BEE:
-		_enemySpeed = 2.5f;
+		_enemySpeed = 3.5f;
 		break;
 	default:
 		break;
