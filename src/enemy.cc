@@ -1,6 +1,7 @@
 #include "enemy.hh"
 
 Enemy::Enemy(float x, float y, Player& player, EEnemyType enemyType, EEnemyDirection enemyDir) : _player(player), _enemyType(enemyType), _enemyDir(enemyDir) {
+	dist5 = new std::uniform_int_distribution<int>(0, 3);
 	init(x, y);
 }
 
@@ -13,10 +14,11 @@ void Enemy::init(float x, float y)
 	sprite.debug_sprite = _player.GetSprite()->debug_sprite;
 	sprite.debug_collide = _player.GetSprite()->debug_collide;
 
+	int between0and3 = (*dist5)(*g);
 	switch (_enemyType)
 	{
 	case EEnemyType::BUG:
-		_enemySpeed = 1.5f;
+		_enemySpeed = 1.5f + between0and3 * 0.5;
 		break;
 	case EEnemyType::MEALWORM:
 		_enemySpeed = 0.5f;

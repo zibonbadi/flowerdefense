@@ -27,6 +27,10 @@ class Enemy {
 		EEnemyDirection _enemyDir			= EEnemyDirection::RIGHT;
 		std::string _id;
 		Player& _player;
+		std::random_device rd;
+		std::mt19937* g = new std::mt19937(rd());  // rd is a std::random_device object
+		std::uniform_int_distribution<int>* dist5;
+
 	public:
 		EEnemyType _enemyType;
 		SDL_FPoint coordinates				= { .x = 0, .y = 0 };
