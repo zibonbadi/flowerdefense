@@ -193,7 +193,9 @@ void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer, Tilemap* course) 
 	}
 
 	auto localspot = course->get_coordinate_from_offset(coordinates.x, coordinates.y);
-	if(_enemyType == EEnemyType::MEALWORM && course->get_spot(localspot.second, localspot.first) == 'x'){
+	if(_enemyType == EEnemyType::MEALWORM && 
+		(course->get_spot(localspot.second, localspot.first) == 'x' ||
+		 course->get_spot(localspot.second, localspot.first) == 'X')){
 		//DEBUG_MSG("Eat this fence (" << localspot.second << ',' << localspot.first << ')' )
 		course->fill(localspot.second, localspot.first, 1, 1, ' ');
 		dying();

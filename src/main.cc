@@ -29,6 +29,7 @@ int main(int argc, char* argv[]) {
 		auto grass = g_rc.make_static_sprite_from_texture("tiles.grass", "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 		auto rose = g_rc.make_static_sprite_from_texture("tiles.rose", "spritesheet", Z_PlaneMeta{ .u = 32 * 5, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
 		auto obstacle = g_rc.make_static_sprite_from_texture("tiles.obstacle", "spritesheet", Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 5, .uw = 32, .vw = 32 }).second;
+		auto preMapObstacle = g_rc.make_static_sprite_from_texture("tiles.preMapObstacle", "spritesheet", Z_PlaneMeta{ .u = 32 * 7, .v = 32 * 4, .uw = 32, .vw = 32 }).second;
 
 
 		Player player((SCREEN_WIDTH / 2) - 32, (SCREEN_HEIGHT / 2) - 64, 1.5f);
@@ -40,6 +41,7 @@ int main(int argc, char* argv[]) {
 		ground.add_tile('.', grass);
 		//plants.add_tile('%', rose);
 		obstacles.add_tile('x', obstacle);
+		obstacles.add_tile('X', preMapObstacle);
 
 		ground.fill(0, 0, 25, 25, '.');
 
@@ -160,7 +162,47 @@ int main(int argc, char* argv[]) {
 				DEBUG_MSG("f_game_state_set(e): Caught." << e->get("scene"));
 				obstacles.clear_map();
 
-				obstacles.fill(4, 9, 4, 1, 'x');
+				std::random_device rd;
+				std::mt19937 g(rd());
+				auto dist = std::uniform_int_distribution<int>(0, 1);
+				auto dist2 = std::uniform_int_distribution<int>(6, 18);
+				auto dist3 = std::uniform_int_distribution<int>(9, 15);
+
+				int stillToPlace = 20;
+				int x, y;
+				bool innerFence;
+				
+				while (stillToPlace > 0) {
+					if (dist(g)) {
+						innerFence = dist(g);
+						if (dist(g)) {
+							// linker zaun
+							x = innerFence ? 9 : 6;
+						}
+						else {
+							// rechter zaun
+							x = innerFence ? 15 : 18;
+						}
+						y = innerFence ? dist3(g) : dist2(g);
+					} else {
+						innerFence = dist(g);
+						if (dist(g)) {
+							// oberer zaun
+							y = innerFence ? 9 : 6;
+						}
+						else {
+							// unterer zaun
+							y = innerFence ? 15: 18;
+						}
+						x = innerFence ? dist3(g) : dist2(g);
+					}
+
+					if (obstacles.get_spot(x, y) == 'X')
+						continue;
+
+					obstacles.fill(x, y, 1, 1, 'X');
+					stillToPlace--;
+				};
 
 				bfsPlayer.execute(10, 10);
 				bfsFlower.execute(25, 25);

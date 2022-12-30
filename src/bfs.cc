@@ -12,9 +12,9 @@ void BFS::execute(const int& x_root, const int& y_root) {
 
 	//std::map<std::pair<unsigned int, unsigned int>, char> map = bfsArrows->get_map
 
-	Z_PlaneMeta zpMeta = bfsArrows->get_transform();
-	int cellCountX = SCREEN_WIDTH / zpMeta.w;		// 800 / 16 = 50
-	int cellCountY = SCREEN_HEIGHT / zpMeta.h;		// 800 / 16 = 50
+	Z_PlaneMeta zpMetabfsArrowsTilemap = bfsArrows->get_transform();
+	int cellCountX = SCREEN_WIDTH / zpMetabfsArrowsTilemap.w;		// 800 / 16 = 50
+	int cellCountY = SCREEN_HEIGHT / zpMetabfsArrowsTilemap.h;		// 800 / 16 = 50
 
 	// Possible arrow pointing direction
 	// towards one of its eight neighburs:
@@ -59,7 +59,7 @@ void BFS::execute(const int& x_root, const int& y_root) {
 	}
 
 	std::map<std::pair<unsigned int, unsigned int>, char> obstacles = _obstacles.get_map();
-	const float innerTileCount = _obstacles.get_transform().w / zpMeta.w;
+	const float innerTileCount = _obstacles.get_transform().w / zpMetabfsArrowsTilemap.w;
 
 	for (auto const& [key, val] : obstacles) {
 		const int& outer_x = key.second;
@@ -67,7 +67,7 @@ void BFS::execute(const int& x_root, const int& y_root) {
 		const int& inner_x = outer_x * innerTileCount;
 		const int& inner_y = outer_y * innerTileCount;
 
-		if (val == 'x') {
+		if (val == 'x' || val == 'X') {
 			for (int y = inner_y; y < (inner_y + innerTileCount); y++) {
 				for (int x = inner_x; x < (inner_x + innerTileCount); x++) {
 					charVec[y][x] = 'x';
