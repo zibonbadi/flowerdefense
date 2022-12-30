@@ -233,7 +233,7 @@ int main(int argc, char* argv[]) {
 			if (e->get("status_edge") == "up") {
 				switch(_obstacles_spot){
 				case 'x': {
-					DEBUG_MSG("Removing obstacle");
+					DEBUG_MSG("Collect obstacle");
 					obstacles.fill(_obstacles_target.second, _obstacles_target.first, 1, 1, ' ');
 					player.obstacles++;
 					g_game.play(g_rc.get_sound("fence.place"));
@@ -244,7 +244,19 @@ int main(int argc, char* argv[]) {
 						DEBUG_MSG("Placing obstacle");
 						obstacles.fill(_obstacles_target.second, _obstacles_target.first, 1, 1, 'x');
 						player.obstacles--;
-						g_game.play(g_rc.get_sound("fence.place"));
+						bfsFlower.execute(25, 25);
+						
+						if (bfsFlower.bfsArrows->get_spot(0, 0) == '\0') {
+							// no more bfs routes for enemies
+							// undo placing operation
+							obstacles.fill(_obstacles_target.second, _obstacles_target.first, 1, 1, ' ');
+							player.obstacles++;
+						}
+						else {
+							// bfs is still working
+							// finish placing operation with sound
+							g_game.play(g_rc.get_sound("fence.place"));
+						}
 					}
 					break;
 				}

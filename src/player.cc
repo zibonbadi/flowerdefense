@@ -672,4 +672,5 @@ Player::~Player() {
 	delete e_player_move_down;
 	delete e_player_move_left;
 	delete e_player_move_right;
+	delete e_player_place_fence;
 }
