@@ -9,7 +9,7 @@ bool g_isPrintEngineDEBUG = false;
 bool running = true;
 // projectilePool
 constexpr int projectilePoolSize = 200;
-const float projectileSpeed = 150.f;
+const float projectileSpeed = 300.f;
 const float flowerShotTime = 0.5f;
 SDL_FPoint projectileSpawn = { .x = SCREEN_WIDTH / 2, .y = SCREEN_HEIGHT / 2 };
 SDL_FPoint* projectilesMoveVec = new SDL_FPoint[projectilePoolSize];
@@ -86,10 +86,10 @@ int main(int argc, char* argv[]) {
 			.h = 40
 		},
 		collide_enemy{
-			.x = 6,
-			.y = 6,
-			.w = 20,
-			.h = 20
+			.x = 4,
+			.y = 4,
+			.w = 24,
+			.h = 24
 		},
 		collide_rose{
 			.x = 0,
@@ -498,8 +498,8 @@ int main(int argc, char* argv[]) {
 						constexpr int projectileSpawnPointY = (SCREEN_HEIGHT / 2) + 16;
 
 						SDL_FPoint flighPathNearestEnemy = {
-							.x = nearestEnemy->coordinates.x - projectileSpawnPointX,
-							.y = nearestEnemy->coordinates.y - projectileSpawnPointY,
+							.x = (nearestEnemy->coordinates.x + 16) - projectileSpawnPointX,
+							.y = (nearestEnemy->coordinates.y + 16) - projectileSpawnPointY,
 						};
 						//float angle = (atan2(-flighPathNearestEnemy.x, flighPathNearestEnemy.y) * 180 / M_PI) + 180;
 						//DEBUG_MSG((int)angle << "°");
