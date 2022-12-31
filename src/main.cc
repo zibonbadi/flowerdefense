@@ -8,9 +8,9 @@ ResourceManager g_rc(g_game.getRenderer());
 bool g_isPrintEngineDEBUG = false;
 bool running = true;
 // projectilePool
-constexpr int projectilePoolSize = 200;
-const float projectileSpeed = 300.f;
-const float flowerShotTime = 0.5f;
+constexpr int projectilePoolSize = 10;
+const float projectileSpeed = 150.f;
+const float flowerShotTime = 1.5f;
 SDL_FPoint projectileSpawn = { .x = SCREEN_WIDTH / 2, .y = SCREEN_HEIGHT / 2 };
 SDL_FPoint* projectilesMoveVec = new SDL_FPoint[projectilePoolSize];
 Sprite* projectTileSprites[projectilePoolSize];
@@ -548,10 +548,10 @@ int main(int argc, char* argv[]) {
 					float deltaY = projectilesMoveVec[i].y * projectileSpeed * deltaTime;
 					projectTileSprites[i]->setTransform(Z_PlaneMeta{ .x = zpMeta.x + deltaX, .y = zpMeta.y + deltaY, .w = 32, .h = 32 });
 
-					for (Enemy* enemy : enemyPool.enemies) {
-						if (projectTileSprites[i]->collision(enemy->GetSprite())) {
-							if (!enemy->isdead && enemy->visible) {
-								enemy->dying();
+					for (Enemy* e : enemyPool.enemies) {
+						if (e->visible && !e->isdead && projectTileSprites[i]->collision(e->GetSprite())) {
+							if (!e->isdead && e->visible) {
+								e->dying();
 							}
 						}
 					}
