@@ -493,7 +493,11 @@ void Hud::Update(Player &player,  Enemypool &enemypool){
 		str_rose_leben.insert(0, 5 - str_rose_leben.length(), ' ');
 
 	tm_inventory->clear_map();
-	tm_inventory->fill(0, 2, player.health, 1, '+');
+	if( player.health > 5){
+		tm_inventory->write(std::pair(0,2), "+"+std::to_string(player.health));
+	}else{
+		tm_inventory->fill(0, 2, player.health, 1, '+');
+	}
 	tm_inventory->write(std::pair(28,4), str_rose_leben);
 	tm_inventory->write(std::pair(0,3), "^"+std::to_string(player.obstacles));
 	tm_inventory->write(std::pair(0, 30), "Mobs: " + std::to_string(enemiesInWaveLeft));
