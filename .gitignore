@@ -1,6 +1,8 @@
 bin/
 assets/
 obj/
+.vs
+.vscode
 Makefile
 *.vxcproj
 *.sln
