@@ -25,6 +25,12 @@ bool LVLSystem::Update(Player &player, Enemypool &enemypool, Hud &hud){
             player.option_wahl = 0;
             g_game.state = EnumGameState::PLAY;
             hud._board.detach(hud.LVLS);
+			if( (hud.rose_akt_leben+5) > hud.rose_max_leben ){
+				hud.rose_akt_leben = hud.rose_max_leben;
+			}else{
+				hud.rose_akt_leben += 5;
+			}
+
 
         }
 
@@ -45,6 +51,6 @@ void LVLSystem::Option_Zwei(Player &player){
 }
 
 void LVLSystem::Option_drei(Player &player){
-    player.xp_bekommt = 100;
+    //player.xp_bekommt = 100;
     std::cout<< "-----3 Option ------"<<std::endl;
 }
