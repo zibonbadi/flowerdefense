@@ -7,7 +7,14 @@ Game g_game((int)SCREEN_WIDTH, (int)SCREEN_HEIGHT, bgcolor);
 ResourceManager g_rc(g_game.getRenderer());
 bool g_isPrintEngineDEBUG = false;
 bool running = true;
-
+// projectilePool
+constexpr int projectilePoolSize = 200;
+const float projectileSpeed = 150.f;
+const float flowerShotTime = 0.5f;
+SDL_FPoint projectileSpawn = { .x = SCREEN_WIDTH / 2, .y = SCREEN_HEIGHT / 2 };
+SDL_FPoint* projectilesMoveVec = new SDL_FPoint[projectilePoolSize];
+Sprite* projectTileSprites[projectilePoolSize];
+float flowerShotTimer = flowerShotTime;
 int main(int argc, char* argv[]) {
 
 	LVLSystem lvlS;
@@ -79,16 +86,22 @@ int main(int argc, char* argv[]) {
 			.h = 40
 		},
 		collide_enemy{
-			.x = 0,
-			.y = 0,
-			.w = 32,
-			.h = 32
+			.x = 6,
+			.y = 6,
+			.w = 20,
+			.h = 20
 		},
 		collide_rose{
 			.x = 0,
 			.y = 0,
 			.w = 32,
 			.h = 32
+		},
+		collide_projectile{
+		.x = 16,
+		.y = 16,
+		.w = 2,
+		.h = 2
 		};
 
 		rose->setCollider(&collide_rose);
@@ -96,6 +109,16 @@ int main(int argc, char* argv[]) {
 
 
 		Enemypool enemyPool(board, player, collide_enemy, hud);
+		
+		auto projPrefix = std::string("projectile.");
+		for (int i = 0; i < projectilePoolSize; i++)
+		{
+			projectilesMoveVec[i] = { .x = -INFINITY, .y = -INFINITY };
+			projectTileSprites[i] = g_rc.make_static_sprite_from_texture(projPrefix + std::to_string(i), "spritesheet", Z_PlaneMeta{ .u = 32 * 4, .v = 32 * 4, .uw = 32, .vw = 32 }).second;
+			projectTileSprites[i]->setTransform(Z_PlaneMeta{ .x = -INFINITY, .y = -INFINITY });
+			projectTileSprites[i]->setCollider(&collide_projectile);
+			board.attach(projectTileSprites[i]);
+		}
 
 		DEBUG_MSG("Entering main loop...");
 
@@ -243,6 +266,10 @@ int main(int argc, char* argv[]) {
 				bool debugColliderState = player.GetSprite()->debug_collide;
 				player.attack->debug_collide = debugColliderState;
 				rose->debug_collide = debugColliderState;
+				for (int i = 0; i < projectilePoolSize; i++)
+				{
+					projectTileSprites[i]->debug_collide = debugColliderState;
+				}
 				for (auto& enemy : enemyPool.enemies) {
 					enemy->GetSprite()->debug_collide = debugColliderState;
 				}
@@ -438,6 +465,99 @@ int main(int argc, char* argv[]) {
 					enemyPool.enemies[i]->Update(bfsFlower, bfsPlayer, &obstacles);
 				}
 			}
+
+			if (g_game.state == EnumGameState::PLAY) {
+				
+				/* Flower shooting */
+
+				// Spawn projectiles
+				flowerShotTimer -= deltaTime;
+				if (flowerShotTimer < 0) {
+					flowerShotTimer = flowerShotTime;
+
+					float min = INFINITY;
+					int minIndex = -1;
+					for (int i = 0; i < enemyPool._poolSize; i++)
+					{
+						Enemy* e = enemyPool.enemies[i];
+						if (e->visible && !e->isdead && e->_flightPathRoseLength < min) {
+							min = e->_flightPathRoseLength;
+							minIndex = i;
+						}
+					}
+
+					if (min != INFINITY) {
+
+						Enemy* nearestEnemy = enemyPool.enemies[minIndex];
+
+
+						// projectileSpawn
+
+
+						constexpr int projectileSpawnPointX = (SCREEN_WIDTH / 2) + 16;
+						constexpr int projectileSpawnPointY = (SCREEN_HEIGHT / 2) + 16;
+
+						SDL_FPoint flighPathNearestEnemy = {
+							.x = nearestEnemy->coordinates.x - projectileSpawnPointX,
+							.y = nearestEnemy->coordinates.y - projectileSpawnPointY,
+						};
+						//float angle = (atan2(-flighPathNearestEnemy.x, flighPathNearestEnemy.y) * 180 / M_PI) + 180;
+						//DEBUG_MSG((int)angle << "°");
+						for (int i = 0; i < projectilePoolSize; i++)
+						{
+							auto zpMeta = projectTileSprites[i]->get_transform();
+							if (zpMeta.x < 0 ||
+								zpMeta.x >= SCREEN_WIDTH ||
+								zpMeta.y < 0 ||
+								zpMeta.y >= SCREEN_HEIGHT) {
+
+
+								// projectTileSprites[i] ist frei
+
+								// spawn
+
+									/* Normalize delta length */
+								if (flighPathNearestEnemy.x != 0 || flighPathNearestEnemy.y != 0) {
+									const float length_inverse = 1.f / sqrt(flighPathNearestEnemy.x * flighPathNearestEnemy.x + flighPathNearestEnemy.y * flighPathNearestEnemy.y);
+									flighPathNearestEnemy.x *= length_inverse;
+									flighPathNearestEnemy.y *= length_inverse;
+								}
+
+								projectilesMoveVec[i] = { .x = flighPathNearestEnemy.x, .y = flighPathNearestEnemy.y };
+								DEBUG_MSG(projectilesMoveVec[i].x << " " << projectilesMoveVec[i].y)
+								projectTileSprites[i]->setTransform(Z_PlaneMeta{ .x = projectileSpawnPointX - 32, .y = projectileSpawnPointY - 32, .w = 32, .h = 32 });
+								break;
+							}
+						}
+					}
+				}
+
+			}
+
+			// Update projectiles
+			for (int i = 0; i < projectilePoolSize; i++)
+			{
+				auto zpMeta = projectTileSprites[i]->get_transform();
+				if (zpMeta.x >= -32 &&
+					zpMeta.x <= SCREEN_WIDTH &&
+					zpMeta.y >= -32 &&
+					zpMeta.y <= SCREEN_HEIGHT) {
+
+
+					float deltaX = projectilesMoveVec[i].x * projectileSpeed * deltaTime;
+					float deltaY = projectilesMoveVec[i].y * projectileSpeed * deltaTime;
+					projectTileSprites[i]->setTransform(Z_PlaneMeta{ .x = zpMeta.x + deltaX, .y = zpMeta.y + deltaY, .w = 32, .h = 32 });
+
+					for (Enemy* enemy : enemyPool.enemies) {
+						if (projectTileSprites[i]->collision(enemy->GetSprite())) {
+							if (!enemy->isdead && enemy->visible) {
+								enemy->dying();
+							}
+						}
+					}
+				}
+			}
+
 			/* Advance the player animation */
 			g_rc.advance_all_anim(now);
 			g_game.render();
@@ -470,6 +590,7 @@ int main(int argc, char* argv[]) {
 	}
 	DEBUG_MSG("Main loop stopped.");
 	DEBUG_MSG("Shutting down...");
+	delete[] projectilesMoveVec;
 	uninit();
 	DEBUG_MSG("Engine stopped!");
 	return 0;
