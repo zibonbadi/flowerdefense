@@ -64,6 +64,7 @@ void Enemypool::Update(const float& deltaTime)
 					_adjustedSpawnTime = _spawnTimeMin;
 				}
 				_hud.wave++;
+				_player.health++;
 				_adjustedEnemiesPerWaveCount = static_cast<int>(_adjustedEnemiesPerWaveCount * _enemiesPerWaveCountScalerAteWaveEnd);
 				_enemySpawnsInWaveLeftCounter = _adjustedEnemiesPerWaveCount;
 				_hud.enemiesInWaveLeft	  = _enemySpawnsInWaveLeftCounter;
