@@ -11,20 +11,23 @@ bool LVLSystem::Update(Player &player, Enemypool &enemypool, Hud &hud){
             player.option_wahl = 0;
             g_game.state = EnumGameState::PLAY;
             
-            hud._board.detach(hud.LVLS);
+            //hud._board.detach(hud.LVLS);
+			hud.LVLS->visible = false;
         }else if (player.option_wahl == 2){
             Option_Zwei(player);
 
             player.press = false;
             player.option_wahl = 0;
             g_game.state = EnumGameState::PLAY;
-            hud._board.detach(hud.LVLS);
+            //hud._board.detach(hud.LVLS);
+			hud.LVLS->visible = false;
         }else if (player.option_wahl == 3){
             Option_drei(player);
             player.press = false;
             player.option_wahl = 0;
             g_game.state = EnumGameState::PLAY;
-            hud._board.detach(hud.LVLS);
+            //hud._board.detach(hud.LVLS);
+			hud.LVLS->visible = false;
 			if( (hud.rose_akt_leben+5) > hud.rose_max_leben ){
 				hud.rose_akt_leben = hud.rose_max_leben;
 			}else{

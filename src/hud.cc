@@ -3,6 +3,39 @@
 Hud::Hud(Plane &board) : _board(board){
 			LVLS = new Tilemap(400,200);
 			LVLS->transform(Z_PlaneMeta{.x = 200, .y = 100});
+
+			 //auto LVLSy = g_rc.make_static_sprite_from_texture("tiles.plus_eins", "plus_eins", Z_PlaneMeta{ .u = 0, .v = 0, .uw = 4000, .vw = 4000 }).second;
+
+			// LVLS =  new Tilemap(32,32);
+			// LVLS->add_tile('?', LVLSy);
+
+			// LVLS->fill(8, 5, 10, 5, '?');
+
+			// _board.attach(LVLS);
+
+			//LVLSY[0] = g_rc.make_static_sprite_from_texture("tiles.lvlUp_option1", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 0, .uw = 400, .vw = 200 }).second;
+			//LVLSY[1] = g_rc.make_static_sprite_from_texture("tiles.lvlUp_option2", "lvlUp_option", Z_PlaneMeta{ .u = 0 , .v = 200, .uw = 400, .vw = 200 }).second;
+			//LVLSY[2] = g_rc.make_static_sprite_from_texture("tiles.lvlUp_option3", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 400, .uw = 400, .vw = 200 }).second;
+
+			LVLSY[0] = g_rc.make_static_sprite_from_texture("tiles.lvlUp.option.speed", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 185, .uw = 400, .vw = 200 }).second;
+			LVLSY[1] = g_rc.make_static_sprite_from_texture("tiles.lvlUp.option.fences", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 400, .uw = 400, .vw = 200 }).second;
+			LVLSY[2] = g_rc.make_static_sprite_from_texture("tiles.lvlUp.option.fire", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 600, .uw = 400, .vw = 200 }).second;
+			LVLSY[3] = g_rc.make_static_sprite_from_texture("tiles.lvlUp.option.health", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 800, .uw = 400, .vw = 200 }).second;
+
+			//LVLSY[0]->transform()
+
+			LVLS->add_tile('?', LVLSY[0]);
+			LVLS->add_tile('/', LVLSY[1]);
+			LVLS->add_tile('o', LVLSY[2]);
+			LVLS->add_tile('+', LVLSY[3]);
+
+			LVLS->fill(0, 0, 1, 1, '?');
+			LVLS->fill(0, 1, 1, 1, '/');
+			LVLS->fill(0, 2, 1, 1, '+');
+
+			LVLS->visible = false;
+			_board.attach(LVLS);
+
 			ex_rahmen_create();
 			ex_bar_create();
 			gaertner_leben_create();
@@ -10,6 +43,11 @@ Hud::Hud(Plane &board) : _board(board){
 			text_layers_create();
 			font_create();
 			eBus_setup();
+}
+
+Hud::~Hud(){
+	_board.detach(LVLS);
+	delete LVLS;
 }
 
 void Hud::eBus_setup(){
@@ -534,31 +572,7 @@ void Hud::Update(Player &player,  Enemypool &enemypool){
 
 bool Hud::option(Player &player,  Enemypool &enemypool){
 
-
-			 //auto LVLSy = g_rc.make_static_sprite_from_texture("tiles.plus_eins", "plus_eins", Z_PlaneMeta{ .u = 0, .v = 0, .uw = 4000, .vw = 4000 }).second;
-
-			// LVLS =  new Tilemap(32,32);
-			// LVLS->add_tile('?', LVLSy);
-
-			// LVLS->fill(8, 5, 10, 5, '?');
-
-			// _board.attach(LVLS);
-
-			LVLSY[0] = g_rc.make_static_sprite_from_texture("tiles.lvlUp_option1", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 0, .uw = 400, .vw = 200 }).second;
-			LVLSY[1] = g_rc.make_static_sprite_from_texture("tiles.lvlUp_option2", "lvlUp_option", Z_PlaneMeta{ .u = 0 , .v = 200, .uw = 400, .vw = 200 }).second;
-			LVLSY[2] = g_rc.make_static_sprite_from_texture("tiles.lvlUp_option3", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 400, .uw = 400, .vw = 200 }).second;
-
-			//LVLSY[0]->transform()
-
-			LVLS->add_tile('?', LVLSY[0]);
-			LVLS->add_tile('/', LVLSY[1]);
-			LVLS->add_tile('+', LVLSY[2]);
-
-			LVLS->fill(0, 0, 1, 1, '?');
-			LVLS->fill(0, 1, 1, 1, '/');
-			LVLS->fill(0, 2, 1, 1, '+');
-
-			_board.attach(LVLS);
+			LVLS->visible = true;
 			g_game.play(g_rc.get_sound("lvlup"));
 
 
@@ -567,20 +581,22 @@ if(player.press == true){
 	std::cout<< "----"<<std::endl;
 	std::cout<< "----"<<std::endl;
 
+	auto lvls_trans = LVLS->get_transform();
+	auto opt_coord = LVLS->get_coordinate_from_offset(player.mouseX - lvls_trans.x, player.mouseY - lvls_trans.y);
 
-	if(player.mouseY <340 && player.press == true){
+	if(opt_coord.first == 0 && player.press == true){
 		std::cout<< "--option 1--"<<std::endl;
 		player.option_wahl = 1;
 		player.press = false;
 		ausgewahelt = false;
 		return false;
-	}else if(player.mouseY <460 && player.press == true){
+	}else if(opt_coord.first == 1 && player.press == true){
 		std::cout<< "--option 2--"<<std::endl;
 		player.option_wahl = 2;
 		player.press = false;
 		ausgewahelt = false;
 		return false;
-	}else if(player.mouseY <600 && player.press == true){
+	}else if(opt_coord.first == 2 && player.press == true){
 		std::cout<< "--option 3--"<<std::endl;
 		player.option_wahl = 3;
 		player.press = false;

@@ -27,6 +27,7 @@ public:
 	bool ausgewahelt = false;
 
 	Hud(Plane &board);
+	~Hud();
 	// Hud();
 	// void setResourceManager(ResourceManager &rc) { _rc = rc;}
 	// void setPlane(Plane &board){_board = board;}
