@@ -1,0 +1,14 @@
+#!/bin/sh
+
+ARCH="x86_64"
+
+## Often used in launch scripts; use $APPDIR instead whne possible
+#HERE="$(dirname "$(readlink -f "${0}")")"
+
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${APPDIR}/usr/lib"
+export PATH="${PATH}:${APPDIR}/usr/bin"
+EXEC="${APPDIR}/usr/bin/flowerdefense"
+
+pushd $APPDIR
+exec $EXEC
+popd 
