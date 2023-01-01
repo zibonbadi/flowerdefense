@@ -2,7 +2,7 @@
 
 Hud::Hud(Plane &board) : _board(board){
 			LVLS = new Tilemap(400,200);
-			LVLS->transform(Z_PlaneMeta{.x = 200, .y = 100});
+			LVLS->transform(Z_PlaneMeta{.x = 200, .y = 0});
 
 			 //auto LVLSy = g_rc.make_static_sprite_from_texture("tiles.plus_eins", "plus_eins", Z_PlaneMeta{ .u = 0, .v = 0, .uw = 4000, .vw = 4000 }).second;
 
@@ -17,21 +17,24 @@ Hud::Hud(Plane &board) : _board(board){
 			//LVLSY[1] = g_rc.make_static_sprite_from_texture("tiles.lvlUp_option2", "lvlUp_option", Z_PlaneMeta{ .u = 0 , .v = 200, .uw = 400, .vw = 200 }).second;
 			//LVLSY[2] = g_rc.make_static_sprite_from_texture("tiles.lvlUp_option3", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 400, .uw = 400, .vw = 200 }).second;
 
-			LVLSY[0] = g_rc.make_static_sprite_from_texture("tiles.lvlUp.option.speed", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 185, .uw = 400, .vw = 200 }).second;
-			LVLSY[1] = g_rc.make_static_sprite_from_texture("tiles.lvlUp.option.fences", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 400, .uw = 400, .vw = 200 }).second;
-			LVLSY[2] = g_rc.make_static_sprite_from_texture("tiles.lvlUp.option.fire", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 600, .uw = 400, .vw = 200 }).second;
-			LVLSY[3] = g_rc.make_static_sprite_from_texture("tiles.lvlUp.option.health", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 800, .uw = 400, .vw = 200 }).second;
+			LVLSY[0] = g_rc.make_static_sprite_from_texture("tiles.lvlUp.option.header", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 0, .uw = 400, .vw = 200 }).second;
+			LVLSY[1] = g_rc.make_static_sprite_from_texture("tiles.lvlUp.option.speed", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 185, .uw = 400, .vw = 200 }).second;
+			LVLSY[2] = g_rc.make_static_sprite_from_texture("tiles.lvlUp.option.fences", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 400, .uw = 400, .vw = 200 }).second;
+			LVLSY[3] = g_rc.make_static_sprite_from_texture("tiles.lvlUp.option.fire", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 600, .uw = 400, .vw = 200 }).second;
+			LVLSY[4] = g_rc.make_static_sprite_from_texture("tiles.lvlUp.option.health", "lvlUp_option", Z_PlaneMeta{ .u = 0, .v = 800, .uw = 400, .vw = 200 }).second;
 
 			//LVLSY[0]->transform()
 
-			LVLS->add_tile('?', LVLSY[0]);
-			LVLS->add_tile('/', LVLSY[1]);
-			LVLS->add_tile('o', LVLSY[2]);
-			LVLS->add_tile('+', LVLSY[3]);
+			LVLS->add_tile('=', LVLSY[0]);
+			LVLS->add_tile('?', LVLSY[1]);
+			LVLS->add_tile('/', LVLSY[2]);
+			LVLS->add_tile('o', LVLSY[3]);
+			LVLS->add_tile('+', LVLSY[4]);
 
-			LVLS->fill(0, 0, 1, 1, '?');
-			LVLS->fill(0, 1, 1, 1, '/');
-			LVLS->fill(0, 2, 1, 1, '+');
+			LVLS->fill(0, 0, 1, 1, '=');
+			LVLS->fill(0, 1, 1, 1, '?');
+			LVLS->fill(0, 2, 1, 1, '/');
+			LVLS->fill(0, 3, 1, 1, '+');
 
 			LVLS->visible = false;
 			_board.attach(LVLS);
@@ -584,19 +587,19 @@ if(player.press == true){
 	auto lvls_trans = LVLS->get_transform();
 	auto opt_coord = LVLS->get_coordinate_from_offset(player.mouseX - lvls_trans.x, player.mouseY - lvls_trans.y);
 
-	if(opt_coord.first == 0 && player.press == true){
+	if(opt_coord.first == 1 && player.press == true){
 		std::cout<< "--option 1--"<<std::endl;
 		player.option_wahl = 1;
 		player.press = false;
 		ausgewahelt = false;
 		return false;
-	}else if(opt_coord.first == 1 && player.press == true){
+	}else if(opt_coord.first == 2 && player.press == true){
 		std::cout<< "--option 2--"<<std::endl;
 		player.option_wahl = 2;
 		player.press = false;
 		ausgewahelt = false;
 		return false;
-	}else if(opt_coord.first == 2 && player.press == true){
+	}else if(opt_coord.first == 3 && player.press == true){
 		std::cout<< "--option 3--"<<std::endl;
 		player.option_wahl = 3;
 		player.press = false;

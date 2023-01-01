@@ -29,7 +29,6 @@ int main(int argc, char* argv[]) {
 
 		/* Import spritesheet */
 		g_rc.import_texture("spritesheet", "./assets/spritesheet.png");
-		g_rc.import_texture("lvlUp_frame", "./assets/lvlUp_frame.png");
 		g_rc.import_texture("lvlUp_option", "./assets/lvlUp_option.png");
 
 
