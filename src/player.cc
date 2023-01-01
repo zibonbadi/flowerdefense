@@ -284,7 +284,7 @@ void Player::initAnimations() {
 	attack->add_animation("upright", g_rc.get_anim("player.attack.upright"));
 	attack->add_animation("downleft", g_rc.get_anim("player.attack.downleft"));
 	attack->add_animation("downright", g_rc.get_anim("player.attack.downright"));
-	attack->switch_to_anim("up");
+	attack->switch_to_anim("left");
 }
 
 void Player::initControls() {

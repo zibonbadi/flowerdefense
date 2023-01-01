@@ -18,13 +18,13 @@ void Enemy::init(float x, float y)
 	switch (_enemyType)
 	{
 	case EEnemyType::BUG:
-		_enemySpeed = 1.5f + between0and3 * 0.5;
+		_enemySpeed = 100.0f + between0and3 * 35.0f;
 		break;
 	case EEnemyType::MEALWORM:
-		_enemySpeed = 1.5f;
+		_enemySpeed = 100.0f;
 		break;
 	case EEnemyType::BEE:
-		_enemySpeed = 3.5f;
+		_enemySpeed = 250.0f;
 		break;
 	default:
 		break;
@@ -65,7 +65,7 @@ void Enemy::setSpriteAnimations() {
 	sprite.add_animation("dead", g_rc.get_anim("enemy.dead"));
 }
 
-void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer, Tilemap* course) {
+void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer, Tilemap* course, float deltaTime) {
 	if (!this->visible || isdead) {
 		return;
 	}
@@ -213,8 +213,8 @@ void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer, Tilemap* course) 
 	}
 
 	SDL_FPoint adjustedInterpolStepSize;
-	adjustedInterpolStepSize.x = interpolStepSize.x * _enemySpeed;
-	adjustedInterpolStepSize.y = interpolStepSize.y * _enemySpeed;
+	adjustedInterpolStepSize.x = interpolStepSize.x * _enemySpeed * deltaTime;
+	adjustedInterpolStepSize.y = interpolStepSize.y * _enemySpeed * deltaTime;
 
 	if (abs(goalTileCoordinates.x - coordinates.x) < abs(adjustedInterpolStepSize.x)) {
 		adjustedInterpolStepSize.x = goalTileCoordinates.x - coordinates.x;

@@ -10,7 +10,7 @@ bool running = true;
 // projectilePool
 constexpr int projectilePoolSize = 10;
 const float projectileSpeed = 150.f;
-const float flowerShotTime = 1.5f;
+const float flowerShotTime = 1.0f;
 SDL_FPoint projectileSpawn = { .x = SCREEN_WIDTH / 2, .y = SCREEN_HEIGHT / 2 };
 SDL_FPoint* projectilesMoveVec = new SDL_FPoint[projectilePoolSize];
 Sprite* projectTileSprites[projectilePoolSize];
@@ -385,6 +385,7 @@ int main(int argc, char* argv[]) {
 
 		g_keymapper.bind(SDLK_ESCAPE, &e_quit);
 		g_keymapper.bind(SDLK_RETURN, &e_game_state_set);
+		g_keymapper.bind(SDLK_KP_ENTER, &e_game_state_set);
 		g_keymapper.bind(SDLK_F1, &e_debug_spritebox_toggle);
 		g_keymapper.bind(SDLK_F2, &e_debug_colliders_toggle);
 		g_keymapper.bind(SDLK_F3, &e_bfs_player_visibility);
@@ -463,7 +464,7 @@ int main(int argc, char* argv[]) {
 
 				for (int i = 0; i < enemyPool.enemies.size(); i++)
 				{
-					enemyPool.enemies[i]->Update(bfsFlower, bfsPlayer, &obstacles);
+					enemyPool.enemies[i]->Update(bfsFlower, bfsPlayer, &obstacles, deltaTime);
 				}
 			}
 
