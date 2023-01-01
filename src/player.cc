@@ -530,6 +530,21 @@ void Player::Update(const float& deltaTime, const std::vector<Enemy*>& enemies, 
 				enemy->disappear();
 			}
 		}
+		if (rose->collision(enemy->GetSprite())) {
+			if (!enemy->isdead && enemy->visible) {
+				//hud.rose_leben_runter();
+				if (hud.rose_akt_leben > 0)
+					hud.rose_akt_leben--;
+				hud.rose_update_health();
+
+				if (hud.rose_akt_leben == 0) {
+					Event e_gameover("game.state.set");
+					e_gameover.set("scene", "gameover");
+					g_eventbus.send(&e_gameover);
+				}
+				enemy->disappear();
+			}
+		}
 	}
 	if (collide_player && this->invulnerableCooldown <= 0) {
 		if (_animID.find(".damage") == std::string::npos) {

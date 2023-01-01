@@ -34,6 +34,7 @@ class Enemy {
 	public:
 		EEnemyType _enemyType;
 		SDL_FPoint coordinates				= { .x = 0, .y = 0 };
+		float _flightPathRoseLength			= INFINITY;
 		Enemy(float x, float y, Player& player, EEnemyType enemyType, EEnemyDirection enemyDir);
 		void init(float x, float y);
 		void setSpriteAnimations();

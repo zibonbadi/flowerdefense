@@ -75,7 +75,7 @@ void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer, Tilemap* course) 
 	.y = (SCREEN_HEIGHT / 2) - coordinates.y,
 	};
 
-	float flightPathRoseLength = sqrt(flightPathRose.x * flightPathRose.x + flightPathRose.y * flightPathRose.y);
+	_flightPathRoseLength = sqrt(flightPathRose.x * flightPathRose.x + flightPathRose.y * flightPathRose.y);
 
 
 
@@ -89,7 +89,7 @@ void Enemy::Update(const BFS& bfsFlower, const BFS& bfsPlayer, Tilemap* course) 
 		};
 		float flightPathPlayerLength = sqrt(flightPathPlayer.x * flightPathPlayer.x + flightPathPlayer.y * flightPathPlayer.y);
 
-		if (flightPathPlayerLength < flightPathRoseLength) {
+		if (flightPathPlayerLength < _flightPathRoseLength) {
 			bfsArrows = bfsPlayer.bfsArrows;
 		}
 		else {
