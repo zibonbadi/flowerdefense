@@ -3,7 +3,7 @@ Flower Defense
 
 An SDL example game with custom engine underneath for educational purposes.
 
-Flower Defense id a tower defense game inspired by Vampire Survivors! Place fences, pick your flamethrower and burn every bug that comes your way!
+Flower Defense is a tower defense game inspired by Vampire Survivors! Place fences, pick your flamethrower and burn every bug that comes your way!
 
 
 Credits:
