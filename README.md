@@ -11,11 +11,6 @@ Credits:
 - R4BN (Robin Cox): Gameplay programming
 - Henzu: UI programming, Spritework & game design
 
-External assets (get them in the itch.io release)
-- Background music: JAM - Lift Your Soul
-- In-game font based on Boxy Bold by Cliff Belanger
-- libopenmpt
-
 Install
 -------
 
