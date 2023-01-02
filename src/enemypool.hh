@@ -20,10 +20,10 @@ private:
 
 public:
 	const int   _poolSize = 1000;
-	const int	_startSpawnTime = 2.f;
+	const int	_startSpawnTime = 1.f;
 	const float _waveCoolDownTime = 6.0f;
-	const float _spawnTimeDeltaAtWaveEnd = -0.2f;
-	const float _spawnTimeMin = 0.2f;
+	const float _spawnTimeDeltaAtWaveEnd = -0.1f;
+	const float _spawnTimeMin = 0.1f;
 	const int   _spawnCount = 1;
 	const int	_startEnemiesPerWaveCount = 20;
 	const float _enemiesPerWaveCountScalerAteWaveEnd = 1.3f;
