@@ -162,7 +162,9 @@ void Enemypool::Spawn(int count, const int& waveNumber)
 		*/
 		Enemy* enemy = getFirstAvailable();
 		enemy->visible = true;
+		enemy->_enemyType = EEnemyType::BUG;
 
+		
 		if (waveNumber >= 3) {
 			g->seed(rd());
 			int typeNumber = (*dist3)(*g);
