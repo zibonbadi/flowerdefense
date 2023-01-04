@@ -8,7 +8,7 @@ Flower Defense is a tower defense game inspired by Vampire Survivors! Place fenc
 
 Contributors:
 - Zibon Badi: Audio, engine, additional gameplay programming & additional spritework
-- R4BN (Robin Cox): Gameplay programming
+- R4BN: Gameplay programming
 - Henzu: UI programming, Spritework & game design
 
 External assets
